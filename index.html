@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Luxois Control de Obras</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{
+font-family:Arial;
+text-align:center;
+margin-top:80px;
+background:#f5f5f5;
+}
+h1{color:#333}
+button{
+font-size:22px;
+padding:20px;
+margin:20px;
+border:none;
+border-radius:10px;
+}
+.entrar{background:#2ecc71;color:white}
+.salir{background:#e74c3c;color:white}
+</style>
+</head>
+
+<body>
+
+<h1>Luxois Control de Obras</h1>
+
+<h2 id="estado">🔴 No trabajando</h2>
+
+<button class="entrar" onclick="entrar()">🟢 ENTRAR</button>
+
+<br>
+
+<button class="salir" onclick="salir()">🔴 SALIR</button>
+
+<script>
+
+function entrar(){
+document.getElementById("estado").innerHTML="🟢 Trabajando"
+navigator.geolocation.getCurrentPosition(pos=>{
+console.log("Entrada GPS:",pos.coords)
+})
+}
+
+function salir(){
+document.getElementById("estado").innerHTML="🔴 Jornada terminada"
+navigator.geolocation.getCurrentPosition(pos=>{
+console.log("Salida GPS:",pos.coords)
+})
+}
+
+</script>
+
+</body>
+</html>
