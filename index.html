@@ -1,26 +1,53 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Luxois Control de Obras</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 body{
-font-family:Arial;
+font-family: Arial;
 text-align:center;
-margin-top:80px;
+margin-top:40px;
 background:#f5f5f5;
 }
-h1{color:#333}
+
+h1{
+color:#333;
+}
+
+select,input{
+font-size:18px;
+padding:10px;
+margin:10px;
+width:250px;
+}
+
 button{
 font-size:22px;
 padding:20px;
-margin:20px;
+margin:10px;
 border:none;
 border-radius:10px;
+width:250px;
 }
-.entrar{background:#2ecc71;color:white}
-.salir{background:#e74c3c;color:white}
+
+.entrar{
+background:#2ecc71;
+color:white;
+}
+
+.salir{
+background:#e74c3c;
+color:white;
+}
+
+.estado{
+font-size:24px;
+margin:20px;
+}
 </style>
 </head>
 
@@ -28,28 +55,98 @@ border-radius:10px;
 
 <h1>Luxois Control de Obras</h1>
 
-<h2 id="estado">🔴 No trabajando</h2>
+<div>
 
-<button class="entrar" onclick="entrar()">🟢 ENTRAR</button>
+<select id="trabajador">
+<option>Aaron</option>
+<option>Enzo</option>
+<option>Miguel Ángel</option>
+<option>Faldir</option>
+<option>Ricardo</option>
+<option>Carlos</option>
+<option>Josiel</option>
+</select>
 
 <br>
 
-<button class="salir" onclick="salir()">🔴 SALIR</button>
+<input type="password" id="pin" placeholder="PIN">
+
+<br>
+
+<select id="obra">
+<option>Castillo de Monterrey - Verin</option>
+</select>
+
+</div>
+
+<div class="estado" id="estado">
+🔴 No trabajando
+</div>
+
+<button class="entrar" onclick="entrar()">ENTRAR</button>
+
+<button class="salir" onclick="salir()">SALIR</button>
 
 <script>
 
+const pins={
+"Aaron":"1111",
+"Enzo":"2222",
+"Miguel Ángel":"3333",
+"Faldir":"4444",
+"Ricardo":"5555",
+"Carlos":"6666",
+"Josiel":"7777"
+}
+
+function verificar(){
+let trabajador=document.getElementById("trabajador").value
+let pin=document.getElementById("pin").value
+
+if(pins[trabajador]!=pin){
+alert("PIN incorrecto")
+return false
+}
+
+return true
+}
+
 function entrar(){
+
+if(!verificar()) return
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
 document.getElementById("estado").innerHTML="🟢 Trabajando"
-navigator.geolocation.getCurrentPosition(pos=>{
-console.log("Entrada GPS:",pos.coords)
+
+console.log("Entrada",{
+trabajador:document.getElementById("trabajador").value,
+obra:document.getElementById("obra").value,
+hora:new Date(),
+gps:pos.coords
 })
+
+})
+
 }
 
 function salir(){
+
+if(!verificar()) return
+
+navigator.geolocation.getCurrentPosition(function(pos){
+
 document.getElementById("estado").innerHTML="🔴 Jornada terminada"
-navigator.geolocation.getCurrentPosition(pos=>{
-console.log("Salida GPS:",pos.coords)
+
+console.log("Salida",{
+trabajador:document.getElementById("trabajador").value,
+obra:document.getElementById("obra").value,
+hora:new Date(),
+gps:pos.coords
 })
+
+})
+
 }
 
 </script>
