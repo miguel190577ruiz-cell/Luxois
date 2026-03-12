@@ -62,8 +62,8 @@ font-weight:bold;
 <script>
 
 const supabase = window.supabase.createClient(
-"https://TU_PROYECTO.supabase.co",
-"TU_PUBLIC_ANON_KEY"
+"https://rldffnkqebxjtgypxwa.supabase.co",
+"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
 )
 
 async function cargarTrabajadores(){
@@ -74,10 +74,12 @@ const { data } = await supabase
 
 const select = document.getElementById("trabajador")
 
+select.innerHTML=""
+
 data.forEach(t=>{
-let op = document.createElement("option")
-op.value = t.id
-op.textContent = t.nombre
+let op=document.createElement("option")
+op.value=t.id
+op.textContent=t.nombre
 select.appendChild(op)
 })
 
@@ -85,9 +87,9 @@ select.appendChild(op)
 
 async function fichar(tipo){
 
-const trabajadorId = document.getElementById("trabajador").value
-const pin = document.getElementById("pin").value
-const obra = document.getElementById("obra").value
+const trabajadorId=document.getElementById("trabajador").value
+const pin=document.getElementById("pin").value
+const obra=document.getElementById("obra").value
 
 const { data:trabajador } = await supabase
 .from("trabajadores")
@@ -100,7 +102,7 @@ alert("Trabajador no encontrado")
 return
 }
 
-if(pin !== trabajador.pin){
+if(pin!==trabajador.pin){
 alert("PIN incorrecto")
 return
 }
@@ -115,7 +117,7 @@ hora: new Date()
 })
 
 document.getElementById("estado").innerText =
-tipo === "entrada" ? "🟢 Trabajando" : "🔴 No trabajando"
+tipo==="entrada" ? "🟢 Trabajando" : "🔴 No trabajando"
 
 document.getElementById("pin").value=""
 
