@@ -91,9 +91,9 @@ const trabajadorId = document.getElementById("trabajador").value
 const pin = document.getElementById("pin").value
 const obra = document.getElementById("obra").value
 
-const { data: trabajador } = await supabase
+const { data, error } = await supabase
 .from("trabajadores")
-.select("id,nombre,pin")
+.select("*")
 .eq("id", trabajadorId)
 .single()
 
