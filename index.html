@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Luxois Control de Obras</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<style>
+<title>Luxois Control de Obras</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script><style>
 body{
 font-family:Arial;
 text-align:center;
@@ -37,64 +32,59 @@ margin-top:20px;
 font-size:20px;
 font-weight:bold;
 }
-</style>
-</head>
+</style></head><body><h1>Luxois Control de Obras</h1><select id="trabajador"></select>
 
-<body>
-
-<h1>Luxois Control de Obras</h1>
-
-<select id="trabajador"></select>
-
-<input type="password" id="pin" placeholder="PIN">
-
-<select id="obra">
-<option>Castillo de Monterrey</option>
-</select>
-
-<br>
-
-<button class="entrar" onclick="fichar('entrada')">ENTRAR</button>
+<input type="password" id="pin" placeholder="PIN"><select id="obra">
+<option value="Castillo de Monterrey">Castillo de Monterrey</option>
+</select><br><button class="entrar" onclick="fichar('entrada')">ENTRAR</button>
 <button class="salir" onclick="fichar('salida')">SALIR</button>
 
-<div id="estado"></div>
-
-<script>
+<div id="estado"></div><script>
 
 const supabase = window.supabase.createClient(
-"https://rldffnkqebxjtgypxwa.supabase.co",
+"https://rldfnkqebxjtgypxwa.supabase.co",
 "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
 )
 
 async function cargarTrabajadores(){
 
-const { data } = await supabase
+const { data, error } = await supabase
 .from("trabajadores")
 .select("*")
+
+if(error){
+alert("Error cargando trabajadores")
+console.log(error)
+return
+}
 
 const select = document.getElementById("trabajador")
 
 select.innerHTML=""
 
-data.forEach(t=>{
-let op=document.createElement("option")
-op.value=t.id
+data.forEach(t => {
+
+let op = document.createElement("option")
+
+op.value = t.id
 op.textContent = t.nombre
+
 select.appendChild(op)
+
 })
 
 }
 
 async function fichar(tipo){
 
-const trabajadorId=document.getElementById("trabajador").value
-const pin=document.getElementById("pin").value
-const obra=document.getElementById("obra").value
+const trabajadorId = document.getElementById("trabajador").value
+const pin = document.getElementById("pin").value
+const obra = document.getElementById("obra").value
 
-const { data:trabajador } = await supabase
+const { data: trabajador } = await supabase
 .from("trabajadores")
 .select("*")
-.eq("id",trabajadorId)
+.eq("id", trabajadorId)
 .single()
 
 if(!trabajador){
@@ -102,7 +92,7 @@ alert("Trabajador no encontrado")
 return
 }
 
-if(pin!=trabajador.pin){
+if(pin != trabajador.pin){
 alert("PIN incorrecto")
 return
 }
@@ -117,7 +107,7 @@ hora: new Date()
 })
 
 document.getElementById("estado").innerText =
-tipo==="entrada" ? "🟢 Trabajando" : "🔴 No trabajando"
+tipo == "entrada" ? "🟢 Trabajando" : "🔴 No trabajando"
 
 document.getElementById("pin").value=""
 
@@ -125,7 +115,5 @@ document.getElementById("pin").value=""
 
 cargarTrabajadores()
 
-</script>
-
-</body>
+</script></body>
 </html>
