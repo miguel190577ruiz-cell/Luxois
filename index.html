@@ -29,6 +29,10 @@ const { data, error } = await supabase
 .from("trabajadores")
 .select("*")
 
+console.log("DATA:", data)
+console.log("ERROR:", error)
+alert("Mira la consola del navegador")
+
 if(error){
 alert("Error cargando trabajadores")
 console.log(error)
