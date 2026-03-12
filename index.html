@@ -1,61 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Luxois Control</title>
+<title>Control fichaje</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
-body{
-font-family:Arial;
-text-align:center;
-margin-top:40px;
-}
-
-select,input,button{
-font-size:18px;
-padding:10px;
-margin:10px;
-}
-
-button{
-cursor:pointer;
-}
-
-#estado{
-margin-top:20px;
-font-size:22px;
-}
-</style>
-
 </head>
+
 <body>
 
 <h2>Control de fichaje</h2>
 
 <select id="trabajador">
-<option value="">Seleccionar trabajador</option>
+<option>Cargando trabajadores...</option>
 </select>
 
-<br>
-
-<input type="password" id="pin" placeholder="PIN">
-
-<br>
-
-<select id="obra">
-<option value="Castillo de Monterrey">Castillo de Monterrey</option>
-<option value="Oficina">Oficina</option>
-</select>
-
-<br>
-
-<button onclick="fichar('entrada')">ENTRAR</button>
-<button onclick="fichar('salida')">SALIR</button>
-
-<div id="estado"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
 const supabase = window.supabase.createClient(
@@ -67,74 +27,30 @@ async function cargarTrabajadores(){
 
 const { data, error } = await supabase
 .from("trabajadores")
-.select("id,nombre")
+.select("*")
 
 if(error){
 alert("Error cargando trabajadores")
+console.log(error)
 return
 }
 
 const select = document.getElementById("trabajador")
+select.innerHTML = ""
 
 data.forEach(t => {
 
-let op = document.createElement("option")
+let option = document.createElement("option")
+option.value = t.id
+option.textContent = t.nombre
 
-op.value = t.id
-op.textContent = t.nombre
-
-select.appendChild(op)
+select.appendChild(option)
 
 })
 
 }
 
-async function fichar(tipo){
-
-const trabajadorId = document.getElementById("trabajador").value
-const pin = document.getElementById("pin").value
-const obra = document.getElementById("obra").value
-
-if(!trabajadorId){
-alert("Selecciona trabajador")
-return
-}
-
-const { data: trabajador } = await supabase
-.from("trabajadores")
-.select("id,nombre,pin")
-.eq("id", trabajadorId)
-.single()
-
-if(!trabajador){
-alert("Trabajador no encontrado")
-return
-}
-
-if(pin != trabajador.pin){
-alert("PIN incorrecto")
-return
-}
-
-await supabase
-.from("fichajes")
-.insert({
-trabajador_id: trabajadorId,
-tipo: tipo,
-obra: obra,
-hora: new Date()
-})
-
-document.getElementById("estado").innerText =
-tipo == "entrada"
-? "🟢 Trabajando"
-: "🔴 No trabajando"
-
-document.getElementById("pin").value=""
-
-}
-
-window.onload = cargarTrabajadores
+cargarTrabajadores()
 
 </script>
 
