@@ -94,6 +94,7 @@ const obra = document.getElementById("obra").value
 const { data, error } = await supabase
 .from("trabajadores")
 .select("*")
+console.log(data)
 .eq("id", trabajadorId)
 .single()
 
