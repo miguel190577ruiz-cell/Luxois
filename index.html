@@ -1,52 +1,41 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <title>Luxois Control de Obras</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
-font-family: Arial;
+font-family:Arial;
 text-align:center;
-margin-top:40px;
-background:#f5f5f5;
+margin-top:60px;
 }
 
-h1{
-color:#333;
-}
-
-select,input{
+select,input,button{
 font-size:18px;
 padding:10px;
-margin:10px;
-width:250px;
-}
-
-button{
-font-size:22px;
-padding:20px;
-margin:10px;
-border:none;
-border-radius:10px;
+margin:8px;
 width:250px;
 }
 
 .entrar{
 background:#2ecc71;
 color:white;
+border:none;
 }
 
 .salir{
 background:#e74c3c;
 color:white;
+border:none;
 }
 
-.estado{
-font-size:24px;
-margin:20px;
+#estado{
+margin-top:20px;
+font-size:20px;
+font-weight:bold;
 }
 </style>
 </head>
@@ -55,101 +44,86 @@ margin:20px;
 
 <h1>Luxois Control de Obras</h1>
 
-<div>
-
-<select id="trabajador">
-<option>Aaron</option>
-<option>Enzo</option>
-<option>Miguel Ángel</option>
-<option>Faldir</option>
-<option>Ricardo</option>
-<option>Carlos</option>
-<option>Josiel</option>
-</select>
-
-<br>
+<select id="trabajador"></select>
 
 <input type="password" id="pin" placeholder="PIN">
 
-<br>
-
 <select id="obra">
-<option>Castillo de Monterrey - Verin</option>
+<option>Castillo de Monterrey</option>
 </select>
 
-</div>
+<br>
 
-<div class="estado" id="estado">
-🔴 No trabajando
-</div>
+<button class="entrar" onclick="fichar('entrada')">ENTRAR</button>
+<button class="salir" onclick="fichar('salida')">SALIR</button>
 
-<button class="entrar" onclick="entrar()">ENTRAR</button>
-
-<button class="salir" onclick="salir()">SALIR</button>
+<div id="estado"></div>
 
 <script>
 
-const pins={
-"Aaron":"1111",
-"Enzo":"2222",
-"Miguel Ángel":"3333",
-"Faldir":"4444",
-"Ricardo":"5555",
-"Carlos":"6666",
-"Josiel":"7777"
+const supabase = window.supabase.createClient(
+"https://TU_PROYECTO.supabase.co",
+"TU_PUBLIC_ANON_KEY"
+)
+
+async function cargarTrabajadores(){
+
+const { data } = await supabase
+.from("trabajadores")
+.select("*")
+
+const select = document.getElementById("trabajador")
+
+data.forEach(t=>{
+let op = document.createElement("option")
+op.value = t.id
+op.textContent = t.nombre
+select.appendChild(op)
+})
+
 }
 
-function verificar(){
-let trabajador=document.getElementById("trabajador").value
-let pin=document.getElementById("pin").value
+async function fichar(tipo){
 
-if(pins[trabajador]!=pin){
+const trabajadorId = document.getElementById("trabajador").value
+const pin = document.getElementById("pin").value
+const obra = document.getElementById("obra").value
+
+const { data:trabajador } = await supabase
+.from("trabajadores")
+.select("*")
+.eq("id",trabajadorId)
+.single()
+
+if(!trabajador){
+alert("Trabajador no encontrado")
+return
+}
+
+if(pin !== trabajador.pin){
 alert("PIN incorrecto")
-return false
+return
 }
 
-return true
-}
-
-function entrar(){
-
-if(!verificar()) return
-
-navigator.geolocation.getCurrentPosition(function(pos){
-
-document.getElementById("estado").innerHTML="🟢 Trabajando"
-
-console.log("Entrada",{
-trabajador:document.getElementById("trabajador").value,
-obra:document.getElementById("obra").value,
-hora:new Date(),
-gps:pos.coords
+await supabase
+.from("fichajes")
+.insert({
+trabajador_id: trabajadorId,
+tipo: tipo,
+obra: obra,
+hora: new Date()
 })
 
-})
+document.getElementById("estado").innerText =
+tipo === "entrada" ? "🟢 Trabajando" : "🔴 No trabajando"
+
+document.getElementById("pin").value=""
 
 }
 
-function salir(){
-
-if(!verificar()) return
-
-navigator.geolocation.getCurrentPosition(function(pos){
-
-document.getElementById("estado").innerHTML="🔴 Jornada terminada"
-
-console.log("Salida",{
-trabajador:document.getElementById("trabajador").value,
-obra:document.getElementById("obra").value,
-hora:new Date(),
-gps:pos.coords
-})
-
-})
-  
-}
+cargarTrabajadores()
 
 </script>
 
-<link rel="manifest" href="manifest.json">
+</body>
 </html>
