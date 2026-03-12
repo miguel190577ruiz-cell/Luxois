@@ -52,7 +52,7 @@ async function cargarTrabajadores(){
 
 const { data, error } = await supabase
 .from("trabajadores")
-.select("*")
+.select("id,nombre")
 
 if(error){
 alert("Error cargando trabajadores")
