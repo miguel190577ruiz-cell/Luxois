@@ -57,7 +57,7 @@ const supabase = window.supabase.createClient(
 )
 
 async function cargarTrabajadores(){
-
+console.log("Cargando trabajadores...")
 const { data, error } = await supabase
 .from("trabajadores")
 .select("id,nombre")
