@@ -20,17 +20,18 @@
 <br><br>
 
 <button onclick="ficharEntrada()">Fichar Entrada</button>
-
 <button onclick="ficharSalida()">Fichar Salida</button>
 
 <script>
 
 const { createClient } = supabase
 
-const supabaseClient = createClient(
-"https://rldfnkqebxjtgypxwa.supabase.co",
-"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
-)
+/* PON AQUI TU URL Y TU CLAVE DE SUPABASE */
+
+const SUPABASE_URL = "PON_AQUI_TU_PROJECT_URL"
+const SUPABASE_KEY = "PON_AQUI_TU_ANON_KEY"
+
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 async function cargarTrabajadores(){
 
@@ -39,7 +40,7 @@ const { data, error } = await supabaseClient
 .select("*")
 
 if(error){
-console.log("Error:", error)
+console.log("Error cargando trabajadores:", error)
 return
 }
 
@@ -64,6 +65,11 @@ async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value
 
+if(!trabajador){
+alert("Selecciona trabajador")
+return
+}
+
 const { error } = await supabaseClient
 .from("fichajes")
 .insert([
@@ -86,6 +92,11 @@ alert("Entrada registrada")
 async function ficharSalida(){
 
 const trabajador = document.getElementById("trabajador").value
+
+if(!trabajador){
+alert("Selecciona trabajador")
+return
+}
 
 const { error } = await supabaseClient
 .from("fichajes")
