@@ -28,7 +28,7 @@
 const { createClient } = supabase
 
 const supabaseClient = createClient(
-"https://rldffnkqebxigtygpxwa.supabase.co",
+"https://rldfnkqebxjtgypxwa.supabase.co",
 "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
 )
 
@@ -37,6 +37,11 @@ async function cargarTrabajadores() {
 const { data, error } = await supabaseClient
 .from("trabajadores")
 .select("*")
+
+if(error){
+console.log(error)
+return
+}
 
 const select = document.getElementById("trabajador")
 
@@ -60,16 +65,15 @@ const trabajador = document.getElementById("trabajador").value
 
 const { error } = await supabaseClient
 .from("fichajes")
-.insert([
-{
+.insert({
 trabajador_id: trabajador,
 tipo: "entrada",
-fecha: new Date()
-}
-])
+fecha: new Date().toISOString()
+})
 
 if(error){
 alert("Error al fichar entrada")
+console.log(error)
 }else{
 alert("Entrada registrada")
 }
@@ -82,16 +86,15 @@ const trabajador = document.getElementById("trabajador").value
 
 const { error } = await supabaseClient
 .from("fichajes")
-.insert([
-{
+.insert({
 trabajador_id: trabajador,
 tipo: "salida",
-fecha: new Date()
-}
-])
+fecha: new Date().toISOString()
+})
 
 if(error){
 alert("Error al fichar salida")
+console.log(error)
 }else{
 alert("Salida registrada")
 }
