@@ -61,22 +61,31 @@ select.appendChild(option)
 
 async function ficharEntrada() {
 
-const trabajador = document.getElementById("trabajador").value
+const trabajador = document.getElementById("trabajador").value;
+const obra = 1;
 
-const { error } = await supabaseClient
-.from("fichajes")
-.insert({
-trabajador_id: trabajador,
-tipo: "entrada",
-fecha: new Date().toISOString()
-})
+const hoy = new Date().tolSOString().split("T")[0];
+const ahora = new Date().tolSOString();
 
+const { error } = await supabase
+ .from("fichajes")
+ .insert([
 if(error){
+  {
+  trabajador_id: trabajador,
+  obra_id: obra,
+  fecha: hoy,
+  entrada: ahora
 alert("Error al fichar entrada")
-console.log(error)
-}else{
-alert("Entrada registrada")
-}
+  }
+ ]);
+
+if(error) { 
+ console.error(error);
+ alert("Error al fichar entrada"); 
+} else {
+ alert("Entrada registrada"); 
+} 
 
 }
 
