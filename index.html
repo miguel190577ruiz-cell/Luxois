@@ -69,9 +69,9 @@ const { error } = await supabaseClient
 .from("fichajes")
 .insert([
 {
-trabajador_id: trabajador,
-tipo: "entrada",
-fecha: new Date().toISOString()
+trabajador: trabajador,
+fecha: new Date().toISOString(),
+entrada: new Date().toISOString()
 }
 ])
 
@@ -92,9 +92,9 @@ const { error } = await supabaseClient
 .from("fichajes")
 .insert([
 {
-trabajador_id: trabajador,
-tipo: "salida",
-fecha: new Date().toISOString()
+trabajador: trabajador,
+fecha: new Date().toISOString(),
+salida: new Date().toISOString()
 }
 ])
 
