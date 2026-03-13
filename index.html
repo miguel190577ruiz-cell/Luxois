@@ -28,18 +28,18 @@
 const { createClient } = supabase
 
 const supabaseClient = createClient(
-"https://rldffnkqebxigtygpxwa.supabase.co",
+"https://rldfnkqebxjtgypxwa.supabase.co",
 "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
 )
 
-async function cargarTrabajadores() {
+async function cargarTrabajadores(){
 
 const { data, error } = await supabaseClient
 .from("trabajadores")
 .select("*")
 
 if(error){
-console.log(error)
+console.log("Error:", error)
 return
 }
 
@@ -50,6 +50,7 @@ select.innerHTML = ""
 data.forEach(trabajador => {
 
 const option = document.createElement("option")
+
 option.value = trabajador.id
 option.textContent = trabajador.nombre
 
@@ -59,48 +60,42 @@ select.appendChild(option)
 
 }
 
-async function ficharEntrada() {
-
-const trabajador =
- document.getElementById("trabajador").value;
-const obra = 1;
-
-const hoy = new Date().toISOString().split("T")[0];
-const ahora = new Date().toISOString();
-
-const { error } = await supabase
- .from("fichajes")
- .insert([
-
-  {
-  trabajador_id: trabajador,
-  obra_id: obra,
-  fecha: hoy,
-  entrada: ahora
-
-  }
- ]);
-
-if(error) { 
- console.error(error);
- alert("Error al fichar entrada"); 
-} else {
- alert("Entrada registrada"); 
-} 
-
-}
-
-async function ficharSalida() {
+async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value
 
 const { error } = await supabaseClient
 .from("fichajes")
-.insert({
+.insert([
+{
+trabajador_id: trabajador,
+tipo: "entrada",
+fecha: new Date().toISOString()
+}
+])
+
+if(error){
+alert("Error al fichar entrada")
+console.log(error)
+}else{
+alert("Entrada registrada")
+}
+
+}
+
+async function ficharSalida(){
+
+const trabajador = document.getElementById("trabajador").value
+
+const { error } = await supabaseClient
+.from("fichajes")
+.insert([
+{
 trabajador_id: trabajador,
 tipo: "salida",
 fecha: new Date().toISOString()
-})
+}
+])
 
 if(error){
 alert("Error al fichar salida")
