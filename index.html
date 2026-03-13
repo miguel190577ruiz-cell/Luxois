@@ -24,45 +24,44 @@
 
 <script>
 
-const { createClient } = supabase
-
+const { createClient } = supabase;
 
 const supabaseClient = createClient(
 "https://rldffnkqebxigtygpxwa.supabase.co",
-"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+"TU_ANON_PUBLIC_KEY_AQUI"
 );
 
 async function cargarTrabajadores(){
 
 const { data, error } = await supabaseClient
 .from("trabajadores")
-.select("*")
+.select("*");
 
 if(error){
-console.log("Error:", error)
-return
+console.log("Error:", error);
+return;
 }
 
-const select = document.getElementById("trabajador")
+const select = document.getElementById("trabajador");
 
-select.innerHTML = ""
+select.innerHTML = "";
 
 data.forEach(trabajador => {
 
-const option = document.createElement("option")
+const option = document.createElement("option");
 
-option.value = trabajador.id
-option.textContent = trabajador.nombre
+option.value = trabajador.nombre;
+option.textContent = trabajador.nombre;
 
-select.appendChild(option)
+select.appendChild(option);
 
-})
+});
 
 }
 
 async function ficharEntrada(){
 
-const trabajador = document.getElementById("trabajador").value
+const trabajador = document.getElementById("trabajador").value;
 
 const { error } = await supabaseClient
 .from("fichajes")
@@ -72,20 +71,20 @@ trabajador: trabajador,
 fecha: new Date().toISOString(),
 entrada: new Date().toISOString()
 }
-])
+]);
 
 if(error){
-alert("Error al fichar entrada")
-console.log(error)
+alert("Error al fichar entrada");
+console.log(error);
 }else{
-alert("Entrada registrada")
+alert("Entrada registrada");
 }
 
 }
 
 async function ficharSalida(){
 
-const trabajador = document.getElementById("trabajador").value
+const trabajador = document.getElementById("trabajador").value;
 
 const { error } = await supabaseClient
 .from("fichajes")
@@ -95,18 +94,18 @@ trabajador: trabajador,
 fecha: new Date().toISOString(),
 salida: new Date().toISOString()
 }
-])
+]);
 
 if(error){
-alert("Error al fichar salida")
-console.log(error)
+alert("Error al fichar salida");
+console.log(error);
 }else{
-alert("Salida registrada")
+alert("Salida registrada");
 }
 
 }
 
-cargarTrabajadores()
+cargarTrabajadores();
 
 </script>
 
