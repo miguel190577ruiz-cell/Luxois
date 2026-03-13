@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Control de fichaje</title>
+<title>Control de obra</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -12,36 +12,31 @@
 
 <h2>Control de fichaje</h2>
 
-<label>Seleccionar trabajador:</label>
-<br><br>
-
+<label>Trabajador:</label>
 <select id="trabajador">
 <option>Cargando trabajadores...</option>
 </select>
 
+<br><br>
+
+<button onclick="ficharEntrada()">Fichar Entrada</button>
+
+<button onclick="ficharSalida()">Fichar Salida</button>
+
 <script>
 
-const { createClient } = supabase;
+const { createClient } = supabase
 
 const supabaseClient = createClient(
-"https://rldffnkqebxigtygpxwa.supabase.co",
-"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
-);
+"https://rldfnkqebxjtgypxwa.supabase.co",
+"sb_publishable_e8InYDhwxDcj44ZmrAsuIg_zplmJRAK"
+)
 
-async function cargarTrabajadores(){
+async function cargarTrabajadores() {
 
 const { data, error } = await supabaseClient
 .from("trabajadores")
 .select("*")
-
-console.log("DATA:", data)
-console.log("ERROR:", error)
-
-if(error){
-alert("Error cargando trabajadores")
-console.log(error)
-return
-}
 
 const select = document.getElementById("trabajador")
 
@@ -56,6 +51,50 @@ option.textContent = trabajador.nombre
 select.appendChild(option)
 
 })
+
+}
+
+async function ficharEntrada() {
+
+const trabajador = document.getElementById("trabajador").value
+
+const { error } = await supabaseClient
+.from("fichajes")
+.insert([
+{
+trabajador_id: trabajador,
+tipo: "entrada",
+fecha: new Date()
+}
+])
+
+if(error){
+alert("Error al fichar entrada")
+}else{
+alert("Entrada registrada")
+}
+
+}
+
+async function ficharSalida() {
+
+const trabajador = document.getElementById("trabajador").value
+
+const { error } = await supabaseClient
+.from("fichajes")
+.insert([
+{
+trabajador_id: trabajador,
+tipo: "salida",
+fecha: new Date()
+}
+])
+
+if(error){
+alert("Error al fichar salida")
+}else{
+alert("Salida registrada")
+}
 
 }
 
