@@ -28,7 +28,7 @@ const { createClient } = supabase;
 
 const supabaseClient = createClient(
 "https://rldffnkqebxigtygpxwa.supabase.co",
-"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+"TU_ANON_PUBLIC_KEY"
 );
 
 async function cargarTrabajadores(){
@@ -38,12 +38,11 @@ const { data, error } = await supabaseClient
 .select("*");
 
 if(error){
-console.log("Error:", error);
+console.log(error);
 return;
 }
 
 const select = document.getElementById("trabajador");
-
 select.innerHTML = "";
 
 data.forEach(trabajador => {
@@ -63,19 +62,34 @@ async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value;
 
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("trabajador", trabajador)
+.eq("fecha", hoy)
+.is("salida", null)
+.maybeSingle();
+
+if(data){
+alert("Este trabajador ya fichó entrada");
+return;
+}
+
 const { error } = await supabaseClient
 .from("fichajes")
 .insert([
 {
 trabajador: trabajador,
-fecha: new Date().toISOString(),
+fecha: hoy,
 entrada: new Date().toISOString()
 }
 ]);
 
 if(error){
-alert("Error al fichar entrada");
 console.log(error);
+alert("Error al fichar entrada");
 }else{
 alert("Entrada registrada");
 }
@@ -86,19 +100,31 @@ async function ficharSalida(){
 
 const trabajador = document.getElementById("trabajador").value;
 
-const { error } = await supabaseClient
-.from("fichajes")
-.insert([
-{
-trabajador: trabajador,
-fecha: new Date().toISOString(),
-salida: new Date().toISOString()
-}
-]);
+const hoy = new Date().toISOString().split("T")[0];
 
-if(error){
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("trabajador", trabajador)
+.eq("fecha", hoy)
+.is("salida", null)
+.maybeSingle();
+
+if(!data){
+alert("No hay entrada registrada");
+return;
+}
+
+const { error: updateError } = await supabaseClient
+.from("fichajes")
+.update({
+salida: new Date().toISOString()
+})
+.eq("id", data.id);
+
+if(updateError){
+console.log(updateError);
 alert("Error al fichar salida");
-console.log(error);
 }else{
 alert("Salida registrada");
 }
