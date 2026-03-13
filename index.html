@@ -25,10 +25,11 @@
 <script>
 
 const { createClient } = supabase
-https://rldffnkqebxigtygpxwa.supabase.co
-sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK
 
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY)
+const supabaseClient = createClient(
+"https://TU_PROJECT_URL.supabase.co",
+"TU_ANON_PUBLIC_KEY"
+)
 
 async function cargarTrabajadores(){
 
@@ -37,7 +38,7 @@ const { data, error } = await supabaseClient
 .select("*")
 
 if(error){
-console.log("Error cargando trabajadores:", error)
+console.log(error)
 return
 }
 
@@ -62,11 +63,6 @@ async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value
 
-if(!trabajador){
-alert("Selecciona trabajador")
-return
-}
-
 const { error } = await supabaseClient
 .from("fichajes")
 .insert([
@@ -89,11 +85,6 @@ alert("Entrada registrada")
 async function ficharSalida(){
 
 const trabajador = document.getElementById("trabajador").value
-
-if(!trabajador){
-alert("Selecciona trabajador")
-return
-}
 
 const { error } = await supabaseClient
 .from("fichajes")
