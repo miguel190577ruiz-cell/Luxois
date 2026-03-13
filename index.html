@@ -65,8 +65,8 @@ const trabajador =
  document.getElementById("trabajador").value;
 const obra = 1;
 
-const hoy = new Date().tolSOString().split("T")[0];
-const ahora = new Date().tolSOString();
+const hoy = new Date().toISOString().split("T")[0];
+const ahora = new Date().toISOString();
 
 const { error } = await supabase
  .from("fichajes")
