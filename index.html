@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Control fichaje</title>
+<title>Control de fichaje</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -12,26 +12,30 @@
 
 <h2>Control de fichaje</h2>
 
+<label>Seleccionar trabajador:</label>
+<br><br>
+
 <select id="trabajador">
 <option>Cargando trabajadores...</option>
 </select>
 
 <script>
 
-const supabase = window.supabase.createClient(
+const { createClient } = supabase
+
+const supabaseClient = createClient(
 "https://rldfnkqebxjtgypxwa.supabase.co",
-"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+"sb_publishable_e8InYDhxDcj44ZmrAsuIg_zp1mJRAK"
 )
 
 async function cargarTrabajadores(){
 
-const { data, error } = await supabase
+const { data, error } = await supabaseClient
 .from("trabajadores")
 .select("*")
 
 console.log("DATA:", data)
 console.log("ERROR:", error)
-alert("Mira la consola del navegador")
 
 if(error){
 alert("Error cargando trabajadores")
@@ -40,13 +44,14 @@ return
 }
 
 const select = document.getElementById("trabajador")
+
 select.innerHTML = ""
 
-data.forEach(t => {
+data.forEach(trabajador => {
 
-let option = document.createElement("option")
-option.value = t.id
-option.textContent = t.nombre
+const option = document.createElement("option")
+option.value = trabajador.id
+option.textContent = trabajador.nombre
 
 select.appendChild(option)
 
