@@ -68,7 +68,7 @@ select.appendChild(option);
 async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value;
-
+const obra = document.getElementById("obra").value;
 const hoy = new Date().toISOString().split("T")[0];
 
 const { data } = await supabaseClient
