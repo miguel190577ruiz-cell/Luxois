@@ -122,7 +122,7 @@ const { data, error } = await supabaseClient
 .is("salida", null)
 .maybeSingle();
 
-if(error){
+if(insertError){
 console.log(error);
 alert("Error buscando entrada");
 return;
