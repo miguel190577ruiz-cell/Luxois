@@ -228,6 +228,8 @@ select.appendChild(option);
 async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value;
+const pin = document.getElementById("pin").value;
+const movil = obtenerMovilID();
 const hoy = new Date().toISOString().split("T")[0];
 
 const { data: trabajadorData, error: obraError } = await supabaseClient
