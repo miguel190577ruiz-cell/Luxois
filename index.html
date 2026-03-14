@@ -147,13 +147,22 @@ alert("No hay entrada registrada");
 return;
 }
 
+const salidaHora = new Date();
+
+const entradaHora = new Date(data.entrada);
+
+const horas = (salidaHora - entradaHora) / 1000 / 60 / 60;
+
+const horasRedondeadas = Math.round(horas);
+
 const { error: updateError } = await supabaseClient
 .from("fichajes")
 .update({
-salida: new Date().toISOString()
+salida: salidaHora.toISOString(),
+horas: horas,
+horas_redondeadas: horasRedondeadas
 })
 .eq("id", data.id);
-
 if(updateError){
 console.log(updateError);
 alert("Error al fichar salida");
