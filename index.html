@@ -94,14 +94,7 @@ fecha: hoy,
 entrada: new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})
 }
 ]);
-insert([
-{
-trabajador: trabajador,
-obra: obra,
-fecha: hoy,
-entrada: new Date().toISOString()
-}
-]);
+
 if(error){
 console.log(error);
 alert("Error al fichar entrada");
