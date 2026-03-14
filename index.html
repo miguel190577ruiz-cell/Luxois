@@ -93,7 +93,14 @@ fecha: hoy,
 entrada: new Date().toISOString()
 }
 ]);
-
+.insert([
+{
+trabajador: trabajador,
+obra: obra,
+fecha: hoy,
+entrada: new Date().toISOString()
+}
+]);
 if(error){
 console.log(error);
 alert("Error al fichar entrada");
