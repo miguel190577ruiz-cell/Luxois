@@ -162,7 +162,41 @@ alert("Salida registrada");
 }
 
 }
+async function cargarTrabajandoAhora(){
 
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("fecha", hoy)
+.is("salida", null);
+
+if(error){
+console.log(error);
+return;
+}
+
+const contenedor = document.getElementById("trabajandoAhora");
+contenedor.innerHTML = "";
+
+if(data.length === 0){
+contenedor.innerHTML = "No hay trabajadores en obra";
+return;
+}
+
+data.forEach(fichaje => {
+
+const linea = document.createElement("div");
+
+linea.textContent =
+fichaje.trabajador + " — " + fichaje.obra;
+
+contenedor.appendChild(linea);
+
+});
+
+}
 cargarTrabajadores();
 cargarTrabajandoAhora();
   
