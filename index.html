@@ -89,6 +89,7 @@ const { error } = await supabaseClient
 .insert([
 {
 trabajador: trabajador,
+obra: obra,
 fecha: hoy,
 entrada: new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})
 }
