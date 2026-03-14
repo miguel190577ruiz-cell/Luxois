@@ -16,9 +16,8 @@
 <select id="trabajador">
 <option>Cargando trabajadores...</option>
 </select>
+
 <br><br>
-
-
 
 <button onclick="ficharEntrada()">Fichar Entrada</button>
 <button onclick="ficharSalida()">Fichar Salida</button>
@@ -78,13 +77,19 @@ return;
 
 const obra = trabajadorData.obra;
 
-const { data: entradaExistente } = await supabaseClient
+const { data: entradaExistente, error: checkError } = await supabaseClient
 .from("fichajes")
 .select("*")
 .eq("trabajador", trabajador)
 .eq("fecha", hoy)
 .is("salida", null)
 .maybeSingle();
+
+if(checkError){
+console.log(checkError);
+alert("Error comprobando fichaje");
+return;
+}
 
 if(entradaExistente){
 alert("Este trabajador ya fichó entrada");
@@ -102,7 +107,7 @@ entrada: new Date().toISOString()
 }
 ]);
 
-if(error){
+if(insertError){
 console.log(insertError);
 alert("Error al fichar entrada");
 }else{
@@ -114,10 +119,9 @@ alert("Entrada registrada");
 async function ficharSalida(){
 
 const trabajador = document.getElementById("trabajador").value;
-
 const hoy = new Date().toISOString().split("T")[0];
 
-const { data, error } = await supabaseClient
+const { data, error: searchError } = await supabaseClient
 .from("fichajes")
 .select("*")
 .eq("trabajador", trabajador)
@@ -125,18 +129,18 @@ const { data, error } = await supabaseClient
 .is("salida", null)
 .maybeSingle();
 
-if(insertError){
-console.log(error);
+if(searchError){
+console.log(searchError);
 alert("Error buscando entrada");
 return;
 }
-  
-if(!data)
-alert("No hay entrada registrada")
+
+if(!data){
+alert("No hay entrada registrada");
 return;
 }
-  
-const { error: updateError } = await supabaseClient    
+
+const { error: updateError } = await supabaseClient
 .from("fichajes")
 .update({
 salida: new Date().toISOString()
