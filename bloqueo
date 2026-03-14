@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Control de obra</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<h2>Control de fichaje</h2>
+
+<label>Trabajador:</label>
+<select id="trabajador">
+ <option>Cargando trabajadores...</option>
+</select>
+  
+<br><br>
+
+<label>PIN:</label>
+<input type="password" id="pin">
+
+
+<br><br>
+
+<button onclick="ficharEntrada()">Fichar Entrada</button>
+<button onclick="ficharSalida()">Fichar Salida</button>
+  
+  <br><br>
+  
+<button onclick="exportarExcel()">Exportar horas a Excel</button>
+async function exportarMes(){
+
+const hoy = new Date();
+const año = hoy.getFullYear();
+const mes = (hoy.getMonth()+1).toString().padStart(2,"0");
+
+const inicioMes = `${año}-${mes}-01`;
+const finMes = `${año}-${mes}-31`;
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.gte("fecha", inicioMes)
+.lte("fecha", finMes)
+.order("fecha", { ascending: true });
+
+if(error){
+console.log(error);
+alert("Error cargando datos");
+return;
+}
+
+let csv = "Fecha,Trabajador,Obra,Entrada,Salida,Horas\n";
+
+data.forEach(f => {
+
+const entrada = f.entrada ? new Date(f.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const salida = f.salida ? new Date(f.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const horas = f.horas_redondeadas ?? "";
+
+csv += `${f.fecha},${f.trabajador},${f.obra},${entrada},${salida},${horas}\n`;
+
+});
+
+const blob = new Blob([csv], { type: "text/csv" });
+
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+
+link.download = `horas_${año}_${mes}.csv`;
+
+link.click();
+
+}
+<br><br>
+<button onclick="exportarMes()">Exportar horas del mes</button>  
+<br><br>
+
+<h3>Trabajando ahora</h3>
+
+<div id="trabajandoAhora">
+Cargando...
+</div>
+  
+ <br><br>
+
+<h3>Historial de hoy</h3>
+  
+<div id="historialHoy">
+Cargando historial...
+</div>
+<script>
+
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
+"https://rldffnkqebxigtygpxwa.supabase.co",
+"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+);
+function obtenerMovilID(){
+
+let id = localStorage.getItem("movil_id");
+
+if(!id){
+
+id = Math.random().toString(36).substring(2) + Date.now();
+
+localStorage.setItem("movil_id", id);
+
+}
+
+return id;
+
+}
+async function exportarExcel(){
+
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("fecha", hoy);
+
+if(error){
+console.log(error);
+alert("Error cargando datos");
+return;
+}
+
+let csv = "Trabajador,Obra,Entrada,Salida,Horas\n";
+
+data.forEach(f => {
+
+const entrada = f.entrada ? new Date(f.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const salida = f.salida ? new Date(f.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const horas = f.horas_redondeadas ?? "";
+
+csv += `${f.trabajador},${f.obra},${entrada},${salida},${horas}\n`;
+
+});
+
+const blob = new Blob([csv], { type: "text/csv" });
+
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+
+link.download = "horas_" + hoy + ".csv";
+
+link.click();
+
+}
+
+
+async function exportarMes(){
+
+const hoy = new Date();
+const año = hoy.getFullYear();
+const mes = (hoy.getMonth()+1).toString().padStart(2,"0");
+
+const inicioMes = `${año}-${mes}-01`;
+const finMes = `${año}-${mes}-31`;
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.gte("fecha", inicioMes)
+.lte("fecha", finMes)
+.order("fecha", { ascending: true });
+
+if(error){
+console.log(error);
+alert("Error cargando datos");
+return;
+}
+
+let csv = "Fecha,Trabajador,Obra,Entrada,Salida,Horas\n";
+
+data.forEach(f => {
+
+const entrada = f.entrada ? new Date(f.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const salida = f.salida ? new Date(f.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const horas = f.horas_redondeadas ?? "";
+
+csv += `${f.fecha},${f.trabajador},${f.obra},${entrada},${salida},${horas}\n`;
+
+});
+
+const blob = new Blob([csv], { type: "text/csv" });
+
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+
+link.download = `horas_${año}_${mes}.csv`;
+
+link.click();
+
+}
+async function cargarTrabajadores(){
+
+const { data, error } = await supabaseClient
+.from("trabajadores")
+.select("*");
+
+if(error){
+console.log(error);
+return;
+}
+
+const select = document.getElementById("trabajador");
+select.innerHTML = "";
+
+data.forEach(trabajador => {
+
+const option = document.createElement("option");
+
+option.value = trabajador.nombre;
+option.textContent = trabajador.nombre;
+
+select.appendChild(option);
+
+});
+
+}
+
+async function ficharEntrada(){
+
+const trabajador = document.getElementById("trabajador").value;
+const pin = document.getElementById("pin").value;
+const movil = obtenerMovilID();
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data: trabajadorData, error: obraError } = await supabaseClient
+.from("trabajadores")
+.select("obra,pin,movil_id")
+.eq("nombre", trabajador)
+.single();
+if(trabajadorData.pin !== pin){
+alert("PIN incorrecto");
+return;
+}
+if(obraError){
+console.log(obraError);
+alert("Error obteniendo obra");
+return;
+}
+
+const obra = trabajadorData.obra;
+
+const { data: entradaExistente, error: checkError } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("trabajador", trabajador)
+.eq("fecha", hoy)
+.is("salida", null)
+.maybeSingle();
+
+if(checkError){
+console.log(checkError);
+alert("Error comprobando fichaje");
+return;
+}
+
+if(entradaExistente){
+alert("Este trabajador ya fichó entrada");
+return;
+}
+
+const { error: insertError } = await supabaseClient
+.from("fichajes")
+.insert([
+{
+trabajador: trabajador,
+obra: obra,
+fecha: hoy,
+entrada: new Date().toISOString()
+}
+]);
+
+if(insertError){
+console.log(insertError);
+alert("Error al fichar entrada");
+}else{
+alert("Entrada registrada");
+}
+
+}
+
+async function ficharSalida(){
+
+const trabajador = document.getElementById("trabajador").value;
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data, error: searchError } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("trabajador", trabajador)
+.eq("fecha", hoy)
+.is("salida", null)
+.maybeSingle();
+
+if(searchError){
+console.log(searchError);
+alert("Error buscando entrada");
+return;
+}
+
+if(!data){
+alert("No hay entrada registrada");
+return;
+}
+
+const salidaHora = new Date();
+
+const entradaHora = new Date(data.entrada);
+
+const horas = (salidaHora - entradaHora) / 1000 / 60 / 60;
+
+const horasRedondeadas = Math.round(horas);
+
+const { error: updateError } = await supabaseClient
+.from("fichajes")
+.update({
+salida: salidaHora.toISOString(),
+horas: horas,
+horas_redondeadas: horasRedondeadas
+})
+.eq("id", data.id);
+if(updateError){
+console.log(updateError);
+alert("Error al fichar salida");
+}else{
+alert("Salida registrada");
+}
+
+}
+async function cargarTrabajandoAhora(){
+
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("fecha", hoy)
+.is("salida", null);
+
+if(error){
+console.log(error);
+return;
+}
+
+const contenedor = document.getElementById("trabajandoAhora");
+contenedor.innerHTML = "";
+
+if(data.length === 0){
+contenedor.innerHTML = "No hay trabajadores en obra";
+return;
+}
+
+data.forEach(fichaje => {
+
+const linea = document.createElement("div");
+
+linea.textContent =
+fichaje.trabajador + " — " + fichaje.obra;
+
+contenedor.appendChild(linea);
+
+});
+
+}
+cargarTrabajadores();
+cargarTrabajandoAhora();
+cargarHistorialHoy();
+async function cargarHistorialHoy(){
+
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("fecha", hoy)
+.order("entrada", { ascending: true });
+
+if(error){
+console.log(error);
+return;
+}
+
+const contenedor = document.getElementById("historialHoy");
+contenedor.innerHTML = "";
+
+if(data.length === 0){
+contenedor.innerHTML = "No hay fichajes hoy";
+return;
+}
+
+data.forEach(fichaje => {
+
+const linea = document.createElement("div");
+
+const entrada = new Date(fichaje.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+
+let salida = "-";
+if(fichaje.salida){
+salida = new Date(fichaje.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+}
+
+let horas = "-";
+if(fichaje.horas_redondeadas){
+horas = fichaje.horas_redondeadas;
+}
+
+linea.textContent =
+fichaje.trabajador + " — " + fichaje.obra +
+" | Entrada: " + entrada +
+" | Salida: " + salida +
+" | Horas: " + horas;
+
+contenedor.appendChild(linea);
+
+});
+
+}
+setInterval(cargarTrabajandoAhora, 30000); 
+setInterval(cargarHistorialHoy, 30000);
+</script>
+
+</body>
+</html>
