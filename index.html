@@ -241,6 +241,10 @@ if(trabajadorData.pin !== pin){
 alert("PIN incorrecto");
 return;
 }
+if(trabajadorData.movil_id && trabajadorData.movil_id !== movil){
+alert("Este trabajador solo puede fichar desde su móvil registrado");
+return;
+} 
 if(obraError){
 console.log(obraError);
 alert("Error obteniendo obra");
