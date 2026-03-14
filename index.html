@@ -80,13 +80,16 @@ return;
 
 const { error } = await supabaseClient
 .from("fichajes")
-  const { data: trabajadorData } = await supabaseClient
+const { data: trabajadorData } = await supabaseClient
 .from("trabajadores")
 .select("obra")
 .eq("nombre", trabajador)
 .single();
 
 const obra = trabajadorData.obra;
+  
+const { error } = await supabaseClient 
+.from("fichajes")
 .insert([
 {
 trabajador: trabajador,
