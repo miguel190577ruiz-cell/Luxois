@@ -237,7 +237,10 @@ const { data: trabajadorData, error: obraError } = await supabaseClient
 .select("obra,pin,movil_id")
 .eq("nombre", trabajador)
 .single();
-
+if(trabajadorData.pin !== pin){
+alert("PIN incorrecto");
+return;
+}
 if(obraError){
 console.log(obraError);
 alert("Error obteniendo obra");
