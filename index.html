@@ -62,10 +62,23 @@ select.appendChild(option);
 async function ficharEntrada(){
 
 const trabajador = document.getElementById("trabajador").value;
-
 const hoy = new Date().toISOString().split("T")[0];
 
-const { data } = await supabaseClient
+const { data: trabajadorData, error: obraError } = await supabaseClient
+.from("trabajadores")
+.select("obra")
+.eq("nombre", trabajador)
+.single();
+
+if(obraError){
+console.log(obraError);
+alert("Error obteniendo obra");
+return;
+}
+
+const obra = trabajadorData.obra;
+
+const { data: entradaExistente } = await supabaseClient
 .from("fichajes")
 .select("*")
 .eq("trabajador", trabajador)
@@ -73,22 +86,12 @@ const { data } = await supabaseClient
 .is("salida", null)
 .maybeSingle();
 
-if(data){
+if(entradaExistente){
 alert("Este trabajador ya fichó entrada");
 return;
 }
 
-const { error } = await supabaseClient
-.from("fichajes")
-const { data: trabajadorData } = await supabaseClient
-.from("trabajadores")
-.select("obra")
-.eq("nombre", trabajador)
-.single();
-
-const obra = trabajadorData.obra;
-  
-const { error } = await supabaseClient 
+const { error: insertError } = await supabaseClient
 .from("fichajes")
 .insert([
 {
