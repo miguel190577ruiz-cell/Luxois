@@ -215,7 +215,58 @@ contenedor.appendChild(linea);
 }
 cargarTrabajadores();
 cargarTrabajandoAhora();
+  async function cargarHistorialHoy(){
+
+const hoy = new Date().toISOString().split("T")[0];
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.eq("fecha", hoy)
+.order("entrada", { ascending: true });
+
+if(error){
+console.log(error);
+return;
+}
+
+const contenedor = document.getElementById("historialHoy");
+contenedor.innerHTML = "";
+
+if(data.length === 0){
+contenedor.innerHTML = "No hay fichajes hoy";
+return;
+}
+
+data.forEach(fichaje => {
+
+const linea = document.createElement("div");
+
+const entrada = new Date(fichaje.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+
+let salida = "-";
+if(fichaje.salida){
+salida = new Date(fichaje.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+}
+
+let horas = "-";
+if(fichaje.horas_redondeadas){
+horas = fichaje.horas_redondeadas;
+}
+
+linea.textContent =
+fichaje.trabajador + " — " + fichaje.obra +
+" | Entrada: " + entrada +
+" | Salida: " + salida +
+" | Horas: " + horas;
+
+contenedor.appendChild(linea);
+
+});
+
+}
 setInterval(cargarTrabajandoAhora, 30000); 
+setInterval(cargarHistorialHoy, 30000);
 </script>
 
 </body>
