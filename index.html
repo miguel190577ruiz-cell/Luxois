@@ -25,7 +25,52 @@
   <br><br>
   
 <button onclick="exportarExcel()">Exportar horas a Excel</button>
-  
+async function exportarMes(){
+
+const hoy = new Date();
+const año = hoy.getFullYear();
+const mes = (hoy.getMonth()+1).toString().padStart(2,"0");
+
+const inicioMes = `${año}-${mes}-01`;
+const finMes = `${año}-${mes}-31`;
+
+const { data, error } = await supabaseClient
+.from("fichajes")
+.select("*")
+.gte("fecha", inicioMes)
+.lte("fecha", finMes)
+.order("fecha", { ascending: true });
+
+if(error){
+console.log(error);
+alert("Error cargando datos");
+return;
+}
+
+let csv = "Fecha,Trabajador,Obra,Entrada,Salida,Horas\n";
+
+data.forEach(f => {
+
+const entrada = f.entrada ? new Date(f.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const salida = f.salida ? new Date(f.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
+const horas = f.horas_redondeadas ?? "";
+
+csv += `${f.fecha},${f.trabajador},${f.obra},${entrada},${salida},${horas}\n`;
+
+});
+
+const blob = new Blob([csv], { type: "text/csv" });
+
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+
+link.download = `horas_${año}_${mes}.csv`;
+
+link.click();
+
+}
+<br><br>
+<button onclick="exportarMes()">Exportar horas del mes</button>  
 <br><br>
 
 <h3>Trabajando ahora</h3>
