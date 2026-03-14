@@ -234,7 +234,7 @@ const hoy = new Date().toISOString().split("T")[0];
 
 const { data: trabajadorData, error: obraError } = await supabaseClient
 .from("trabajadores")
-.select("obra")
+.select("obra,pin,movil_id")
 .eq("nombre", trabajador)
 .single();
 
