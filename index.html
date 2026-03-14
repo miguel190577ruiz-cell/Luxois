@@ -122,12 +122,18 @@ const { data, error } = await supabaseClient
 .is("salida", null)
 .maybeSingle();
 
-if(!data){
-alert("No hay entrada registrada");
+if(error){
+console.log(error);
+alert("Error buscando entrada");
 return;
 }
-
-const { error: updateError } = await supabaseClient
+  
+if(!data)
+alert(No hay entrada registrada")
+return;
+}
+  
+const { error: updateError } = await supabaseClient    
 .from("fichajes")
 .update({
 salida: new Date().toISOString()
