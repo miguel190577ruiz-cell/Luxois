@@ -234,6 +234,21 @@ const trabajador = document.getElementById("trabajador").value;
 const pin = document.getElementById("pin").value;
 const movil = obtenerMovilID();
 const pinEncargado = document.getElementById("pinEncargado").value;
+let esEncargado = false;
+
+if(pinEncargado){
+
+const { data } = await supabaseClient
+.from("encargados")
+.select("*")
+.eq("pin", pinEncargado)
+.maybeSingle();
+
+if(data){
+esEncargado = true;
+}
+
+}
 const hoy = new Date().toISOString().split("T")[0];
 
 const { data: trabajadorData, error: obraError } = await supabaseClient
