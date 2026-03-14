@@ -84,16 +84,7 @@ Cargando...
 <h3>Historial de hoy</h3>
   
 <div id="historialHoy">
- 
 Cargando historial...
-</div>
-  
-<br><br>
-
-<h3>Trabajadores por obra</h3>
-
-<div id="porObra">
-Cargando obras...
 </div>
 <script>
 
@@ -275,7 +266,6 @@ contenedor.appendChild(linea);
 cargarTrabajadores();
 cargarTrabajandoAhora();
 cargarHistorialHoy();
-cargarPorObra(); 
 async function cargarHistorialHoy(){
 
 const hoy = new Date().toISOString().split("T")[0];
@@ -324,64 +314,10 @@ fichaje.trabajador + " — " + fichaje.obra +
 contenedor.appendChild(linea);
 
 });
-async function cargarPorObra(){
 
-const hoy = new Date().toISOString().split("T")[0];
-
-const { data, error } = await supabaseClient
-.from("fichajes")
-.select("*")
-.eq("fecha", hoy)
-.is("salida", null);
-
-if(error){
-console.log(error);
-return;
-}
-
-const contenedor = document.getElementById("porObra");
-contenedor.innerHTML = "";
-
-if(data.length === 0){
-contenedor.innerHTML = "No hay trabajadores en obra";
-return;
-}
-
-const obras = {};
-
-data.forEach(f => {
-
-if(!obras[f.obra]){
-obras[f.obra] = [];
-}
-
-obras[f.obra].push(f.trabajador);
-
-});
-
-for(const obra in obras){
-
-const titulo = document.createElement("h4");
-titulo.textContent = obra;
-contenedor.appendChild(titulo);
-
-obras[obra].forEach(trabajador => {
-
-const linea = document.createElement("div");
-linea.textContent = "• " + trabajador;
-
-contenedor.appendChild(linea);
-
-});
-
-}
-
-}
 }
 setInterval(cargarTrabajandoAhora, 30000); 
 setInterval(cargarHistorialHoy, 30000);
-setInterval(cargarPorObra, 30000);
-  
 </script>
 
 </body>
