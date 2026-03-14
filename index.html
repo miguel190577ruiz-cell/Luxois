@@ -250,7 +250,14 @@ console.log(obraError);
 alert("Error obteniendo obra");
 return;
 }
+if(!trabajadorData.movil_id){
 
+await supabaseClient
+.from("trabajadores")
+.update({ movil_id: movil })
+.eq("nombre", trabajador);
+
+}
 const obra = trabajadorData.obra;
 
 const { data: entradaExistente, error: checkError } = await supabaseClient
