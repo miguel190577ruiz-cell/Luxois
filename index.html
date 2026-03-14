@@ -18,13 +18,7 @@
 </select>
 <br><br>
 
-<label>Obra:</label>
-<select id="obra">
-<option>Castillo Monterrey</option>
-<option>Reforma Vivienda</option>
-<option>Local Comercial</option>
-</select>
-<br><br>
+
 
 <button onclick="ficharEntrada()">Fichar Entrada</button>
 <button onclick="ficharSalida()">Fichar Salida</button>
@@ -86,6 +80,13 @@ return;
 
 const { error } = await supabaseClient
 .from("fichajes")
+  const { data: trabajadorData } = await supabaseClient
+.from("trabajadores")
+.select("obra")
+.eq("nombre", trabajador)
+.single();
+
+const obra = trabajadorData.obra;
 .insert([
 {
 trabajador: trabajador,
