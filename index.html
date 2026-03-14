@@ -21,8 +21,11 @@
 
 <button onclick="ficharEntrada()">Fichar Entrada</button>
 <button onclick="ficharSalida()">Fichar Salida</button>
+  
   <br><br>
+  
 <button onclick="exportarExcel()">Exportar horas a Excel</button>
+  
 <br><br>
 
 <h3>Trabajando ahora</h3>
@@ -30,46 +33,11 @@
 <div id="trabajandoAhora">
 Cargando...
 </div>
-  <br><br>
+  
+ <br><br>
 
 <h3>Historial de hoy</h3>
-async function exportarExcel(){
-
-const hoy = new Date().toISOString().split("T")[0];
-
-const { data, error } = await supabaseClient
-.from("fichajes")
-.select("*")
-.eq("fecha", hoy);
-
-if(error){
-console.log(error);
-alert("Error cargando datos");
-return;
-}
-
-let csv = "Trabajador,Obra,Entrada,Salida,Horas\n";
-
-data.forEach(f => {
-
-const entrada = f.entrada ? new Date(f.entrada).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
-const salida = f.salida ? new Date(f.salida).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : "";
-const horas = f.horas_redondeadas ?? "";
-
-csv += `${f.trabajador},${f.obra},${entrada},${salida},${horas}\n`;
-
-});
-
-const blob = new Blob([csv], { type: "text/csv" });
-
-const link = document.createElement("a");
-link.href = URL.createObjectURL(blob);
-
-link.download = "horas_" + hoy + ".csv";
-
-link.click();
-
-}
+  
 <div id="historialHoy">
 Cargando historial...
 </div>
