@@ -290,6 +290,7 @@ const btnCerrarModalObras = document.getElementById("btnCerrarModalObras");
 
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
+let obraSeleccionadaId = null;
 let listaObras = [];
 
 const HORAS_SEMANA_PRUEBA = 32;
@@ -341,6 +342,8 @@ const { data, error } = await supabaseClient
 if(error){
 console.log(error);
 listaObras = [];
+obraSeleccionada = "";
+obraSeleccionadaId = null;
 btnObra.textContent = "OBRA";
 return;
 }
@@ -348,12 +351,22 @@ return;
 listaObras = data || [];
 
 if(listaObras.length > 0){
-if(!obraSeleccionada){
+if(!obraSeleccionadaId){
+obraSeleccionadaId = listaObras[0].id;
 obraSeleccionada = listaObras[0].nombre;
+} else {
+const obraActual = listaObras.find(o => o.id === obraSeleccionadaId);
+if(obraActual){
+obraSeleccionada = obraActual.nombre;
+} else {
+obraSeleccionadaId = listaObras[0].id;
+obraSeleccionada = listaObras[0].nombre;
+}
 }
 btnObra.textContent = obraSeleccionada;
 }else{
 obraSeleccionada = "";
+obraSeleccionadaId = null;
 btnObra.textContent = "SIN OBRA";
 }
 
@@ -374,6 +387,7 @@ boton.textContent = obra.nombre;
 
 boton.addEventListener("click", () => {
 obraSeleccionada = obra.nombre;
+obraSeleccionadaId = obra.id;
 btnObra.textContent = obraSeleccionada;
 cerrarModalObras();
 });
@@ -481,19 +495,28 @@ btnMes.textContent = "HORAS MES";
 
 async function añadirObra(){
 
-const nombreObra = prompt("Escribe el nombre de la nueva obra");
-
+const nombreObra = prompt("Nombre de la obra");
 if(!nombreObra) return;
+
+const latitud = prompt("Latitud de la obra");
+if(!latitud) return;
+
+const longitud = prompt("Longitud de la obra");
+if(!longitud) return;
 
 const { error } = await supabaseClient
 .from("obras")
 .insert([
-{ nombre: nombreObra }
+{
+nombre: nombreObra.trim(),
+latitud: parseFloat(latitud),
+longitud: parseFloat(longitud)
+}
 ]);
 
 if(error){
 console.log(error);
-alert("Error al crear la obra: " + error.message);
+alert("Error al crear la obra: " + (error.message || ""));
 return;
 }
 
@@ -538,11 +561,11 @@ const { error } = await supabaseClient
 if(error){
 console.log(error);
 alert(
-"Error al crear trabajador:\\n\\n" +
+"Error al crear trabajador:\n\n" +
 (error.message || "") +
-"\\n\\n" +
+"\n\n" +
 (error.details || "") +
-"\\n\\n" +
+"\n\n" +
 (error.hint || "")
 );
 return;
