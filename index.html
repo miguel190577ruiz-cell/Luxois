@@ -157,7 +157,8 @@ letter-spacing:3px;
 }
 
 .listaObras,
-.listaTrabajando{
+.listaTrabajando,
+.listaSemana{
 display:flex;
 flex-direction:column;
 gap:14px;
@@ -193,6 +194,21 @@ border:2px solid #f0b33a;
 color:#f0b33a;
 cursor:pointer;
 font-family:'Cinzel', serif;
+}
+
+.lineaSemana{
+display:flex;
+justify-content:space-between;
+gap:12px;
+border:1px solid #f0b33a;
+padding:10px 12px;
+font-size:17px;
+}
+
+.totalSemana{
+margin:10px 0 24px 0;
+font-size:22px;
+letter-spacing:2px;
 }
 </style>
 </head>
@@ -275,6 +291,15 @@ font-family:'Cinzel', serif;
 </div>
 </div>
 
+<div id="modalHorasSemana" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo" id="tituloHorasSemana">HORAS SEMANA</h3>
+<div id="listaHorasSemana" class="listaSemana"></div>
+<div id="totalHorasSemana" class="totalSemana"></div>
+<button class="botonCerrar" id="btnCerrarHorasSemana">CERRAR</button>
+</div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -322,6 +347,12 @@ const tituloFichaTrabajador = document.getElementById("tituloFichaTrabajador");
 const btnFichaHorasSemana = document.getElementById("btnFichaHorasSemana");
 const btnFichaHorasMes = document.getElementById("btnFichaHorasMes");
 const btnCerrarFichaTrabajador = document.getElementById("btnCerrarFichaTrabajador");
+
+const modalHorasSemana = document.getElementById("modalHorasSemana");
+const tituloHorasSemana = document.getElementById("tituloHorasSemana");
+const listaHorasSemana = document.getElementById("listaHorasSemana");
+const totalHorasSemana = document.getElementById("totalHorasSemana");
+const btnCerrarHorasSemana = document.getElementById("btnCerrarHorasSemana");
 
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
@@ -410,6 +441,63 @@ function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
+}
+
+function calcularHorasRedondeadasDesdeFichaje(fichaje){
+  if(!fichaje || !fichaje.entrada || !fichaje.salida){
+    return 0;
+  }
+
+  if(fichaje.horas_redondeadas != null){
+    return Number(fichaje.horas_redondeadas);
+  }
+
+  const entrada = new Date(fichaje.entrada);
+  const salida = new Date(fichaje.salida);
+
+  let horas = (salida - entrada) / 1000 / 60 / 60;
+
+  const minutosSalida = salida.getHours() * 60 + salida.getMinutes();
+  const limiteComida = 14 * 60 + 25;
+
+  if(minutosSalida > limiteComida){
+    horas = horas - 1;
+  }
+
+  if(horas < 0){
+    horas = 0;
+  }
+
+  return Math.round(horas);
+}
+
+function obtenerInicioSemana(fecha){
+  const d = new Date(fecha);
+  const dia = d.getDay();
+  const ajuste = dia === 0 ? -6 : 1 - dia;
+  d.setDate(d.getDate() + ajuste);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function formatearFechaYYYYMMDD(fecha){
+  const año = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  return `${año}-${mes}-${dia}`;
+}
+
+function nombreDiaSemana(indice){
+  const nombres = [
+    "LUNES",
+    "MARTES",
+    "MIÉRCOLES",
+    "JUEVES",
+    "VIERNES",
+    "SÁBADO",
+    "DOMINGO"
+  ];
+  return nombres[indice];
 }
 
 async function cargarObras(){
@@ -505,6 +593,66 @@ function cerrarFichaTrabajador(){
   modalFichaTrabajador.classList.add("oculto");
 }
 
+async function abrirHorasSemanaTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const hoy = new Date();
+  const inicioSemana = obtenerInicioSemana(hoy);
+
+  const finSemana = new Date(inicioSemana);
+  finSemana.setDate(finSemana.getDate() + 6);
+
+  const fechaInicio = formatearFechaYYYYMMDD(inicioSemana);
+  const fechaFin = formatearFechaYYYYMMDD(finSemana);
+
+  const { data, error } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .gte("fecha", fechaInicio)
+    .lte("fecha", fechaFin)
+    .order("fecha", { ascending: true });
+
+  if(error){
+    console.log(error);
+    alert("Error cargando horas de la semana");
+    return;
+  }
+
+  const horasPorDia = {};
+  (data || []).forEach(fichaje => {
+    horasPorDia[fichaje.fecha] = calcularHorasRedondeadasDesdeFichaje(fichaje);
+  });
+
+  listaHorasSemana.innerHTML = "";
+  let total = 0;
+
+  for(let i = 0; i < 7; i++){
+    const fechaDia = new Date(inicioSemana);
+    fechaDia.setDate(fechaDia.getDate() + i);
+
+    const clave = formatearFechaYYYYMMDD(fechaDia);
+    const horas = horasPorDia[clave] || 0;
+    total += horas;
+
+    const linea = document.createElement("div");
+    linea.className = "lineaSemana";
+    linea.innerHTML = `<span>${nombreDiaSemana(i)}</span><span>${horas} H</span>`;
+    listaHorasSemana.appendChild(linea);
+  }
+
+  tituloHorasSemana.textContent = "SEMANA DE " + trabajadorSeleccionadoFicha.nombre.toUpperCase();
+  totalHorasSemana.textContent = "TOTAL: " + total + " H";
+
+  modalHorasSemana.classList.remove("oculto");
+}
+
+function cerrarHorasSemana(){
+  modalHorasSemana.classList.add("oculto");
+}
+
 async function abrirModalTrabajando(){
   if(!obraSeleccionada){
     alert("Selecciona primero una obra");
@@ -554,15 +702,8 @@ async function abrirModalTrabajando(){
       if(fichaje.entrada && !fichaje.salida){
         estado = "TRABAJANDO";
       } else if(fichaje.entrada && fichaje.salida){
-        let horasTexto = "";
-        if(fichaje.horas_redondeadas != null){
-          horasTexto = fichaje.horas_redondeadas + " H";
-        } else if(fichaje.horas != null){
-          horasTexto = Math.round(fichaje.horas) + " H";
-        } else {
-          horasTexto = "COMPLETADO";
-        }
-        estado = "SALIO, " + horasTexto;
+        const horasTexto = calcularHorasRedondeadasDesdeFichaje(fichaje);
+        estado = "SALIO, " + horasTexto + " H";
       } else {
         estado = "FICHAJE INCOMPLETO";
       }
@@ -826,10 +967,7 @@ btnHorasMesEnc.addEventListener("click", funcionNoDisponible);
 btnCerrarModalObras.addEventListener("click", cerrarModalObras);
 btnCerrarModalTrabajando.addEventListener("click", cerrarModalTrabajando);
 
-btnFichaHorasSemana.addEventListener("click", () => {
-  if(!trabajadorSeleccionadoFicha) return;
-  alert("HORAS SEMANA de " + trabajadorSeleccionadoFicha.nombre + " será el siguiente paso");
-});
+btnFichaHorasSemana.addEventListener("click", abrirHorasSemanaTrabajador);
 
 btnFichaHorasMes.addEventListener("click", () => {
   if(!trabajadorSeleccionadoFicha) return;
@@ -837,6 +975,7 @@ btnFichaHorasMes.addEventListener("click", () => {
 });
 
 btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
+btnCerrarHorasSemana.addEventListener("click", cerrarHorasSemana);
 
 });
 </script>
