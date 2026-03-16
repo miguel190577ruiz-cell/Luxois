@@ -124,7 +124,70 @@ font-size:14px;
 }
 
 .oculto{
-display:none;
+display:none !important;
+}
+
+/* MODAL LUXOIS */
+.modalFondo{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.88);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:999;
+}
+
+.modalCaja{
+width:100%;
+max-width:380px;
+border:2px solid #f0b33a;
+padding:24px 20px;
+background:black;
+box-shadow:0 0 18px rgba(240,179,58,0.18);
+text-align:center;
+}
+
+.modalTitulo{
+font-size:26px;
+margin:0 0 24px 0;
+letter-spacing:3px;
+}
+
+.listaObras{
+display:flex;
+flex-direction:column;
+gap:14px;
+margin-bottom:24px;
+}
+
+.botonObra{
+width:100%;
+padding:12px 16px;
+font-size:20px;
+letter-spacing:1px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+}
+
+.botonObra:hover{
+background:#f0b33a;
+color:black;
+}
+
+.botonCerrar{
+width:100%;
+padding:12px 16px;
+font-size:18px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
 }
 </style>
 </head>
@@ -184,6 +247,15 @@ display:none;
 <button class="boton" id="btnHorasMesEnc">HORAS MES</button>
 </div>
 
+<!-- MODAL OBRAS -->
+<div id="modalObras" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo">SELECCIONAR OBRA</h3>
+<div id="listaObras" class="listaObras"></div>
+<button class="botonCerrar" id="btnCerrarModalObras">CERRAR</button>
+</div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -217,8 +289,13 @@ const btnTrabajando = document.getElementById("btnTrabajando");
 const btnHorasSemanaEnc = document.getElementById("btnHorasSemanaEnc");
 const btnHorasMesEnc = document.getElementById("btnHorasMesEnc");
 
+const modalObras = document.getElementById("modalObras");
+const listaObrasDiv = document.getElementById("listaObras");
+const btnCerrarModalObras = document.getElementById("btnCerrarModalObras");
+
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
+let listaObras = [];
 
 const HORAS_SEMANA_PRUEBA = 32;
 const HORAS_MES_PRUEBA = 118;
@@ -246,7 +323,6 @@ localStorage.setItem("estado_trabajador", estado);
 }
 
 function actualizarPantallaTrabajador(){
-
 const estado = leerEstadoDia();
 
 if(estado === "inicio"){
@@ -258,30 +334,62 @@ estadoTrabajador.textContent = "TRABAJANDO";
 else if(estado === "salido"){
 estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
 }
-
 }
 
-async function cargarPrimeraObra(){
+async function cargarObras(){
 
 const { data, error } = await supabaseClient
 .from("obras")
 .select("*")
-.order("nombre", { ascending: true })
-.limit(1);
+.order("nombre", { ascending: true });
 
 if(error){
 console.log(error);
-btnObra.textContent = "OBRA";
+listaObras = [];
 return;
 }
 
-if(data && data.length > 0){
-obraSeleccionada = data[0].nombre;
+listaObras = data || [];
+
+if(listaObras.length > 0){
+if(!obraSeleccionada){
+obraSeleccionada = listaObras[0].nombre;
+}
 btnObra.textContent = obraSeleccionada;
 }else{
+obraSeleccionada = "";
 btnObra.textContent = "SIN OBRA";
 }
 
+}
+
+function abrirModalObras(){
+if(listaObras.length === 0){
+alert("No hay obras creadas");
+return;
+}
+
+listaObrasDiv.innerHTML = "";
+
+listaObras.forEach(obra => {
+const boton = document.createElement("button");
+boton.className = "botonObra";
+boton.textContent = obra.nombre;
+
+boton.addEventListener("click", () => {
+obraSeleccionada = obra.nombre;
+btnObra.textContent = obraSeleccionada;
+cerrarModalObras();
+});
+
+listaObrasDiv.appendChild(boton);
+});
+
+modalObras.classList.remove("oculto");
+}
+
+function cerrarModalObras(){
+modalObras.classList.add("oculto");
 }
 
 inputs.forEach((input, index) => {
@@ -319,7 +427,7 @@ if(pin === PIN_ENCARGADO){
 mensajeLogin.textContent = "";
 pantallaLogin.classList.add("oculto");
 pantallaEncargado.classList.remove("oculto");
-cargarPrimeraObra();
+await cargarObras();
 return;
 }
 
@@ -347,7 +455,6 @@ pantallaLogin.classList.add("oculto");
 pantallaTrabajador.classList.remove("oculto");
 
 actualizarPantallaTrabajador();
-
 }
 
 function ficharEntrada(){
@@ -395,8 +502,7 @@ return;
 }
 
 alert("Obra creada correctamente");
-cargarPrimeraObra();
-
+await cargarObras();
 }
 
 function funcionNoDisponible(){
@@ -409,13 +515,15 @@ btnSalida.addEventListener("click", ficharSalida);
 btnSemana.addEventListener("click", verHorasSemana);
 btnMes.addEventListener("click", verHorasMes);
 
+btnObra.addEventListener("click", abrirModalObras);
 btnAñadirObra.addEventListener("click", añadirObra);
 
-btnObra.addEventListener("click", funcionNoDisponible);
 btnAñadirTrabajador.addEventListener("click", funcionNoDisponible);
 btnTrabajando.addEventListener("click", funcionNoDisponible);
 btnHorasSemanaEnc.addEventListener("click", funcionNoDisponible);
 btnHorasMesEnc.addEventListener("click", funcionNoDisponible);
+
+btnCerrarModalObras.addEventListener("click", cerrarModalObras);
 
 });
 </script>
