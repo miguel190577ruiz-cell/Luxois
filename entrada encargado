@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXOIS Control de Obras</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+min-height:100vh;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:'Cinzel', serif;
+color:#f0b33a;
+}
+
+.pantalla{
+width:100%;
+max-width:420px;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+text-align:center;
+padding:40px 24px;
+}
+
+.logo{
+font-size:64px;
+margin:0;
+letter-spacing:2px;
+}
+
+.sublogo{
+font-size:22px;
+margin:0 0 50px 0;
+letter-spacing:3px;
+}
+
+.estado{
+font-size:30px;
+margin:0 0 50px 0;
+min-height:40px;
+}
+
+.tituloPanel{
+font-size:28px;
+margin:0 0 50px 0;
+letter-spacing:4px;
+}
+
+.pinTitle{
+font-size:28px;
+margin-bottom:24px;
+letter-spacing:6px;
+}
+
+.pinRow{
+display:flex;
+gap:20px;
+margin-bottom:20px;
+}
+
+.pinInput{
+width:50px;
+height:50px;
+border:none;
+border-bottom:3px solid #f0b33a;
+background:transparent;
+color:#f0b33a;
+font-size:32px;
+text-align:center;
+outline:none;
+font-family:'Cinzel', serif;
+}
+
+.pinDots{
+display:flex;
+gap:18px;
+margin-bottom:70px;
+}
+
+.pinDots span{
+width:12px;
+height:12px;
+background:#f0b33a;
+border-radius:50%;
+box-shadow:0 0 8px #f0b33a;
+}
+
+.boton{
+width:260px;
+padding:14px 20px;
+font-size:22px;
+letter-spacing:2px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+margin-bottom:20px;
+}
+
+.boton:hover{
+background:#f0b33a;
+color:black;
+}
+
+.mensaje{
+margin-top:10px;
+min-height:24px;
+font-size:14px;
+}
+
+.oculto{
+display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="pantallaLogin" class="pantalla">
+<h1 class="logo">LUXOIS</h1>
+<h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+<h3 class="pinTitle">PIN</h3>
+
+<div class="pinRow">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+</div>
+
+<div class="pinDots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<button class="boton" id="btnEntrarApp">ENTRAR</button>
+<div class="mensaje" id="mensajeLogin"></div>
+</div>
+
+<div id="pantallaTrabajador" class="pantalla oculto">
+<h1 class="logo">LUXOIS</h1>
+<h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+<h3 class="estado" id="estadoTrabajador">HOLA</h3>
+
+<button class="boton" id="btnEntrada">ENTRAR</button>
+<button class="boton" id="btnSalida">SALIR</button>
+<button class="boton" id="btnSemana">HORAS SEMANA</button>
+<button class="boton" id="btnMes">HORAS MES</button>
+</div>
+
+<div id="pantallaEncargado" class="pantalla oculto">
+<h1 class="logo">LUXOIS</h1>
+<h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+<h3 class="tituloPanel">PANEL ENCARGADO</h3>
+
+<button class="boton">OBRA</button>
+<button class="boton">AÑADIR OBRA</button>
+<button class="boton">AÑADIR TRABAJADOR</button>
+<button class="boton">TRABAJANDO</button>
+<button class="boton">HORAS SEMANA</button>
+<button class="boton">HORAS MES</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
+"https://rldffnkqebxigtygpxwa.supabase.co",
+"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+);
+
+const PIN_ENCARGADO = "7126";
+
+const inputs = document.querySelectorAll(".pinInput");
+const mensajeLogin = document.getElementById("mensajeLogin");
+
+const pantallaLogin = document.getElementById("pantallaLogin");
+const pantallaTrabajador = document.getElementById("pantallaTrabajador");
+const pantallaEncargado = document.getElementById("pantallaEncargado");
+
+const estadoTrabajador = document.getElementById("estadoTrabajador");
+const btnSemana = document.getElementById("btnSemana");
+const btnMes = document.getElementById("btnMes");
+const btnEntrarApp = document.getElementById("btnEntrarApp");
+const btnEntrada = document.getElementById("btnEntrada");
+const btnSalida = document.getElementById("btnSalida");
+
+let nombreTrabajadorActual = "";
+const HORAS_SEMANA_PRUEBA = 32;
+const HORAS_MES_PRUEBA = 118;
+
+function hoyString(){
+return new Date().toISOString().split("T")[0];
+}
+
+function leerEstadoDia(){
+const guardado = localStorage.getItem("estado_trabajador");
+const fecha = localStorage.getItem("estado_fecha");
+
+if(fecha !== hoyString()){
+localStorage.setItem("estado_fecha", hoyString());
+localStorage.setItem("estado_trabajador", "inicio");
+return "inicio";
+}
+
+return guardado || "inicio";
+}
+
+function guardarEstadoDia(estado){
+localStorage.setItem("estado_fecha", hoyString());
+localStorage.setItem("estado_trabajador", estado);
+}
+
+function actualizarPantallaTrabajador(){
+
+const estado = leerEstadoDia();
+
+if(estado === "inicio"){
+estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
+}
+
+else if(estado === "trabajando"){
+estadoTrabajador.textContent = "TRABAJANDO";
+}
+
+else if(estado === "salido"){
+estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
+}
+
+}
+
+inputs.forEach((input, index) => {
+
+input.addEventListener("input", () => {
+
+input.value = input.value.replace(/[^0-9]/g, "");
+
+if(input.value && index < inputs.length - 1){
+inputs[index + 1].focus();
+}
+
+});
+
+input.addEventListener("keydown", (e) => {
+
+if(e.key === "Backspace" && !input.value && index > 0){
+inputs[index - 1].focus();
+}
+
+});
+
+});
+
+async function entrarApp(){
+
+let pin = "";
+
+inputs.forEach(input => {
+pin += input.value;
+});
+
+if(pin.length !== 4){
+mensajeLogin.textContent = "Introduce el PIN completo";
+return;
+}
+
+if(pin === PIN_ENCARGADO){
+
+pantallaLogin.classList.add("oculto");
+pantallaEncargado.classList.remove("oculto");
+
+return;
+
+}
+
+const { data, error } = await supabaseClient
+.from("trabajadores")
+.select("*")
+.eq("pin", pin)
+.maybeSingle();
+
+if(error){
+console.log(error);
+mensajeLogin.textContent = "Error conectando";
+return;
+}
+
+if(!data){
+mensajeLogin.textContent = "PIN incorrecto";
+return;
+}
+
+nombreTrabajadorActual = data.nombre || "TRABAJADOR";
+
+pantallaLogin.classList.add("oculto");
+pantallaTrabajador.classList.remove("oculto");
+
+actualizarPantallaTrabajador();
+
+}
+
+function ficharEntrada(){
+guardarEstadoDia("trabajando");
+actualizarPantallaTrabajador();
+}
+
+function ficharSalida(){
+guardarEstadoDia("salido");
+actualizarPantallaTrabajador();
+}
+
+function verHorasSemana(){
+
+btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
+
+setTimeout(() => {
+btnSemana.textContent = "HORAS SEMANA";
+},5000);
+
+}
+
+function verHorasMes(){
+
+btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
+
+setTimeout(() => {
+btnMes.textContent = "HORAS MES";
+},5000);
+
+}
+
+btnEntrarApp.addEventListener("click", entrarApp);
+btnEntrada.addEventListener("click", ficharEntrada);
+btnSalida.addEventListener("click", ficharSalida);
+btnSemana.addEventListener("click", verHorasSemana);
+btnMes.addEventListener("click", verHorasMes);
+
+});
+</script>
+
+</body>
+</html>
