@@ -700,24 +700,15 @@ async function modificarHorasSemana(){
     return;
   }
 
-  let resumen = "Escribe DIA y HORAS.\\n\\nEjemplo:\\nMIERCOLES 8\\n\\nDías válidos:\\nLUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO";
-  const entrada = prompt(resumen);
+  const diaTextoOriginal = prompt(
+    "Escribe el día a modificar.\n\nEjemplo:\nMIERCOLES\n\nDías válidos:\nLUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO"
+  );
 
-  if(!entrada) return;
+  if(!diaTextoOriginal) return;
 
-  const texto = entrada.trim().toUpperCase()
+  const diaTexto = diaTextoOriginal.trim().toUpperCase()
     .replace("MIÉRCOLES", "MIERCOLES")
     .replace("SÁBADO", "SABADO");
-
-  const partes = texto.split(/\\s+/);
-
-  if(partes.length < 2){
-    alert("Formato no válido. Usa por ejemplo: MIERCOLES 8");
-    return;
-  }
-
-  const diaTexto = partes[0];
-  const horasTexto = partes[1];
 
   const mapaDias = {
     "LUNES": "LUNES",
@@ -733,6 +724,10 @@ async function modificarHorasSemana(){
     alert("Día no válido");
     return;
   }
+
+  const horasTexto = prompt("Escribe las horas nuevas para " + mapaDias[diaTexto]);
+
+  if(horasTexto === null || horasTexto === "") return;
 
   const nuevasHoras = parseFloat(horasTexto);
 
