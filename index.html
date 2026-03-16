@@ -441,8 +441,8 @@ document.addEventListener("DOMContentLoaded", () => {
 const { createClient } = supabase;
 
 const supabaseClient = createClient(
-"https://rldffnkqebxigtygpxwa.supabase.co",
-"sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+  "https://rldffnkqebxigtygpxwa.supabase.co",
+  "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
 );
 
 const PIN_ENCARGADO = "7126";
@@ -515,9 +515,6 @@ let datosMesActual = [];
 let mesVisualizado = null;
 let añoVisualizado = null;
 
-const HORAS_SEMANA_PRUEBA = 32;
-const HORAS_MES_PRUEBA = 118;
-
 function hoyString(){
   return new Date().toISOString().split("T")[0];
 }
@@ -545,11 +542,9 @@ function actualizarPantallaTrabajador(){
 
   if(estado === "inicio"){
     estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
-  }
-  else if(estado === "trabajando"){
+  } else if(estado === "trabajando"){
     estadoTrabajador.textContent = "TRABAJANDO";
-  }
-  else if(estado === "salido"){
+  } else if(estado === "salido"){
     estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
   }
 }
@@ -597,12 +592,16 @@ function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
 }
 
 function calcularHorasRedondeadasDesdeFichaje(fichaje){
-  if(!fichaje || !fichaje.entrada || !fichaje.salida){
+  if(!fichaje){
     return 0;
   }
 
   if(fichaje.horas_redondeadas != null){
     return Number(fichaje.horas_redondeadas);
+  }
+
+  if(!fichaje.entrada || !fichaje.salida){
+    return 0;
   }
 
   const entrada = new Date(fichaje.entrada);
@@ -624,6 +623,45 @@ function calcularHorasRedondeadasDesdeFichaje(fichaje){
   return Math.round(horas);
 }
 
+function construirHorasPorFecha(fichajes){
+  const mapa = {};
+
+  (fichajes || []).forEach(fichaje => {
+    const fecha = fichaje.fecha;
+    if(!fecha) return;
+
+    const valor = calcularHorasRedondeadasDesdeFichaje(fichaje);
+    const tieneCorreccion = fichaje.horas_redondeadas != null;
+
+    if(!mapa[fecha]){
+      mapa[fecha] = {
+        horas: valor,
+        corregido: tieneCorreccion
+      };
+      return;
+    }
+
+    if(tieneCorreccion){
+      mapa[fecha] = {
+        horas: valor,
+        corregido: true
+      };
+      return;
+    }
+
+    if(!mapa[fecha].corregido){
+      mapa[fecha].horas = valor;
+    }
+  });
+
+  const salida = {};
+  Object.keys(mapa).forEach(fecha => {
+    salida[fecha] = mapa[fecha].horas;
+  });
+
+  return salida;
+}
+
 function obtenerInicioSemana(fecha){
   const d = new Date(fecha);
   const dia = d.getDay();
@@ -642,13 +680,7 @@ function formatearFechaYYYYMMDD(fecha){
 
 function nombreDiaSemana(indice){
   const nombres = [
-    "LUNES",
-    "MARTES",
-    "MIÉRCOLES",
-    "JUEVES",
-    "VIERNES",
-    "SÁBADO",
-    "DOMINGO"
+    "LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES","SÁBADO","DOMINGO"
   ];
   return nombres[indice];
 }
@@ -679,23 +711,23 @@ async function guardarCorreccionHoras(fecha, horasRedondeadas){
     .from("fichajes")
     .select("id")
     .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
-    .eq("fecha", fecha)
-    .limit(1);
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
+    .eq("fecha", fecha);
 
   if(errorBuscar){
     throw errorBuscar;
   }
 
   if(existentes && existentes.length > 0){
-    const idFichaje = existentes[0].id;
-
     const { error: errorUpdate } = await supabaseClient
       .from("fichajes")
       .update({
         horas_redondeadas: horasRedondeadas,
         horas: horasRedondeadas
       })
-      .eq("id", idFichaje);
+      .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+      .eq("obra", trabajadorSeleccionadoFicha.obra)
+      .eq("fecha", fecha);
 
     if(errorUpdate){
       throw errorUpdate;
@@ -748,7 +780,7 @@ async function cargarObras(){
       }
     }
     btnObra.textContent = obraSeleccionada;
-  }else{
+  } else {
     obraSeleccionada = "";
     obraSeleccionadaId = null;
     btnObra.textContent = "SIN OBRA";
@@ -872,7 +904,6 @@ async function abrirHorasSemanaTrabajador(){
 
   const hoy = new Date();
   const inicioSemana = obtenerInicioSemana(hoy);
-
   const finSemana = new Date(inicioSemana);
   finSemana.setDate(finSemana.getDate() + 6);
 
@@ -883,6 +914,7 @@ async function abrirHorasSemanaTrabajador(){
     .from("fichajes")
     .select("*")
     .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
     .gte("fecha", fechaInicio)
     .lte("fecha", fechaFin)
     .order("fecha", { ascending: true });
@@ -893,11 +925,7 @@ async function abrirHorasSemanaTrabajador(){
     return;
   }
 
-  const horasPorDia = {};
-  (data || []).forEach(fichaje => {
-    horasPorDia[fichaje.fecha] = calcularHorasRedondeadasDesdeFichaje(fichaje);
-  });
-
+  const horasPorDia = construirHorasPorFecha(data || []);
   const datosSemana = [];
 
   for(let i = 0; i < 7; i++){
@@ -948,6 +976,7 @@ async function cargarYRenderizarMes(){
     .from("fichajes")
     .select("*")
     .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
     .gte("fecha", fechaInicio)
     .lte("fecha", fechaFin)
     .order("fecha", { ascending: true });
@@ -958,12 +987,9 @@ async function cargarYRenderizarMes(){
     return;
   }
 
-  const horasPorDia = {};
-  (data || []).forEach(fichaje => {
-    horasPorDia[fichaje.fecha] = calcularHorasRedondeadasDesdeFichaje(fichaje);
-  });
-
+  const horasPorDia = construirHorasPorFecha(data || []);
   const totalDias = diasEnMes(añoVisualizado, mesVisualizado);
+
   datosMesActual = [];
 
   for(let dia = 1; dia <= totalDias; dia++){
@@ -1281,15 +1307,18 @@ async function abrirModalTrabajando(){
   }
 
   trabajadores.forEach(trabajador => {
-    const fichaje = (fichajesHoy || []).find(f => f.trabajador === trabajador.nombre);
+    const fichajesTrabajador = (fichajesHoy || []).filter(f => f.trabajador === trabajador.nombre);
 
     let estado = "NO FICHO ENTRADA";
 
-    if(fichaje){
-      if(fichaje.entrada && !fichaje.salida){
+    if(fichajesTrabajador.length > 0){
+      const fichajeConSalida = fichajesTrabajador.find(f => f.entrada && f.salida);
+      const fichajeTrabajando = fichajesTrabajador.find(f => f.entrada && !f.salida);
+
+      if(fichajeTrabajando){
         estado = "TRABAJANDO";
-      } else if(fichaje.entrada && fichaje.salida){
-        const horasTexto = calcularHorasRedondeadasDesdeFichaje(fichaje);
+      } else if(fichajeConSalida){
+        const horasTexto = calcularHorasRedondeadasDesdeFichaje(fichajeConSalida);
         estado = "SALIO, " + horasTexto + " H";
       } else {
         estado = "FICHAJE INCOMPLETO";
@@ -1437,16 +1466,14 @@ function ficharSalida(){
 }
 
 function verHorasSemana(){
-  btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
-
+  btnSemana.textContent = "SEMANA: 32 H";
   setTimeout(() => {
     btnSemana.textContent = "HORAS SEMANA";
   }, 5000);
 }
 
 function verHorasMes(){
-  btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
-
+  btnMes.textContent = "MES: 118 H";
   setTimeout(() => {
     btnMes.textContent = "HORAS MES";
   }, 5000);
@@ -1467,14 +1494,12 @@ async function añadirObra(){
 
   const { error } = await supabaseClient
     .from("obras")
-    .insert([
-      {
-        nombre: nombreObra.trim(),
-        latitud: parseFloat(latitud),
-        longitud: parseFloat(longitud),
-        radio_fichaje: parseFloat(radioFichaje)
-      }
-    ]);
+    .insert([{
+      nombre: nombreObra.trim(),
+      latitud: parseFloat(latitud),
+      longitud: parseFloat(longitud),
+      radio_fichaje: parseFloat(radioFichaje)
+    }]);
 
   if(error){
     console.log(error);
