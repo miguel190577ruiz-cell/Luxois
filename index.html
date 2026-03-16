@@ -44,19 +44,19 @@ letter-spacing:2px;
 
 .sublogo{
 font-size:22px;
-margin:0 0 50px 0;
+margin:0 0 40px 0;
 letter-spacing:3px;
 }
 
 .estado{
 font-size:30px;
-margin:0 0 50px 0;
+margin:0 0 40px 0;
 min-height:40px;
 }
 
 .tituloPanel{
 font-size:28px;
-margin:0 0 50px 0;
+margin:0 0 40px 0;
 letter-spacing:4px;
 }
 
@@ -146,6 +146,8 @@ padding:24px 20px;
 background:black;
 box-shadow:0 0 18px rgba(240,179,58,0.18);
 text-align:center;
+max-height:80vh;
+overflow:auto;
 }
 
 .modalTitulo{
@@ -154,26 +156,30 @@ margin:0 0 24px 0;
 letter-spacing:3px;
 }
 
-.listaObras{
+.listaObras,
+.listaTrabajando{
 display:flex;
 flex-direction:column;
 gap:14px;
 margin-bottom:24px;
 }
 
-.botonObra{
+.botonObra,
+.botonTrabajador{
 width:100%;
 padding:12px 16px;
-font-size:20px;
+font-size:18px;
 letter-spacing:1px;
 background:black;
 border:2px solid #f0b33a;
 color:#f0b33a;
 cursor:pointer;
 font-family:'Cinzel', serif;
+text-align:center;
 }
 
-.botonObra:hover{
+.botonObra:hover,
+.botonTrabajador:hover{
 background:#f0b33a;
 color:black;
 }
@@ -252,6 +258,14 @@ font-family:'Cinzel', serif;
 </div>
 </div>
 
+<div id="modalTrabajando" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo">TRABAJADORES DE LA OBRA</h3>
+<div id="listaTrabajando" class="listaTrabajando"></div>
+<button class="botonCerrar" id="btnCerrarModalTrabajando">CERRAR</button>
+</div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -290,6 +304,10 @@ const modalObras = document.getElementById("modalObras");
 const listaObrasDiv = document.getElementById("listaObras");
 const btnCerrarModalObras = document.getElementById("btnCerrarModalObras");
 
+const modalTrabajando = document.getElementById("modalTrabajando");
+const listaTrabajandoDiv = document.getElementById("listaTrabajando");
+const btnCerrarModalTrabajando = document.getElementById("btnCerrarModalTrabajando");
+
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
 let obraSeleccionadaId = null;
@@ -301,397 +319,474 @@ const HORAS_SEMANA_PRUEBA = 32;
 const HORAS_MES_PRUEBA = 118;
 
 function hoyString(){
-return new Date().toISOString().split("T")[0];
+  return new Date().toISOString().split("T")[0];
 }
 
 function leerEstadoDia(){
-const guardado = localStorage.getItem("estado_trabajador");
-const fecha = localStorage.getItem("estado_fecha");
+  const guardado = localStorage.getItem("estado_trabajador");
+  const fecha = localStorage.getItem("estado_fecha");
 
-if(fecha !== hoyString()){
-localStorage.setItem("estado_fecha", hoyString());
-localStorage.setItem("estado_trabajador", "inicio");
-return "inicio";
-}
+  if(fecha !== hoyString()){
+    localStorage.setItem("estado_fecha", hoyString());
+    localStorage.setItem("estado_trabajador", "inicio");
+    return "inicio";
+  }
 
-return guardado || "inicio";
+  return guardado || "inicio";
 }
 
 function guardarEstadoDia(estado){
-localStorage.setItem("estado_fecha", hoyString());
-localStorage.setItem("estado_trabajador", estado);
+  localStorage.setItem("estado_fecha", hoyString());
+  localStorage.setItem("estado_trabajador", estado);
 }
 
 function actualizarPantallaTrabajador(){
-const estado = leerEstadoDia();
+  const estado = leerEstadoDia();
 
-if(estado === "inicio"){
-estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
-}
-else if(estado === "trabajando"){
-estadoTrabajador.textContent = "TRABAJANDO";
-}
-else if(estado === "salido"){
-estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
-}
+  if(estado === "inicio"){
+    estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
+  }
+  else if(estado === "trabajando"){
+    estadoTrabajador.textContent = "TRABAJANDO";
+  }
+  else if(estado === "salido"){
+    estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
+  }
 }
 
 function obtenerUbicacionActual(){
-return new Promise((resolve, reject) => {
-if(!navigator.geolocation){
-reject(new Error("Tu dispositivo no permite geolocalización"));
-return;
-}
+  return new Promise((resolve, reject) => {
+    if(!navigator.geolocation){
+      reject(new Error("Tu dispositivo no permite geolocalización"));
+      return;
+    }
 
-navigator.geolocation.getCurrentPosition(
-posicion => {
-resolve({
-latitud: posicion.coords.latitude,
-longitud: posicion.coords.longitude
-});
-},
-error => {
-reject(error);
-},
-{
-enableHighAccuracy: true,
-timeout: 15000,
-maximumAge: 0
-}
-);
-});
+    navigator.geolocation.getCurrentPosition(
+      posicion => {
+        resolve({
+          latitud: posicion.coords.latitude,
+          longitud: posicion.coords.longitude
+        });
+      },
+      error => {
+        reject(error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+  });
 }
 
 function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
-const R = 6371000;
-const toRad = grados => grados * Math.PI / 180;
+  const R = 6371000;
+  const toRad = grados => grados * Math.PI / 180;
 
-const dLat = toRad(lat2 - lat1);
-const dLon = toRad(lon2 - lon1);
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
 
-const a =
-Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
-const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-return R * c;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 async function cargarObras(){
 
-const { data, error } = await supabaseClient
-.from("obras")
-.select("*")
-.order("nombre", { ascending: true });
+  const { data, error } = await supabaseClient
+    .from("obras")
+    .select("*")
+    .order("nombre", { ascending: true });
 
-if(error){
-console.log(error);
-listaObras = [];
-obraSeleccionada = "";
-obraSeleccionadaId = null;
-btnObra.textContent = "OBRA";
-return;
-}
+  if(error){
+    console.log(error);
+    listaObras = [];
+    obraSeleccionada = "";
+    obraSeleccionadaId = null;
+    btnObra.textContent = "OBRA";
+    return;
+  }
 
-listaObras = data || [];
+  listaObras = data || [];
 
-if(listaObras.length > 0){
-if(!obraSeleccionadaId){
-obraSeleccionadaId = listaObras[0].id;
-obraSeleccionada = listaObras[0].nombre;
-} else {
-const obraActual = listaObras.find(o => o.id === obraSeleccionadaId);
-if(obraActual){
-obraSeleccionada = obraActual.nombre;
-} else {
-obraSeleccionadaId = listaObras[0].id;
-obraSeleccionada = listaObras[0].nombre;
-}
-}
-btnObra.textContent = obraSeleccionada;
-}else{
-obraSeleccionada = "";
-obraSeleccionadaId = null;
-btnObra.textContent = "SIN OBRA";
-}
-
+  if(listaObras.length > 0){
+    if(!obraSeleccionadaId){
+      obraSeleccionadaId = listaObras[0].id;
+      obraSeleccionada = listaObras[0].nombre;
+    } else {
+      const obraActual = listaObras.find(o => o.id === obraSeleccionadaId);
+      if(obraActual){
+        obraSeleccionada = obraActual.nombre;
+      } else {
+        obraSeleccionadaId = listaObras[0].id;
+        obraSeleccionada = listaObras[0].nombre;
+      }
+    }
+    btnObra.textContent = obraSeleccionada;
+  }else{
+    obraSeleccionada = "";
+    obraSeleccionadaId = null;
+    btnObra.textContent = "SIN OBRA";
+  }
 }
 
 async function cargarObraDeTrabajador(nombreObra){
-const { data, error } = await supabaseClient
-.from("obras")
-.select("*")
-.eq("nombre", nombreObra)
-.maybeSingle();
+  const { data, error } = await supabaseClient
+    .from("obras")
+    .select("*")
+    .eq("nombre", nombreObra)
+    .maybeSingle();
 
-if(error){
-console.log(error);
-return null;
-}
+  if(error){
+    console.log(error);
+    return null;
+  }
 
-return data;
+  return data;
 }
 
 function abrirModalObras(){
-if(listaObras.length === 0){
-alert("No hay obras creadas");
-return;
-}
+  if(listaObras.length === 0){
+    alert("No hay obras creadas");
+    return;
+  }
 
-listaObrasDiv.innerHTML = "";
+  listaObrasDiv.innerHTML = "";
 
-listaObras.forEach(obra => {
-const boton = document.createElement("button");
-boton.className = "botonObra";
-boton.textContent = obra.nombre;
+  listaObras.forEach(obra => {
+    const boton = document.createElement("button");
+    boton.className = "botonObra";
+    boton.textContent = obra.nombre;
 
-boton.addEventListener("click", () => {
-obraSeleccionada = obra.nombre;
-obraSeleccionadaId = obra.id;
-btnObra.textContent = obraSeleccionada;
-cerrarModalObras();
-});
+    boton.addEventListener("click", () => {
+      obraSeleccionada = obra.nombre;
+      obraSeleccionadaId = obra.id;
+      btnObra.textContent = obraSeleccionada;
+      cerrarModalObras();
+    });
 
-listaObrasDiv.appendChild(boton);
-});
+    listaObrasDiv.appendChild(boton);
+  });
 
-modalObras.classList.remove("oculto");
+  modalObras.classList.remove("oculto");
 }
 
 function cerrarModalObras(){
-modalObras.classList.add("oculto");
+  modalObras.classList.add("oculto");
+}
+
+async function abrirModalTrabajando(){
+  if(!obraSeleccionada){
+    alert("Selecciona primero una obra");
+    return;
+  }
+
+  listaTrabajandoDiv.innerHTML = "";
+
+  const hoy = hoyString();
+
+  const { data: trabajadores, error: errorTrabajadores } = await supabaseClient
+    .from("trabajadores")
+    .select("*")
+    .eq("obra", obraSeleccionada)
+    .order("nombre", { ascending: true });
+
+  if(errorTrabajadores){
+    console.log(errorTrabajadores);
+    alert("Error cargando trabajadores");
+    return;
+  }
+
+  const { data: fichajesHoy, error: errorFichajes } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("obra", obraSeleccionada)
+    .eq("fecha", hoy);
+
+  if(errorFichajes){
+    console.log(errorFichajes);
+    alert("Error cargando fichajes");
+    return;
+  }
+
+  if(!trabajadores || trabajadores.length === 0){
+    listaTrabajandoDiv.innerHTML = "<div>No hay trabajadores en esta obra</div>";
+    modalTrabajando.classList.remove("oculto");
+    return;
+  }
+
+  trabajadores.forEach(trabajador => {
+    const fichaje = (fichajesHoy || []).find(f => f.trabajador === trabajador.nombre);
+
+    let estado = "NO FICHO ENTRADA";
+
+    if(fichaje){
+      if(fichaje.entrada && !fichaje.salida){
+        estado = "TRABAJANDO";
+      } else if(fichaje.entrada && fichaje.salida){
+        let horasTexto = "";
+        if(fichaje.horas_redondeadas != null){
+          horasTexto = fichaje.horas_redondeadas + " H";
+        } else if(fichaje.horas != null){
+          horasTexto = Math.round(fichaje.horas) + " H";
+        } else {
+          horasTexto = "COMPLETADO";
+        }
+        estado = "SALIO, " + horasTexto;
+      } else {
+        estado = "FICHAJE INCOMPLETO";
+      }
+    }
+
+    const boton = document.createElement("button");
+    boton.className = "botonTrabajador";
+    boton.textContent = trabajador.nombre + " — " + estado;
+
+    boton.addEventListener("click", () => {
+      alert("La ficha individual de " + trabajador.nombre + " será el siguiente paso");
+    });
+
+    listaTrabajandoDiv.appendChild(boton);
+  });
+
+  modalTrabajando.classList.remove("oculto");
+}
+
+function cerrarModalTrabajando(){
+  modalTrabajando.classList.add("oculto");
 }
 
 inputs.forEach((input, index) => {
+  input.addEventListener("input", () => {
+    input.value = input.value.replace(/[^0-9]/g, "");
 
-input.addEventListener("input", () => {
-input.value = input.value.replace(/[^0-9]/g, "");
+    if(input.value && index < inputs.length - 1){
+      inputs[index + 1].focus();
+    }
+  });
 
-if(input.value && index < inputs.length - 1){
-inputs[index + 1].focus();
-}
-});
-
-input.addEventListener("keydown", (e) => {
-if(e.key === "Backspace" && !input.value && index > 0){
-inputs[index - 1].focus();
-}
-});
-
+  input.addEventListener("keydown", (e) => {
+    if(e.key === "Backspace" && !input.value && index > 0){
+      inputs[index - 1].focus();
+    }
+  });
 });
 
 async function entrarApp(){
 
-let pin = "";
+  let pin = "";
 
-inputs.forEach(input => {
-pin += input.value;
-});
+  inputs.forEach(input => {
+    pin += input.value;
+  });
 
-if(pin.length !== 4){
-mensajeLogin.textContent = "Introduce el PIN completo";
-return;
-}
+  if(pin.length !== 4){
+    mensajeLogin.textContent = "Introduce el PIN completo";
+    return;
+  }
 
-if(pin === PIN_ENCARGADO){
-mensajeLogin.textContent = "";
-pantallaLogin.classList.add("oculto");
-pantallaEncargado.classList.remove("oculto");
-await cargarObras();
-return;
-}
+  if(pin === PIN_ENCARGADO){
+    mensajeLogin.textContent = "";
+    pantallaLogin.classList.add("oculto");
+    pantallaEncargado.classList.remove("oculto");
+    await cargarObras();
+    return;
+  }
 
-const { data, error } = await supabaseClient
-.from("trabajadores")
-.select("*")
-.eq("pin", pin)
-.maybeSingle();
+  const { data, error } = await supabaseClient
+    .from("trabajadores")
+    .select("*")
+    .eq("pin", pin)
+    .maybeSingle();
 
-if(error){
-console.log(error);
-mensajeLogin.textContent = "Error conectando";
-return;
-}
+  if(error){
+    console.log(error);
+    mensajeLogin.textContent = "Error conectando";
+    return;
+  }
 
-if(!data){
-mensajeLogin.textContent = "PIN incorrecto";
-return;
-}
+  if(!data){
+    mensajeLogin.textContent = "PIN incorrecto";
+    return;
+  }
 
-trabajadorActual = data;
-nombreTrabajadorActual = data.nombre || "TRABAJADOR";
-obraTrabajadorActual = await cargarObraDeTrabajador(data.obra);
+  trabajadorActual = data;
+  nombreTrabajadorActual = data.nombre || "TRABAJADOR";
+  obraTrabajadorActual = await cargarObraDeTrabajador(data.obra);
 
-mensajeLogin.textContent = "";
-mensajeTrabajador.textContent = "";
-pantallaLogin.classList.add("oculto");
-pantallaTrabajador.classList.remove("oculto");
+  mensajeLogin.textContent = "";
+  mensajeTrabajador.textContent = "";
+  pantallaLogin.classList.add("oculto");
+  pantallaTrabajador.classList.remove("oculto");
 
-actualizarPantallaTrabajador();
+  actualizarPantallaTrabajador();
 }
 
 async function ficharEntrada(){
 
-mensajeTrabajador.textContent = "";
+  mensajeTrabajador.textContent = "";
 
-if(!trabajadorActual){
-mensajeTrabajador.textContent = "No se encontró el trabajador";
-return;
-}
+  if(!trabajadorActual){
+    mensajeTrabajador.textContent = "No se encontró el trabajador";
+    return;
+  }
 
-if(!obraTrabajadorActual){
-mensajeTrabajador.textContent = "No se encontró la obra del trabajador";
-return;
-}
+  if(!obraTrabajadorActual){
+    mensajeTrabajador.textContent = "No se encontró la obra del trabajador";
+    return;
+  }
 
-if(
-obraTrabajadorActual.latitud == null ||
-obraTrabajadorActual.longitud == null ||
-obraTrabajadorActual.radio_fichaje == null
-){
-mensajeTrabajador.textContent = "La obra no tiene ubicación o radio configurado";
-return;
-}
+  if(
+    obraTrabajadorActual.latitud == null ||
+    obraTrabajadorActual.longitud == null ||
+    obraTrabajadorActual.radio_fichaje == null
+  ){
+    mensajeTrabajador.textContent = "La obra no tiene ubicación o radio configurado";
+    return;
+  }
 
-try{
+  try{
 
-mensajeTrabajador.textContent = "Comprobando ubicación...";
+    mensajeTrabajador.textContent = "Comprobando ubicación...";
 
-const ubicacion = await obtenerUbicacionActual();
+    const ubicacion = await obtenerUbicacionActual();
 
-const distancia = calcularDistanciaMetros(
-ubicacion.latitud,
-ubicacion.longitud,
-parseFloat(obraTrabajadorActual.latitud),
-parseFloat(obraTrabajadorActual.longitud)
-);
+    const distancia = calcularDistanciaMetros(
+      ubicacion.latitud,
+      ubicacion.longitud,
+      parseFloat(obraTrabajadorActual.latitud),
+      parseFloat(obraTrabajadorActual.longitud)
+    );
 
-const radioPermitido = parseFloat(obraTrabajadorActual.radio_fichaje);
+    const radioPermitido = parseFloat(obraTrabajadorActual.radio_fichaje);
 
-if(distancia > radioPermitido){
-mensajeTrabajador.textContent = "Fuera del radio permitido de la obra";
-return;
-}
+    if(distancia > radioPermitido){
+      mensajeTrabajador.textContent = "Fuera del radio permitido de la obra";
+      return;
+    }
 
-guardarEstadoDia("trabajando");
-actualizarPantallaTrabajador();
-mensajeTrabajador.textContent = "Fichaje correcto";
+    guardarEstadoDia("trabajando");
+    actualizarPantallaTrabajador();
+    mensajeTrabajador.textContent = "Fichaje correcto";
 
-}catch(error){
-console.log(error);
-mensajeTrabajador.textContent = "No se pudo comprobar la ubicación";
-}
-
+  }catch(error){
+    console.log(error);
+    mensajeTrabajador.textContent = "No se pudo comprobar la ubicación";
+  }
 }
 
 function ficharSalida(){
-guardarEstadoDia("salido");
-actualizarPantallaTrabajador();
-mensajeTrabajador.textContent = "";
+  guardarEstadoDia("salido");
+  actualizarPantallaTrabajador();
+  mensajeTrabajador.textContent = "";
 }
 
 function verHorasSemana(){
-btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
+  btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
 
-setTimeout(() => {
-btnSemana.textContent = "HORAS SEMANA";
-}, 5000);
+  setTimeout(() => {
+    btnSemana.textContent = "HORAS SEMANA";
+  }, 5000);
 }
 
 function verHorasMes(){
-btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
+  btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
 
-setTimeout(() => {
-btnMes.textContent = "HORAS MES";
-}, 5000);
+  setTimeout(() => {
+    btnMes.textContent = "HORAS MES";
+  }, 5000);
 }
 
 async function añadirObra(){
 
-const nombreObra = prompt("Nombre de la obra");
-if(!nombreObra) return;
+  const nombreObra = prompt("Nombre de la obra");
+  if(!nombreObra) return;
 
-const latitud = prompt("Latitud de la obra");
-if(!latitud) return;
+  const latitud = prompt("Latitud de la obra");
+  if(!latitud) return;
 
-const longitud = prompt("Longitud de la obra");
-if(!longitud) return;
+  const longitud = prompt("Longitud de la obra");
+  if(!longitud) return;
 
-const radioFichaje = prompt("Radio de fichaje en metros");
-if(!radioFichaje) return;
+  const radioFichaje = prompt("Radio de fichaje en metros");
+  if(!radioFichaje) return;
 
-const { error } = await supabaseClient
-.from("obras")
-.insert([
-{
-nombre: nombreObra.trim(),
-latitud: parseFloat(latitud),
-longitud: parseFloat(longitud),
-radio_fichaje: parseFloat(radioFichaje)
-}
-]);
+  const { error } = await supabaseClient
+    .from("obras")
+    .insert([
+      {
+        nombre: nombreObra.trim(),
+        latitud: parseFloat(latitud),
+        longitud: parseFloat(longitud),
+        radio_fichaje: parseFloat(radioFichaje)
+      }
+    ]);
 
-if(error){
-console.log(error);
-alert("Error al crear la obra: " + (error.message || ""));
-return;
-}
+  if(error){
+    console.log(error);
+    alert("Error al crear la obra: " + (error.message || ""));
+    return;
+  }
 
-alert("Obra creada correctamente");
-await cargarObras();
+  alert("Obra creada correctamente");
+  await cargarObras();
 }
 
 async function añadirTrabajador(){
 
-if(!obraSeleccionada){
-alert("Selecciona primero una obra");
-return;
-}
+  if(!obraSeleccionada){
+    alert("Selecciona primero una obra");
+    return;
+  }
 
-const nombre = prompt("Nombre del trabajador");
-if(!nombre) return;
+  const nombre = prompt("Nombre del trabajador");
+  if(!nombre) return;
 
-const pin = prompt("PIN del trabajador (4 números)");
-if(!pin) return;
+  const pin = prompt("PIN del trabajador (4 números)");
+  if(!pin) return;
 
-const precioHora = prompt("Precio por hora");
-if(!precioHora) return;
+  const precioHora = prompt("Precio por hora");
+  if(!precioHora) return;
 
-const telefono = prompt("Teléfono");
-if(!telefono) return;
+  const telefono = prompt("Teléfono");
+  if(!telefono) return;
 
-const datosTrabajador = {
-nombre: nombre.trim(),
-pin: pin.trim(),
-obra: obraSeleccionada,
-precio_hora: parseFloat(precioHora),
-telefono: telefono.trim(),
-movil_id: null
-};
+  const datosTrabajador = {
+    nombre: nombre.trim(),
+    pin: pin.trim(),
+    obra: obraSeleccionada,
+    precio_hora: parseFloat(precioHora),
+    telefono: telefono.trim(),
+    movil_id: null
+  };
 
-const { error } = await supabaseClient
-.from("trabajadores")
-.insert([datosTrabajador]);
+  const { error } = await supabaseClient
+    .from("trabajadores")
+    .insert([datosTrabajador]);
 
-if(error){
-console.log(error);
-alert(
-"Error al crear trabajador:\n\n" +
-(error.message || "") +
-"\n\n" +
-(error.details || "") +
-"\n\n" +
-(error.hint || "")
-);
-return;
-}
+  if(error){
+    console.log(error);
+    alert(
+      "Error al crear trabajador:\n\n" +
+      (error.message || "") +
+      "\n\n" +
+      (error.details || "") +
+      "\n\n" +
+      (error.hint || "")
+    );
+    return;
+  }
 
-alert("Trabajador creado correctamente en la obra " + obraSeleccionada);
+  alert("Trabajador creado correctamente en la obra " + obraSeleccionada);
 }
 
 function funcionNoDisponible(){
-alert("Esta función la añadiremos en el siguiente paso");
+  alert("Esta función la añadiremos en el siguiente paso");
 }
 
 btnEntrarApp.addEventListener("click", entrarApp);
@@ -703,12 +798,13 @@ btnMes.addEventListener("click", verHorasMes);
 btnObra.addEventListener("click", abrirModalObras);
 btnAñadirObra.addEventListener("click", añadirObra);
 btnAñadirTrabajador.addEventListener("click", añadirTrabajador);
+btnTrabajando.addEventListener("click", abrirModalTrabajando);
 
-btnTrabajando.addEventListener("click", funcionNoDisponible);
 btnHorasSemanaEnc.addEventListener("click", funcionNoDisponible);
 btnHorasMesEnc.addEventListener("click", funcionNoDisponible);
 
 btnCerrarModalObras.addEventListener("click", cerrarModalObras);
+btnCerrarModalTrabajando.addEventListener("click", cerrarModalTrabajando);
 
 });
 </script>
