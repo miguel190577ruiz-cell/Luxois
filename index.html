@@ -125,9 +125,7 @@ body{
 
 <body>
 
-<!-- PANTALLA LOGIN -->
 <div id="pantallaLogin" class="pantalla">
-
   <h1 class="logo">LUXOIS</h1>
   <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
@@ -147,168 +145,163 @@ body{
     <span></span>
   </div>
 
-  <button class="boton" onclick="entrarApp()">ENTRAR</button>
-
+  <button class="boton" id="btnEntrarApp">ENTRAR</button>
   <div class="mensaje" id="mensajeLogin"></div>
-
 </div>
 
-<!-- PANTALLA TRABAJADOR -->
 <div id="pantallaTrabajador" class="pantalla oculto">
-
   <h1 class="logo">LUXOIS</h1>
   <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
   <h3 class="estado" id="estadoTrabajador">HOLA</h3>
 
-  <button class="boton" onclick="ficharEntrada()">ENTRAR</button>
-  <button class="boton" onclick="ficharSalida()">SALIR</button>
-  <button class="boton" id="btnSemana" onclick="verHorasSemana()">HORAS SEMANA</button>
-  <button class="boton" id="btnMes" onclick="verHorasMes()">HORAS MES</button>
-
+  <button class="boton" id="btnEntrada">ENTRAR</button>
+  <button class="boton" id="btnSalida">SALIR</button>
+  <button class="boton" id="btnSemana">HORAS SEMANA</button>
+  <button class="boton" id="btnMes">HORAS MES</button>
 </div>
 
 <script>
-const { createClient } = supabase;
+document.addEventListener("DOMContentLoaded", () => {
+  const { createClient } = supabase;
 
-const supabaseClient = createClient(
-  "https://rldffnkqebxigtygpxwa.supabase.co",
-  "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
-);
+  const supabaseClient = createClient(
+    "https://rldffnkqebxigtygpxwa.supabase.co",
+    "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+  );
 
-const inputs = document.querySelectorAll(".pinInput");
-const mensajeLogin = document.getElementById("mensajeLogin");
+  const inputs = document.querySelectorAll(".pinInput");
+  const mensajeLogin = document.getElementById("mensajeLogin");
+  const pantallaLogin = document.getElementById("pantallaLogin");
+  const pantallaTrabajador = document.getElementById("pantallaTrabajador");
+  const estadoTrabajador = document.getElementById("estadoTrabajador");
+  const btnSemana = document.getElementById("btnSemana");
+  const btnMes = document.getElementById("btnMes");
+  const btnEntrarApp = document.getElementById("btnEntrarApp");
+  const btnEntrada = document.getElementById("btnEntrada");
+  const btnSalida = document.getElementById("btnSalida");
 
-const pantallaLogin = document.getElementById("pantallaLogin");
-const pantallaTrabajador = document.getElementById("pantallaTrabajador");
-const estadoTrabajador = document.getElementById("estadoTrabajador");
+  let nombreTrabajadorActual = "";
+  const HORAS_SEMANA_PRUEBA = 32;
+  const HORAS_MES_PRUEBA = 118;
 
-const btnSemana = document.getElementById("btnSemana");
-const btnMes = document.getElementById("btnMes");
+  function hoyString(){
+    return new Date().toISOString().split("T")[0];
+  }
 
-let nombreTrabajadorActual = "";
-const HORAS_SEMANA_PRUEBA = 32;
-const HORAS_MES_PRUEBA = 118;
+  function leerEstadoDia(){
+    const guardado = localStorage.getItem("estado_trabajador");
+    const fecha = localStorage.getItem("estado_fecha");
 
-function hoyString(){
-  return new Date().toISOString().split("T")[0];
-}
+    if(fecha !== hoyString()){
+      localStorage.setItem("estado_fecha", hoyString());
+      localStorage.setItem("estado_trabajador", "inicio");
+      return "inicio";
+    }
 
-function leerEstadoDia(){
-  const guardado = localStorage.getItem("estado_trabajador");
-  const fecha = localStorage.getItem("estado_fecha");
+    return guardado || "inicio";
+  }
 
-  if(fecha !== hoyString()){
+  function guardarEstadoDia(estado){
     localStorage.setItem("estado_fecha", hoyString());
-    localStorage.setItem("estado_trabajador", "inicio");
-    return "inicio";
+    localStorage.setItem("estado_trabajador", estado);
   }
 
-  return guardado || "inicio";
-}
+  function actualizarPantallaTrabajador(){
+    const estado = leerEstadoDia();
 
-function guardarEstadoDia(estado){
-  localStorage.setItem("estado_fecha", hoyString());
-  localStorage.setItem("estado_trabajador", estado);
-}
-
-function actualizarPantallaTrabajador(){
-  const estado = leerEstadoDia();
-
-  if(!estadoTrabajador) return;
-
-  if(estado === "inicio"){
-    estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
-  }
-
-  if(estado === "trabajando"){
-    estadoTrabajador.textContent = "TRABAJANDO";
-  }
-
-  if(estado === "salido"){
-    estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
-  }
-}
-
-inputs.forEach((input, index) => {
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^0-9]/g, "");
-
-    if(input.value && index < inputs.length - 1){
-      inputs[index + 1].focus();
+    if(estado === "inicio"){
+      estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
+    } else if(estado === "trabajando"){
+      estadoTrabajador.textContent = "TRABAJANDO";
+    } else if(estado === "salido"){
+      estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
     }
+  }
+
+  inputs.forEach((input, index) => {
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/[^0-9]/g, "");
+      if(input.value && index < inputs.length - 1){
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if(e.key === "Backspace" && !input.value && index > 0){
+        inputs[index - 1].focus();
+      }
+    });
   });
 
-  input.addEventListener("keydown", (e) => {
-    if(e.key === "Backspace" && !input.value && index > 0){
-      inputs[index - 1].focus();
+  async function entrarApp(){
+    let pin = "";
+
+    inputs.forEach(input => {
+      pin += input.value;
+    });
+
+    if(pin.length !== 4){
+      mensajeLogin.textContent = "Introduce el PIN completo";
+      return;
     }
-  });
+
+    const { data, error } = await supabaseClient
+      .from("trabajadores")
+      .select("*")
+      .eq("pin", pin)
+      .maybeSingle();
+
+    if(error){
+      console.log(error);
+      mensajeLogin.textContent = "Error conectando";
+      return;
+    }
+
+    if(!data){
+      mensajeLogin.textContent = "PIN incorrecto";
+      return;
+    }
+
+    nombreTrabajadorActual = data.nombre || "TRABAJADOR";
+
+    mensajeLogin.textContent = "";
+    pantallaLogin.classList.add("oculto");
+    pantallaTrabajador.classList.remove("oculto");
+
+    actualizarPantallaTrabajador();
+  }
+
+  function ficharEntrada(){
+    guardarEstadoDia("trabajando");
+    actualizarPantallaTrabajador();
+  }
+
+  function ficharSalida(){
+    guardarEstadoDia("salido");
+    actualizarPantallaTrabajador();
+  }
+
+  function verHorasSemana(){
+    btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
+    setTimeout(() => {
+      btnSemana.textContent = "HORAS SEMANA";
+    }, 5000);
+  }
+
+  function verHorasMes(){
+    btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
+    setTimeout(() => {
+      btnMes.textContent = "HORAS MES";
+    }, 5000);
+  }
+
+  btnEntrarApp.addEventListener("click", entrarApp);
+  btnEntrada.addEventListener("click", ficharEntrada);
+  btnSalida.addEventListener("click", ficharSalida);
+  btnSemana.addEventListener("click", verHorasSemana);
+  btnMes.addEventListener("click", verHorasMes);
 });
-
-async function entrarApp(){
-  let pin = "";
-
-  inputs.forEach(input => {
-    pin += input.value;
-  });
-
-  if(pin.length !== 4){
-    mensajeLogin.textContent = "Introduce el PIN completo";
-    return;
-  }
-
-  const { data, error } = await supabaseClient
-    .from("trabajadores")
-    .select("*")
-    .eq("pin", pin)
-    .maybeSingle();
-
-  if(error){
-    console.log(error);
-    mensajeLogin.textContent = "Error conectando";
-    return;
-  }
-
-  if(!data){
-    mensajeLogin.textContent = "PIN incorrecto";
-    return;
-  }
-
-  nombreTrabajadorActual = data.nombre || "TRABAJADOR";
-
-  mensajeLogin.textContent = "";
-  pantallaLogin.classList.add("oculto");
-  pantallaTrabajador.classList.remove("oculto");
-
-  actualizarPantallaTrabajador();
-}
-
-function ficharEntrada(){
-  guardarEstadoDia("trabajando");
-  actualizarPantallaTrabajador();
-}
-
-function ficharSalida(){
-  guardarEstadoDia("salido");
-  actualizarPantallaTrabajador();
-}
-
-function verHorasSemana(){
-  btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
-
-  setTimeout(() => {
-    btnSemana.textContent = "HORAS SEMANA";
-  }, 5000);
-}
-
-function verHorasMes(){
-  btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
-
-  setTimeout(() => {
-    btnMes.textContent = "HORAS MES";
-  }, 5000);
-}
 </script>
 
 </body>
