@@ -164,7 +164,7 @@ padding:24px 20px;
 background:black;
 box-shadow:0 0 18px rgba(240,179,58,0.18);
 text-align:center;
-max-height:80vh;
+max-height:86vh;
 overflow:auto;
 }
 
@@ -223,10 +223,94 @@ padding:10px 12px;
 font-size:17px;
 }
 
-.totalSemana{
+.totalSemana,
+.totalMes{
 margin:10px 0 24px 0;
 font-size:22px;
 letter-spacing:2px;
+}
+
+.mesCabecera{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:16px;
+}
+
+.mesTitulo{
+font-size:24px;
+letter-spacing:2px;
+}
+
+.botonMesNav{
+width:52px;
+padding:8px 0;
+font-size:22px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+}
+
+.diasSemanaMes{
+display:grid;
+grid-template-columns:repeat(7, 1fr);
+gap:6px;
+margin-bottom:8px;
+font-size:12px;
+letter-spacing:1px;
+}
+
+.diaSemanaCabecera{
+padding:6px 2px;
+text-align:center;
+border-bottom:1px solid #f0b33a;
+}
+
+.calendarioMes{
+display:grid;
+grid-template-columns:repeat(7, 1fr);
+gap:6px;
+margin-bottom:18px;
+}
+
+.celdaMes{
+min-height:72px;
+border:1px solid rgba(240,179,58,0.55);
+padding:6px 4px;
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+align-items:center;
+font-size:12px;
+}
+
+.celdaMesVacia{
+opacity:0.18;
+}
+
+.numeroDia{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.horasDia{
+font-size:12px;
+line-height:1.2;
+text-align:center;
+}
+
+.celdaConHoras{
+box-shadow:0 0 8px rgba(240,179,58,0.15);
+}
+
+.accionesMes{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:8px;
 }
 </style>
 </head>
@@ -321,6 +405,36 @@ letter-spacing:2px;
 </div>
 </div>
 
+<div id="modalHorasMes" class="modalFondo oculto">
+<div class="modalCaja">
+<div class="mesCabecera">
+<button class="botonMesNav" id="btnMesAnterior">&lt;</button>
+<div class="mesTitulo" id="tituloHorasMes">MES</div>
+<button class="botonMesNav" id="btnMesSiguiente">&gt;</button>
+</div>
+
+<div class="diasSemanaMes">
+<div class="diaSemanaCabecera">LUN</div>
+<div class="diaSemanaCabecera">MAR</div>
+<div class="diaSemanaCabecera">MIÉ</div>
+<div class="diaSemanaCabecera">JUE</div>
+<div class="diaSemanaCabecera">VIE</div>
+<div class="diaSemanaCabecera">SÁB</div>
+<div class="diaSemanaCabecera">DOM</div>
+</div>
+
+<div id="calendarioMes" class="calendarioMes"></div>
+<div id="totalHorasMes" class="totalMes"></div>
+
+<div class="accionesMes">
+<button class="botonPeque" id="btnModificarMes">MODIFICAR</button>
+<button class="botonPeque" id="btnImprimirObraMes">IMPRIMIR OBRA</button>
+<button class="botonPeque" id="btnImprimirGestoriaMes">IMPRIMIR GESTORÍA</button>
+<button class="botonCerrar" id="btnCerrarHorasMes">CERRAR</button>
+</div>
+</div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -378,6 +492,17 @@ const btnModificarSemana = document.getElementById("btnModificarSemana");
 const btnImprimirObraSemana = document.getElementById("btnImprimirObraSemana");
 const btnImprimirGestoriaSemana = document.getElementById("btnImprimirGestoriaSemana");
 
+const modalHorasMes = document.getElementById("modalHorasMes");
+const tituloHorasMes = document.getElementById("tituloHorasMes");
+const calendarioMes = document.getElementById("calendarioMes");
+const totalHorasMes = document.getElementById("totalHorasMes");
+const btnMesAnterior = document.getElementById("btnMesAnterior");
+const btnMesSiguiente = document.getElementById("btnMesSiguiente");
+const btnModificarMes = document.getElementById("btnModificarMes");
+const btnImprimirObraMes = document.getElementById("btnImprimirObraMes");
+const btnImprimirGestoriaMes = document.getElementById("btnImprimirGestoriaMes");
+const btnCerrarHorasMes = document.getElementById("btnCerrarHorasMes");
+
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
 let obraSeleccionadaId = null;
@@ -386,6 +511,9 @@ let trabajadorActual = null;
 let obraTrabajadorActual = null;
 let trabajadorSeleccionadoFicha = null;
 let datosSemanaActual = [];
+let datosMesActual = [];
+let mesVisualizado = null;
+let añoVisualizado = null;
 
 const HORAS_SEMANA_PRUEBA = 32;
 const HORAS_MES_PRUEBA = 118;
@@ -525,6 +653,23 @@ function nombreDiaSemana(indice){
   return nombres[indice];
 }
 
+function nombreMes(mes){
+  const nombres = [
+    "ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO",
+    "JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"
+  ];
+  return nombres[mes];
+}
+
+function diasEnMes(año, mes){
+  return new Date(año, mes + 1, 0).getDate();
+}
+
+function primerDiaMesLunes0(año, mes){
+  const dia = new Date(año, mes, 1).getDay();
+  return dia === 0 ? 6 : dia - 1;
+}
+
 async function cargarObras(){
   const { data, error } = await supabaseClient
     .from("obras")
@@ -636,6 +781,43 @@ function renderHorasSemana(datosSemana){
   totalHorasSemana.textContent = "TOTAL: " + total + " H";
 }
 
+function renderHorasMes(){
+  calendarioMes.innerHTML = "";
+
+  tituloHorasMes.textContent = nombreMes(mesVisualizado) + " " + añoVisualizado;
+
+  const primerDia = primerDiaMesLunes0(añoVisualizado, mesVisualizado);
+  const totalDias = diasEnMes(añoVisualizado, mesVisualizado);
+
+  for(let i = 0; i < primerDia; i++){
+    const vacia = document.createElement("div");
+    vacia.className = "celdaMes celdaMesVacia";
+    calendarioMes.appendChild(vacia);
+  }
+
+  let total = 0;
+
+  for(let dia = 1; dia <= totalDias; dia++){
+    const fecha = new Date(añoVisualizado, mesVisualizado, dia);
+    const clave = formatearFechaYYYYMMDD(fecha);
+    const dato = datosMesActual.find(d => d.fecha === clave);
+    const horas = dato ? dato.horas : 0;
+
+    total += horas;
+
+    const celda = document.createElement("div");
+    celda.className = "celdaMes" + (horas > 0 ? " celdaConHoras" : "");
+    celda.innerHTML = `
+      <div class="numeroDia">${dia}</div>
+      <div class="horasDia">${horas} H</div>
+    `;
+
+    calendarioMes.appendChild(celda);
+  }
+
+  totalHorasMes.textContent = "TOTAL MES: " + total + " H";
+}
+
 async function abrirHorasSemanaTrabajador(){
   if(!trabajadorSeleccionadoFicha){
     return;
@@ -691,8 +873,72 @@ async function abrirHorasSemanaTrabajador(){
   modalHorasSemana.classList.remove("oculto");
 }
 
+async function abrirHorasMesTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const hoy = new Date();
+  mesVisualizado = hoy.getMonth();
+  añoVisualizado = hoy.getFullYear();
+
+  await cargarYRenderizarMes();
+  modalHorasMes.classList.remove("oculto");
+}
+
+async function cargarYRenderizarMes(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const primerDia = new Date(añoVisualizado, mesVisualizado, 1);
+  const ultimoDia = new Date(añoVisualizado, mesVisualizado + 1, 0);
+
+  const fechaInicio = formatearFechaYYYYMMDD(primerDia);
+  const fechaFin = formatearFechaYYYYMMDD(ultimoDia);
+
+  const { data, error } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .gte("fecha", fechaInicio)
+    .lte("fecha", fechaFin)
+    .order("fecha", { ascending: true });
+
+  if(error){
+    console.log(error);
+    alert("Error cargando horas del mes");
+    return;
+  }
+
+  const horasPorDia = {};
+  (data || []).forEach(fichaje => {
+    horasPorDia[fichaje.fecha] = calcularHorasRedondeadasDesdeFichaje(fichaje);
+  });
+
+  const totalDias = diasEnMes(añoVisualizado, mesVisualizado);
+  datosMesActual = [];
+
+  for(let dia = 1; dia <= totalDias; dia++){
+    const fecha = new Date(añoVisualizado, mesVisualizado, dia);
+    const clave = formatearFechaYYYYMMDD(fecha);
+
+    datosMesActual.push({
+      dia: dia,
+      fecha: clave,
+      horas: horasPorDia[clave] || 0
+    });
+  }
+
+  renderHorasMes();
+}
+
 function cerrarHorasSemana(){
   modalHorasSemana.classList.add("oculto");
+}
+
+function cerrarHorasMes(){
+  modalHorasMes.classList.add("oculto");
 }
 
 async function modificarHorasSemana(){
@@ -726,11 +972,9 @@ async function modificarHorasSemana(){
   }
 
   const horasTexto = prompt("Escribe las horas nuevas para " + mapaDias[diaTexto]);
-
   if(horasTexto === null || horasTexto === "") return;
 
   const nuevasHoras = parseFloat(horasTexto);
-
   if(isNaN(nuevasHoras) || nuevasHoras < 0){
     alert("Horas no válidas");
     return;
@@ -746,6 +990,39 @@ async function modificarHorasSemana(){
 
   dia.horas = Math.round(nuevasHoras);
   renderHorasSemana(datosSemanaActual);
+}
+
+async function modificarHorasMes(){
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
+    return;
+  }
+
+  const diaTexto = prompt("Escribe el día del mes a modificar.\n\nEjemplo:\n19");
+  if(!diaTexto) return;
+
+  const diaNumero = parseInt(diaTexto, 10);
+  if(isNaN(diaNumero) || diaNumero < 1 || diaNumero > datosMesActual.length){
+    alert("Día no válido");
+    return;
+  }
+
+  const horasTexto = prompt("Escribe las horas nuevas para el día " + diaNumero);
+  if(horasTexto === null || horasTexto === "") return;
+
+  const nuevasHoras = parseFloat(horasTexto);
+  if(isNaN(nuevasHoras) || nuevasHoras < 0){
+    alert("Horas no válidas");
+    return;
+  }
+
+  const dia = datosMesActual.find(d => d.dia === diaNumero);
+  if(!dia){
+    alert("No se encontró ese día");
+    return;
+  }
+
+  dia.horas = Math.round(nuevasHoras);
+  renderHorasMes();
 }
 
 function abrirVentanaImpresion(titulo, contenidoHtml){
@@ -799,9 +1076,7 @@ function imprimirObraSemana(){
       <thead>
         <tr><th>Día</th><th>Horas</th></tr>
       </thead>
-      <tbody>
-        ${filas}
-      </tbody>
+      <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL HORAS: ${total} H</div>
   `;
@@ -830,9 +1105,7 @@ function imprimirGestoriaSemana(){
       <thead>
         <tr><th>Día</th><th>Horas</th></tr>
       </thead>
-      <tbody>
-        ${filas}
-      </tbody>
+      <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL HORAS: ${total} H</div>
     <div class="total">PRECIO HORA: ${precioHora.toFixed(2)} €</div>
@@ -840,6 +1113,66 @@ function imprimirGestoriaSemana(){
   `;
 
   abrirVentanaImpresion("Imprimir gestoría semana", html);
+}
+
+function imprimirObraMes(){
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
+    return;
+  }
+
+  const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
+
+  let filas = "";
+  datosMesActual.forEach(dia => {
+    filas += `<tr><td>${dia.dia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE MENSUAL OBRA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <h2>Mes: ${nombreMes(mesVisualizado)} ${añoVisualizado}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir obra mes", html);
+}
+
+function imprimirGestoriaMes(){
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
+    return;
+  }
+
+  const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
+  const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
+  const totalPagar = total * precioHora;
+
+  let filas = "";
+  datosMesActual.forEach(dia => {
+    filas += `<tr><td>${dia.dia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE MENSUAL GESTORÍA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <h2>Mes: ${nombreMes(mesVisualizado)} ${añoVisualizado}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+    <div class="total">PRECIO HORA: ${precioHora.toFixed(2)} €</div>
+    <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir gestoría mes", html);
 }
 
 async function abrirModalTrabajando(){
@@ -1157,18 +1490,39 @@ btnCerrarModalObras.addEventListener("click", cerrarModalObras);
 btnCerrarModalTrabajando.addEventListener("click", cerrarModalTrabajando);
 
 btnFichaHorasSemana.addEventListener("click", abrirHorasSemanaTrabajador);
-
-btnFichaHorasMes.addEventListener("click", () => {
-  if(!trabajadorSeleccionadoFicha) return;
-  alert("HORAS MES de " + trabajadorSeleccionadoFicha.nombre + " será el siguiente paso");
-});
+btnFichaHorasMes.addEventListener("click", abrirHorasMesTrabajador);
 
 btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
-btnCerrarHorasSemana.addEventListener("click", cerrarHorasSemana);
 
+btnCerrarHorasSemana.addEventListener("click", cerrarHorasSemana);
 btnModificarSemana.addEventListener("click", modificarHorasSemana);
 btnImprimirObraSemana.addEventListener("click", imprimirObraSemana);
 btnImprimirGestoriaSemana.addEventListener("click", imprimirGestoriaSemana);
+
+btnCerrarHorasMes.addEventListener("click", cerrarHorasMes);
+btnModificarMes.addEventListener("click", modificarHorasMes);
+btnImprimirObraMes.addEventListener("click", imprimirObraMes);
+btnImprimirGestoriaMes.addEventListener("click", imprimirGestoriaMes);
+
+btnMesAnterior.addEventListener("click", async () => {
+  if(mesVisualizado === 0){
+    mesVisualizado = 11;
+    añoVisualizado--;
+  } else {
+    mesVisualizado--;
+  }
+  await cargarYRenderizarMes();
+});
+
+btnMesSiguiente.addEventListener("click", async () => {
+  if(mesVisualizado === 11){
+    mesVisualizado = 0;
+    añoVisualizado++;
+  } else {
+    mesVisualizado++;
+  }
+  await cargarYRenderizarMes();
+});
 
 });
 </script>
