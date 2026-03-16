@@ -346,6 +346,7 @@ const { data, error } = await supabaseClient
 if(error){
 console.log(error);
 listaObras = [];
+btnObra.textContent = "OBRA";
 return;
 }
 
@@ -505,6 +506,48 @@ alert("Obra creada correctamente");
 await cargarObras();
 }
 
+async function añadirTrabajador(){
+
+if(!obraSeleccionada){
+alert("Selecciona primero una obra");
+return;
+}
+
+const nombre = prompt("Nombre del trabajador");
+if(!nombre) return;
+
+const pin = prompt("PIN del trabajador (4 números)");
+if(!pin) return;
+
+const precioHora = prompt("Precio por hora");
+if(!precioHora) return;
+
+const telefono = prompt("Teléfono");
+if(!telefono) return;
+
+const { error } = await supabaseClient
+.from("trabajadores")
+.insert([
+{
+nombre: nombre,
+pin: pin,
+obra: obraSeleccionada,
+precio_hora: precioHora,
+telefono: telefono,
+movil_id: null
+}
+]);
+
+if(error){
+console.log(error);
+alert("Error al crear trabajador");
+return;
+}
+
+alert("Trabajador creado correctamente en la obra " + obraSeleccionada);
+
+}
+
 function funcionNoDisponible(){
 alert("Esta función la añadiremos en el siguiente paso");
 }
@@ -517,8 +560,8 @@ btnMes.addEventListener("click", verHorasMes);
 
 btnObra.addEventListener("click", abrirModalObras);
 btnAñadirObra.addEventListener("click", añadirObra);
+btnAñadirTrabajador.addEventListener("click", añadirTrabajador);
 
-btnAñadirTrabajador.addEventListener("click", funcionNoDisponible);
 btnTrabajando.addEventListener("click", funcionNoDisponible);
 btnHorasSemanaEnc.addEventListener("click", funcionNoDisponible);
 btnHorasMesEnc.addEventListener("click", funcionNoDisponible);
