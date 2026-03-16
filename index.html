@@ -131,6 +131,7 @@ display:none;
 
 <body>
 
+<!-- LOGIN -->
 <div id="pantallaLogin" class="pantalla">
 <h1 class="logo">LUXOIS</h1>
 <h2 class="sublogo">CONTROL DE OBRAS</h2>
@@ -155,6 +156,7 @@ display:none;
 <div class="mensaje" id="mensajeLogin"></div>
 </div>
 
+<!-- TRABAJADOR -->
 <div id="pantallaTrabajador" class="pantalla oculto">
 <h1 class="logo">LUXOIS</h1>
 <h2 class="sublogo">CONTROL DE OBRAS</h2>
@@ -167,18 +169,19 @@ display:none;
 <button class="boton" id="btnMes">HORAS MES</button>
 </div>
 
+<!-- ENCARGADO -->
 <div id="pantallaEncargado" class="pantalla oculto">
 <h1 class="logo">LUXOIS</h1>
 <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
 <h3 class="tituloPanel">PANEL ENCARGADO</h3>
 
-<button class="boton">OBRA</button>
-<button class="boton">AÑADIR OBRA</button>
-<button class="boton">AÑADIR TRABAJADOR</button>
-<button class="boton">TRABAJANDO</button>
-<button class="boton">HORAS SEMANA</button>
-<button class="boton">HORAS MES</button>
+<button class="boton" id="btnObra">OBRA</button>
+<button class="boton" id="btnAñadirObra">AÑADIR OBRA</button>
+<button class="boton" id="btnAñadirTrabajador">AÑADIR TRABAJADOR</button>
+<button class="boton" id="btnTrabajando">TRABAJANDO</button>
+<button class="boton" id="btnHorasSemanaEnc">HORAS SEMANA</button>
+<button class="boton" id="btnHorasMesEnc">HORAS MES</button>
 </div>
 
 <script>
@@ -206,6 +209,13 @@ const btnMes = document.getElementById("btnMes");
 const btnEntrarApp = document.getElementById("btnEntrarApp");
 const btnEntrada = document.getElementById("btnEntrada");
 const btnSalida = document.getElementById("btnSalida");
+
+const btnObra = document.getElementById("btnObra");
+const btnAñadirObra = document.getElementById("btnAñadirObra");
+const btnAñadirTrabajador = document.getElementById("btnAñadirTrabajador");
+const btnTrabajando = document.getElementById("btnTrabajando");
+const btnHorasSemanaEnc = document.getElementById("btnHorasSemanaEnc");
+const btnHorasMesEnc = document.getElementById("btnHorasMesEnc");
 
 let nombreTrabajadorActual = "";
 const HORAS_SEMANA_PRUEBA = 32;
@@ -287,12 +297,10 @@ return;
 }
 
 if(pin === PIN_ENCARGADO){
-
+mensajeLogin.textContent = "";
 pantallaLogin.classList.add("oculto");
 pantallaEncargado.classList.remove("oculto");
-
 return;
-
 }
 
 const { data, error } = await supabaseClient
@@ -314,6 +322,7 @@ return;
 
 nombreTrabajadorActual = data.nombre || "TRABAJADOR";
 
+mensajeLogin.textContent = "";
 pantallaLogin.classList.add("oculto");
 pantallaTrabajador.classList.remove("oculto");
 
@@ -332,23 +341,45 @@ actualizarPantallaTrabajador();
 }
 
 function verHorasSemana(){
-
 btnSemana.textContent = "SEMANA: " + HORAS_SEMANA_PRUEBA + " H";
 
 setTimeout(() => {
 btnSemana.textContent = "HORAS SEMANA";
-},5000);
-
+}, 5000);
 }
 
 function verHorasMes(){
-
 btnMes.textContent = "MES: " + HORAS_MES_PRUEBA + " H";
 
 setTimeout(() => {
 btnMes.textContent = "HORAS MES";
-},5000);
+}, 5000);
+}
 
+async function añadirObra(){
+
+const nombreObra = prompt("Escribe el nombre de la nueva obra");
+
+if(!nombreObra) return;
+
+const { error } = await supabaseClient
+.from("obras")
+.insert([
+{ nombre: nombreObra }
+]);
+
+if(error){
+console.log(error);
+alert("Error al crear la obra");
+return;
+}
+
+alert("Obra creada correctamente");
+
+}
+
+function funcionNoDisponible(){
+alert("Esta función la añadiremos en el siguiente paso");
 }
 
 btnEntrarApp.addEventListener("click", entrarApp);
@@ -356,6 +387,14 @@ btnEntrada.addEventListener("click", ficharEntrada);
 btnSalida.addEventListener("click", ficharSalida);
 btnSemana.addEventListener("click", verHorasSemana);
 btnMes.addEventListener("click", verHorasMes);
+
+btnAñadirObra.addEventListener("click", añadirObra);
+
+btnObra.addEventListener("click", funcionNoDisponible);
+btnAñadirTrabajador.addEventListener("click", funcionNoDisponible);
+btnTrabajando.addEventListener("click", funcionNoDisponible);
+btnHorasSemanaEnc.addEventListener("click", funcionNoDisponible);
+btnHorasMesEnc.addEventListener("click", funcionNoDisponible);
 
 });
 </script>
