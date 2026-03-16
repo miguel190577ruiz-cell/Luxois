@@ -318,121 +318,123 @@ margin-top:8px;
 <body>
 
 <div id="pantallaLogin" class="pantalla">
-<h1 class="logo">LUXOIS</h1>
-<h2 class="sublogo">CONTROL DE OBRAS</h2>
+  <h1 class="logo">LUXOIS</h1>
+  <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
-<h3 class="pinTitle">PIN</h3>
+  <h3 class="pinTitle">PIN</h3>
 
-<div class="pinRow">
-<input class="pinInput" maxlength="1" inputmode="numeric">
-<input class="pinInput" maxlength="1" inputmode="numeric">
-<input class="pinInput" maxlength="1" inputmode="numeric">
-<input class="pinInput" maxlength="1" inputmode="numeric">
-</div>
+  <div class="pinRow">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+  </div>
 
-<div class="pinDots">
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-</div>
+  <div class="pinDots">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
-<button class="boton" id="btnEntrarApp">ENTRAR</button>
-<div class="mensaje" id="mensajeLogin"></div>
+  <button class="boton" id="btnEntrarApp">ENTRAR</button>
+  <div class="mensaje" id="mensajeLogin"></div>
 </div>
 
 <div id="pantallaTrabajador" class="pantalla oculto">
-<h1 class="logo">LUXOIS</h1>
-<h2 class="sublogo">CONTROL DE OBRAS</h2>
+  <h1 class="logo">LUXOIS</h1>
+  <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
-<h3 class="estado" id="estadoTrabajador">HOLA</h3>
+  <h3 class="estado" id="estadoTrabajador">HOLA</h3>
 
-<button class="boton" id="btnEntrada">ENTRAR</button>
-<button class="boton" id="btnSalida">SALIR</button>
-<button class="boton" id="btnSemana">HORAS SEMANA</button>
-<button class="boton" id="btnMes">HORAS MES</button>
-<div class="mensaje" id="mensajeTrabajador"></div>
+  <button class="boton" id="btnEntrada">ENTRAR</button>
+  <button class="boton" id="btnSalida">SALIR</button>
+  <button class="boton" id="btnSemana">HORAS SEMANA</button>
+  <button class="boton" id="btnMes">HORAS MES</button>
+  <div class="mensaje" id="mensajeTrabajador"></div>
 </div>
 
 <div id="pantallaEncargado" class="pantalla oculto">
-<h1 class="logo">LUXOIS</h1>
-<h2 class="sublogo">CONTROL DE OBRAS</h2>
+  <h1 class="logo">LUXOIS</h1>
+  <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
-<h3 class="tituloPanel">PANEL ENCARGADO</h3>
+  <h3 class="tituloPanel">PANEL ENCARGADO</h3>
 
-<button class="boton" id="btnObra">OBRA</button>
-<button class="boton" id="btnAñadirObra">AÑADIR OBRA</button>
-<button class="boton" id="btnAñadirTrabajador">AÑADIR TRABAJADOR</button>
-<button class="boton" id="btnTrabajando">TRABAJANDO</button>
-<button class="boton" id="btnHorasSemanaEnc">HORAS SEMANA</button>
-<button class="boton" id="btnHorasMesEnc">HORAS MES</button>
+  <button class="boton" id="btnObra">OBRA</button>
+  <button class="boton" id="btnAñadirObra">AÑADIR OBRA</button>
+  <button class="boton" id="btnAñadirTrabajador">AÑADIR TRABAJADOR</button>
+  <button class="boton" id="btnTrabajando">TRABAJANDO</button>
+  <button class="boton" id="btnHorasSemanaEnc">HORAS SEMANA</button>
+  <button class="boton" id="btnHorasMesEnc">HORAS MES</button>
 </div>
 
 <div id="modalObras" class="modalFondo oculto">
-<div class="modalCaja">
-<h3 class="modalTitulo">SELECCIONAR OBRA</h3>
-<div id="listaObras" class="listaObras"></div>
-<button class="botonCerrar" id="btnCerrarModalObras">CERRAR</button>
-</div>
+  <div class="modalCaja">
+    <h3 class="modalTitulo">SELECCIONAR OBRA</h3>
+    <div id="listaObras" class="listaObras"></div>
+    <button class="botonCerrar" id="btnCerrarModalObras">CERRAR</button>
+  </div>
 </div>
 
 <div id="modalTrabajando" class="modalFondo oculto">
-<div class="modalCaja">
-<h3 class="modalTitulo">TRABAJADORES DE LA OBRA</h3>
-<div id="listaTrabajando" class="listaTrabajando"></div>
-<button class="botonCerrar" id="btnCerrarModalTrabajando">CERRAR</button>
-</div>
+  <div class="modalCaja">
+    <h3 class="modalTitulo">TRABAJADORES DE LA OBRA</h3>
+    <div id="listaTrabajando" class="listaTrabajando"></div>
+    <button class="botonCerrar" id="btnCerrarModalTrabajando">CERRAR</button>
+  </div>
 </div>
 
 <div id="modalFichaTrabajador" class="modalFondo oculto">
-<div class="modalCaja">
-<h3 class="modalTitulo" id="tituloFichaTrabajador">TRABAJADOR</h3>
-<button class="boton" id="btnFichaHorasSemana">HORAS SEMANA</button>
-<button class="boton" id="btnFichaHorasMes">HORAS MES</button>
-<button class="botonCerrar" id="btnCerrarFichaTrabajador">CERRAR</button>
-</div>
+  <div class="modalCaja">
+    <h3 class="modalTitulo" id="tituloFichaTrabajador">TRABAJADOR</h3>
+    <button class="boton" id="btnFichaHorasSemana">HORAS SEMANA</button>
+    <button class="boton" id="btnFichaHorasMes">HORAS MES</button>
+    <button class="boton" id="btnFichaPrecioHora">PRECIO HORA</button>
+    <button class="boton" id="btnFichaCambiarObra">CAMBIAR OBRA</button>
+    <button class="botonCerrar" id="btnCerrarFichaTrabajador">CERRAR</button>
+  </div>
 </div>
 
 <div id="modalHorasSemana" class="modalFondo oculto">
-<div class="modalCaja">
-<h3 class="modalTitulo" id="tituloHorasSemana">HORAS SEMANA</h3>
-<div id="listaHorasSemana" class="listaSemana"></div>
-<div id="totalHorasSemana" class="totalSemana"></div>
-<button class="botonPeque" id="btnModificarSemana">MODIFICAR</button>
-<button class="botonPeque" id="btnImprimirObraSemana">IMPRIMIR OBRA</button>
-<button class="botonPeque" id="btnImprimirGestoriaSemana">IMPRIMIR GESTORÍA</button>
-<button class="botonCerrar" id="btnCerrarHorasSemana">CERRAR</button>
-</div>
+  <div class="modalCaja">
+    <h3 class="modalTitulo" id="tituloHorasSemana">HORAS SEMANA</h3>
+    <div id="listaHorasSemana" class="listaSemana"></div>
+    <div id="totalHorasSemana" class="totalSemana"></div>
+    <button class="botonPeque" id="btnModificarSemana">MODIFICAR</button>
+    <button class="botonPeque" id="btnImprimirObraSemana">IMPRIMIR OBRA</button>
+    <button class="botonPeque" id="btnImprimirGestoriaSemana">IMPRIMIR GESTORÍA</button>
+    <button class="botonCerrar" id="btnCerrarHorasSemana">CERRAR</button>
+  </div>
 </div>
 
 <div id="modalHorasMes" class="modalFondo oculto">
-<div class="modalCaja">
-<div class="mesCabecera">
-<button class="botonMesNav" id="btnMesAnterior">&lt;</button>
-<div class="mesTitulo" id="tituloHorasMes">MES</div>
-<button class="botonMesNav" id="btnMesSiguiente">&gt;</button>
-</div>
+  <div class="modalCaja">
+    <div class="mesCabecera">
+      <button class="botonMesNav" id="btnMesAnterior">&lt;</button>
+      <div class="mesTitulo" id="tituloHorasMes">MES</div>
+      <button class="botonMesNav" id="btnMesSiguiente">&gt;</button>
+    </div>
 
-<div class="diasSemanaMes">
-<div class="diaSemanaCabecera">LUN</div>
-<div class="diaSemanaCabecera">MAR</div>
-<div class="diaSemanaCabecera">MIÉ</div>
-<div class="diaSemanaCabecera">JUE</div>
-<div class="diaSemanaCabecera">VIE</div>
-<div class="diaSemanaCabecera">SÁB</div>
-<div class="diaSemanaCabecera">DOM</div>
-</div>
+    <div class="diasSemanaMes">
+      <div class="diaSemanaCabecera">LUN</div>
+      <div class="diaSemanaCabecera">MAR</div>
+      <div class="diaSemanaCabecera">MIÉ</div>
+      <div class="diaSemanaCabecera">JUE</div>
+      <div class="diaSemanaCabecera">VIE</div>
+      <div class="diaSemanaCabecera">SÁB</div>
+      <div class="diaSemanaCabecera">DOM</div>
+    </div>
 
-<div id="calendarioMes" class="calendarioMes"></div>
-<div id="totalHorasMes" class="totalMes"></div>
+    <div id="calendarioMes" class="calendarioMes"></div>
+    <div id="totalHorasMes" class="totalMes"></div>
 
-<div class="accionesMes">
-<button class="botonPeque" id="btnModificarMes">MODIFICAR</button>
-<button class="botonPeque" id="btnImprimirObraMes">IMPRIMIR OBRA</button>
-<button class="botonPeque" id="btnImprimirGestoriaMes">IMPRIMIR GESTORÍA</button>
-<button class="botonCerrar" id="btnCerrarHorasMes">CERRAR</button>
-</div>
-</div>
+    <div class="accionesMes">
+      <button class="botonPeque" id="btnModificarMes">MODIFICAR</button>
+      <button class="botonPeque" id="btnImprimirObraMes">IMPRIMIR OBRA</button>
+      <button class="botonPeque" id="btnImprimirGestoriaMes">IMPRIMIR GESTORÍA</button>
+      <button class="botonCerrar" id="btnCerrarHorasMes">CERRAR</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -481,6 +483,8 @@ const modalFichaTrabajador = document.getElementById("modalFichaTrabajador");
 const tituloFichaTrabajador = document.getElementById("tituloFichaTrabajador");
 const btnFichaHorasSemana = document.getElementById("btnFichaHorasSemana");
 const btnFichaHorasMes = document.getElementById("btnFichaHorasMes");
+const btnFichaPrecioHora = document.getElementById("btnFichaPrecioHora");
+const btnFichaCambiarObra = document.getElementById("btnFichaCambiarObra");
 const btnCerrarFichaTrabajador = document.getElementById("btnCerrarFichaTrabajador");
 
 const modalHorasSemana = document.getElementById("modalHorasSemana");
@@ -862,7 +866,6 @@ function renderHorasSemana(datosSemana){
 
 function renderHorasMes(){
   calendarioMes.innerHTML = "";
-
   tituloHorasMes.textContent = nombreMes(mesVisualizado) + " " + añoVisualizado;
 
   const primerDia = primerDiaMesLunes0(añoVisualizado, mesVisualizado);
@@ -989,7 +992,6 @@ async function cargarYRenderizarMes(){
 
   const horasPorDia = construirHorasPorFecha(data || []);
   const totalDias = diasEnMes(añoVisualizado, mesVisualizado);
-
   datosMesActual = [];
 
   for(let dia = 1; dia <= totalDias; dia++){
@@ -1266,6 +1268,86 @@ function imprimirGestoriaMes(){
   abrirVentanaImpresion("Imprimir gestoría mes", html);
 }
 
+async function actualizarPrecioHoraTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const actual = trabajadorSeleccionadoFicha.precio_hora != null
+    ? String(trabajadorSeleccionadoFicha.precio_hora)
+    : "";
+
+  const nuevoPrecioTexto = prompt("Precio hora actual: " + actual + "\n\nEscribe el nuevo precio hora", actual);
+  if(nuevoPrecioTexto === null || nuevoPrecioTexto === "") return;
+
+  const nuevoPrecio = parseFloat(nuevoPrecioTexto);
+  if(isNaN(nuevoPrecio) || nuevoPrecio < 0){
+    alert("Precio no válido");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("trabajadores")
+    .update({
+      precio_hora: nuevoPrecio
+    })
+    .eq("id", trabajadorSeleccionadoFicha.id);
+
+  if(error){
+    console.log(error);
+    alert("Error al guardar el precio hora");
+    return;
+  }
+
+  trabajadorSeleccionadoFicha.precio_hora = nuevoPrecio;
+  alert("Precio hora actualizado correctamente");
+}
+
+async function cambiarObraTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  await cargarObras();
+
+  if(!listaObras || listaObras.length === 0){
+    alert("No hay obras creadas");
+    return;
+  }
+
+  let texto = "Escribe el nombre exacto de la nueva obra.\n\nObras disponibles:\n\n";
+  listaObras.forEach(obra => {
+    texto += obra.nombre + "\n";
+  });
+
+  const nuevaObraTexto = prompt(texto, trabajadorSeleccionadoFicha.obra || "");
+  if(!nuevaObraTexto) return;
+
+  const nuevaObra = nuevaObraTexto.trim();
+  const existe = listaObras.find(o => o.nombre === nuevaObra);
+
+  if(!existe){
+    alert("Esa obra no existe exactamente con ese nombre");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("trabajadores")
+    .update({
+      obra: nuevaObra
+    })
+    .eq("id", trabajadorSeleccionadoFicha.id);
+
+  if(error){
+    console.log(error);
+    alert("Error al cambiar la obra");
+    return;
+  }
+
+  trabajadorSeleccionadoFicha.obra = nuevaObra;
+  alert("Obra cambiada correctamente a " + nuevaObra);
+}
+
 async function abrirModalTrabajando(){
   if(!obraSeleccionada){
     alert("Selecciona primero una obra");
@@ -1280,6 +1362,7 @@ async function abrirModalTrabajando(){
     .from("trabajadores")
     .select("*")
     .eq("obra", obraSeleccionada)
+    .eq("activo", true)
     .order("nombre", { ascending: true });
 
   if(errorTrabajadores){
@@ -1383,6 +1466,7 @@ async function entrarApp(){
     .from("trabajadores")
     .select("*")
     .eq("pin", pin)
+    .eq("activo", true)
     .maybeSingle();
 
   if(error){
@@ -1535,7 +1619,8 @@ async function añadirTrabajador(){
     obra: obraSeleccionada,
     precio_hora: parseFloat(precioHora),
     telefono: telefono.trim(),
-    movil_id: null
+    movil_id: null,
+    activo: true
   };
 
   const { error } = await supabaseClient
@@ -1581,6 +1666,8 @@ btnCerrarModalTrabajando.addEventListener("click", cerrarModalTrabajando);
 
 btnFichaHorasSemana.addEventListener("click", abrirHorasSemanaTrabajador);
 btnFichaHorasMes.addEventListener("click", abrirHorasMesTrabajador);
+btnFichaPrecioHora.addEventListener("click", actualizarPrecioHoraTrabajador);
+btnFichaCambiarObra.addEventListener("click", cambiarObraTrabajador);
 
 btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
 
