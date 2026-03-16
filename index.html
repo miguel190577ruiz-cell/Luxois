@@ -6,80 +6,170 @@
 <title>LUXOIS Control de Obras</title>
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   min-height:100vh;
-  background:black url("https://luxois.vercel.app/luxois-login.png") no-repeat center center;
+  background:
+    linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.52)),
+    url("https://luxois.vercel.app/luxois-login.png") no-repeat center center;
   background-size:cover;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:Arial, sans-serif;
+  font-family:Georgia, "Times New Roman", serif;
 }
 
 .loginBox{
   width:100%;
-  max-width:420px;
+  max-width:430px;
+  min-height:100vh;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   text-align:center;
-  padding:20px;
-  box-sizing:border-box;
+  padding:70px 24px 40px 24px;
 }
 
 .logo{
+  margin:0;
   color:#f2b233;
   font-size:72px;
+  line-height:0.95;
+  letter-spacing:1px;
   font-weight:bold;
-  margin:0;
-  line-height:1;
-  letter-spacing:2px;
-  text-shadow:0 0 10px rgba(242,178,51,0.35);
+  text-shadow:
+    0 0 8px rgba(242,178,51,0.35),
+    0 0 20px rgba(242,178,51,0.10);
 }
 
 .sublogo{
+  margin:8px 0 110px 0;
   color:#f2b233;
-  font-size:22px;
+  font-size:24px;
   font-weight:bold;
-  margin:8px 0 40px 0;
   letter-spacing:2px;
-  text-shadow:0 0 8px rgba(242,178,51,0.25);
+  text-shadow:
+    0 0 8px rgba(242,178,51,0.25);
 }
 
-.pin{
+.pinTitle{
+  margin:0 0 22px 0;
+  color:#f2b233;
+  font-size:34px;
+  letter-spacing:4px;
+  font-weight:bold;
+  text-shadow:
+    0 0 8px rgba(242,178,51,0.25);
+}
+
+.pinRow{
   display:flex;
-  gap:12px;
-  margin-bottom:35px;
+  gap:18px;
+  margin-bottom:22px;
 }
 
 .pinInput{
-  width:58px;
-  height:58px;
-  font-size:30px;
-  text-align:center;
-  border:2px solid #f2b233;
-  background:rgba(0,0,0,0.75);
+  width:56px;
+  height:48px;
+  border:none;
+  border-bottom:3px solid #f2b233;
+  background:transparent;
   color:#f2b233;
+  font-size:34px;
+  text-align:center;
   outline:none;
-  box-shadow:0 0 10px rgba(242,178,51,0.25);
+  box-shadow:0 8px 12px rgba(242,178,51,0.08);
+}
+
+.pinInput::-webkit-outer-spin-button,
+.pinInput::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+
+.pinDots{
+  display:flex;
+  gap:20px;
+  margin-bottom:120px;
+}
+
+.pinDots span{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#f2b233;
+  box-shadow:
+    0 0 8px rgba(242,178,51,0.80),
+    0 0 16px rgba(242,178,51,0.25);
 }
 
 .entrarBtn{
-  padding:14px 46px;
+  min-width:230px;
+  padding:16px 34px;
   font-size:24px;
   font-weight:bold;
-  background:rgba(0,0,0,0.75);
+  letter-spacing:2px;
   color:#f2b233;
+  background:rgba(0,0,0,0.45);
   border:2px solid #f2b233;
   cursor:pointer;
-  box-shadow:0 0 12px rgba(242,178,51,0.25);
+  box-shadow:
+    0 0 14px rgba(242,178,51,0.30),
+    inset 0 0 10px rgba(242,178,51,0.10);
 }
 
 .entrarBtn:hover{
-  background:#f2b233;
-  color:black;
+  background:rgba(242,178,51,0.12);
+}
+
+.mensaje{
+  margin-top:24px;
+  color:#f2b233;
+  font-size:16px;
+  min-height:24px;
+}
+
+@media (max-width:600px){
+  .loginBox{
+    max-width:100%;
+    padding-top:72px;
+  }
+
+  .logo{
+    font-size:68px;
+  }
+
+  .sublogo{
+    font-size:22px;
+    margin-bottom:100px;
+  }
+
+  .pinTitle{
+    font-size:32px;
+  }
+
+  .pinRow{
+    gap:16px;
+  }
+
+  .pinInput{
+    width:52px;
+    font-size:32px;
+  }
+
+  .pinDots{
+    margin-bottom:110px;
+  }
+
+  .entrarBtn{
+    min-width:220px;
+    font-size:22px;
+  }
 }
 </style>
 </head>
@@ -87,22 +177,53 @@ body{
 <body>
 
 <div class="loginBox">
+
   <h1 class="logo">LUXOIS</h1>
   <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
-  <div class="pin">
+  <h3 class="pinTitle">PIN</h3>
+
+  <div class="pinRow">
     <input class="pinInput" maxlength="1" inputmode="numeric">
     <input class="pinInput" maxlength="1" inputmode="numeric">
     <input class="pinInput" maxlength="1" inputmode="numeric">
     <input class="pinInput" maxlength="1" inputmode="numeric">
   </div>
 
+  <div class="pinDots">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
   <button class="entrarBtn" onclick="entrar()">ENTRAR</button>
+
+  <div class="mensaje" id="mensaje"></div>
+
 </div>
 
 <script>
+const inputs = document.querySelectorAll(".pinInput");
+const mensaje = document.getElementById("mensaje");
+
+inputs.forEach((input, index) => {
+  input.addEventListener("input", () => {
+    input.value = input.value.replace(/[^0-9]/g, "");
+
+    if(input.value && index < inputs.length - 1){
+      inputs[index + 1].focus();
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if(e.key === "Backspace" && !input.value && index > 0){
+      inputs[index - 1].focus();
+    }
+  });
+});
+
 function entrar(){
-  const inputs = document.querySelectorAll(".pinInput");
   let pin = "";
 
   inputs.forEach(input => {
@@ -110,11 +231,11 @@ function entrar(){
   });
 
   if(pin.length !== 4){
-    alert("Introduce el PIN completo");
+    mensaje.textContent = "Introduce el PIN completo";
     return;
   }
 
-  alert("PIN introducido: " + pin);
+  mensaje.textContent = "PIN introducido: " + pin;
 }
 </script>
 
