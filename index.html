@@ -670,6 +670,53 @@ function primerDiaMesLunes0(año, mes){
   return dia === 0 ? 6 : dia - 1;
 }
 
+async function guardarCorreccionHoras(fecha, horasRedondeadas){
+  if(!trabajadorSeleccionadoFicha){
+    throw new Error("No hay trabajador seleccionado");
+  }
+
+  const { data: existentes, error: errorBuscar } = await supabaseClient
+    .from("fichajes")
+    .select("id")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("fecha", fecha)
+    .limit(1);
+
+  if(errorBuscar){
+    throw errorBuscar;
+  }
+
+  if(existentes && existentes.length > 0){
+    const idFichaje = existentes[0].id;
+
+    const { error: errorUpdate } = await supabaseClient
+      .from("fichajes")
+      .update({
+        horas_redondeadas: horasRedondeadas,
+        horas: horasRedondeadas
+      })
+      .eq("id", idFichaje);
+
+    if(errorUpdate){
+      throw errorUpdate;
+    }
+  } else {
+    const { error: errorInsert } = await supabaseClient
+      .from("fichajes")
+      .insert([{
+        trabajador: trabajadorSeleccionadoFicha.nombre,
+        obra: trabajadorSeleccionadoFicha.obra,
+        fecha: fecha,
+        horas: horasRedondeadas,
+        horas_redondeadas: horasRedondeadas
+      }]);
+
+    if(errorInsert){
+      throw errorInsert;
+    }
+  }
+}
+
 async function cargarObras(){
   const { data, error } = await supabaseClient
     .from("obras")
@@ -988,8 +1035,17 @@ async function modificarHorasSemana(){
     return;
   }
 
-  dia.horas = Math.round(nuevasHoras);
-  renderHorasSemana(datosSemanaActual);
+  const horasFinales = Math.round(nuevasHoras);
+
+  try{
+    await guardarCorreccionHoras(dia.fecha, horasFinales);
+    dia.horas = horasFinales;
+    renderHorasSemana(datosSemanaActual);
+    alert("Horas guardadas correctamente");
+  }catch(error){
+    console.log(error);
+    alert("Error al guardar las horas");
+  }
 }
 
 async function modificarHorasMes(){
@@ -1021,8 +1077,17 @@ async function modificarHorasMes(){
     return;
   }
 
-  dia.horas = Math.round(nuevasHoras);
-  renderHorasMes();
+  const horasFinales = Math.round(nuevasHoras);
+
+  try{
+    await guardarCorreccionHoras(dia.fecha, horasFinales);
+    dia.horas = horasFinales;
+    renderHorasMes();
+    alert("Horas guardadas correctamente");
+  }catch(error){
+    console.log(error);
+    alert("Error al guardar las horas");
+  }
 }
 
 function abrirVentanaImpresion(titulo, contenidoHtml){
