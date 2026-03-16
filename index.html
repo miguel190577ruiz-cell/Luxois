@@ -380,6 +380,7 @@ margin-top:8px;
 
   <button class="boton" id="btnObra">OBRA</button>
   <button class="boton" id="btnAñadirObra">AÑADIR OBRA</button>
+  <button class="boton" id="btnBorrarObra">BORRAR OBRA</button>
   <button class="boton" id="btnAñadirTrabajador">AÑADIR TRABAJADOR</button>
   <button class="boton" id="btnTrabajando">TRABAJANDO</button>
   <button class="boton" id="btnHorasSemanaEnc">HORAS SEMANA</button>
@@ -485,6 +486,7 @@ const btnSalida = document.getElementById("btnSalida");
 
 const btnObra = document.getElementById("btnObra");
 const btnAñadirObra = document.getElementById("btnAñadirObra");
+const btnBorrarObra = document.getElementById("btnBorrarObra");
 const btnAñadirTrabajador = document.getElementById("btnAñadirTrabajador");
 const btnTrabajando = document.getElementById("btnTrabajando");
 const btnHorasSemanaEnc = document.getElementById("btnHorasSemanaEnc");
@@ -684,6 +686,42 @@ function construirHorasPorFecha(fichajes){
   });
 
   return salida;
+}
+
+function agruparHorasPorTrabajadorYFecha(fichajes){
+  const mapa = {};
+
+  (fichajes || []).forEach(fichaje => {
+    const trabajador = fichaje.trabajador || "SIN NOMBRE";
+    const fecha = fichaje.fecha;
+    if(!fecha) return;
+
+    const valor = calcularHorasRedondeadasDesdeFichaje(fichaje);
+    const clave = trabajador + "||" + fecha;
+    const tieneCorreccion = fichaje.horas_redondeadas != null;
+
+    if(!mapa[clave]){
+      mapa[clave] = {
+        trabajador: trabajador,
+        fecha: fecha,
+        horas: valor,
+        corregido: tieneCorreccion
+      };
+      return;
+    }
+
+    if(tieneCorreccion){
+      mapa[clave].horas = valor;
+      mapa[clave].corregido = true;
+      return;
+    }
+
+    if(!mapa[clave].corregido){
+      mapa[clave].horas = valor;
+    }
+  });
+
+  return Object.values(mapa);
 }
 
 function obtenerInicioSemana(fecha){
@@ -1288,6 +1326,64 @@ function imprimirGestoriaMes(){
   abrirVentanaImpresion("Imprimir gestoría mes", html);
 }
 
+async function imprimirResumenObraAntesDeBorrar(){
+  if(!obraSeleccionada){
+    alert("No hay obra seleccionada");
+    return;
+  }
+
+  const { data: fichajes, error } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("obra", obraSeleccionada)
+    .order("trabajador", { ascending: true })
+    .order("fecha", { ascending: true });
+
+  if(error){
+    console.log(error);
+    alert("Error al cargar el resumen de la obra");
+    return;
+  }
+
+  const agrupados = agruparHorasPorTrabajadorYFecha(fichajes || []);
+  const totalesPorTrabajador = {};
+
+  agrupados.forEach(item => {
+    if(!totalesPorTrabajador[item.trabajador]){
+      totalesPorTrabajador[item.trabajador] = 0;
+    }
+    totalesPorTrabajador[item.trabajador] += item.horas;
+  });
+
+  const trabajadores = Object.keys(totalesPorTrabajador).sort((a, b) => a.localeCompare(b));
+  let filas = "";
+  let totalGeneral = 0;
+
+  trabajadores.forEach(nombre => {
+    const horas = totalesPorTrabajador[nombre];
+    totalGeneral += horas;
+    filas += `<tr><td>${nombre}</td><td>${horas} H</td></tr>`;
+  });
+
+  if(!filas){
+    filas = `<tr><td colspan="2">No hay horas registradas en esta obra</td></tr>`;
+  }
+
+  const html = `
+    <h1>RESUMEN DE OBRA</h1>
+    <h2>Obra: ${obraSeleccionada}</h2>
+    <table>
+      <thead>
+        <tr><th>Trabajador</th><th>Total horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL GENERAL: ${totalGeneral} H</div>
+  `;
+
+  abrirVentanaImpresion("Resumen obra", html);
+}
+
 async function actualizarPrecioHoraTrabajador(){
   if(!trabajadorSeleccionadoFicha){
     return;
@@ -1373,10 +1469,49 @@ async function darDeBajaTrabajador(){
     return;
   }
 
+  const opcion = prompt(
+    "Vas a dar de baja a " + trabajadorSeleccionadoFicha.nombre + ".\n\n" +
+    "1 = IMPRIMIR ANTES\n" +
+    "2 = DAR DE BAJA\n" +
+    "3 = CANCELAR"
+  );
+
+  if(!opcion || opcion === "3") return;
+
+  if(opcion === "1"){
+    const opcionImpresion = prompt(
+      "¿Qué quieres imprimir antes?\n\n" +
+      "1 = MES OBRA\n" +
+      "2 = MES GESTORÍA\n" +
+      "3 = CANCELAR"
+    );
+
+    if(opcionImpresion === "1"){
+      if(!datosMesActual.length){
+        await abrirHorasMesTrabajador();
+      }
+      imprimirObraMes();
+      return;
+    }
+
+    if(opcionImpresion === "2"){
+      if(!datosMesActual.length){
+        await abrirHorasMesTrabajador();
+      }
+      imprimirGestoriaMes();
+      return;
+    }
+
+    return;
+  }
+
+  if(opcion !== "2"){
+    return;
+  }
+
   const confirmar = confirm(
-    "¿Seguro que quieres dar de baja a " +
-    trabajadorSeleccionadoFicha.nombre +
-    "?\n\nNo podrá entrar con su PIN ni saldrá en la lista de trabajadores activos, pero su historial y sus horas seguirán guardados."
+    "¿Confirmas la baja de " + trabajadorSeleccionadoFicha.nombre + "?\n\n" +
+    "No podrá entrar con su PIN ni saldrá en la lista de activos, pero su historial seguirá guardado."
   );
 
   if(!confirmar) return;
@@ -1397,6 +1532,71 @@ async function darDeBajaTrabajador(){
   alert("Trabajador dado de baja correctamente");
   cerrarFichaTrabajador();
   cerrarModalTrabajando();
+}
+
+async function borrarObra(){
+  if(!obraSeleccionada || !obraSeleccionadaId){
+    alert("No hay obra seleccionada");
+    return;
+  }
+
+  const opcion = prompt(
+    "Vas a borrar la obra " + obraSeleccionada + ".\n\n" +
+    "1 = IMPRIMIR ANTES\n" +
+    "2 = BORRAR OBRA\n" +
+    "3 = CANCELAR"
+  );
+
+  if(!opcion || opcion === "3") return;
+
+  if(opcion === "1"){
+    await imprimirResumenObraAntesDeBorrar();
+    return;
+  }
+
+  if(opcion !== "2"){
+    return;
+  }
+
+  const { data: trabajadoresActivos, error: errorTrabajadores } = await supabaseClient
+    .from("trabajadores")
+    .select("id")
+    .eq("obra", obraSeleccionada)
+    .eq("activo", true);
+
+  if(errorTrabajadores){
+    console.log(errorTrabajadores);
+    alert("Error comprobando trabajadores de la obra");
+    return;
+  }
+
+  if(trabajadoresActivos && trabajadoresActivos.length > 0){
+    alert("No se puede borrar la obra porque tiene trabajadores activos asignados");
+    return;
+  }
+
+  const confirmar = confirm(
+    "¿Confirmas borrar la obra " + obraSeleccionada + "?\n\n" +
+    "Los fichajes históricos seguirán existiendo, pero la obra desaparecerá del panel."
+  );
+
+  if(!confirmar) return;
+
+  const { error } = await supabaseClient
+    .from("obras")
+    .delete()
+    .eq("id", obraSeleccionadaId);
+
+  if(error){
+    console.log(error);
+    alert("Error al borrar la obra");
+    return;
+  }
+
+  alert("Obra borrada correctamente");
+  obraSeleccionada = "";
+  obraSeleccionadaId = null;
+  await cargarObras();
 }
 
 async function abrirModalTrabajando(){
@@ -1706,6 +1906,7 @@ btnMes.addEventListener("click", verHorasMes);
 
 btnObra.addEventListener("click", abrirModalObras);
 btnAñadirObra.addEventListener("click", añadirObra);
+btnBorrarObra.addEventListener("click", borrarObra);
 btnAñadirTrabajador.addEventListener("click", añadirTrabajador);
 btnTrabajando.addEventListener("click", abrirModalTrabajando);
 
