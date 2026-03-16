@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXOIS Control de Obras</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+min-height:100vh;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:'Cinzel', serif;
+color:#f0b33a;
+}
+
+.pantalla{
+width:100%;
+max-width:420px;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+text-align:center;
+padding:40px 24px;
+}
+
+.logo{
+font-size:64px;
+margin:0;
+letter-spacing:2px;
+}
+
+.sublogo{
+font-size:22px;
+margin:0 0 40px 0;
+letter-spacing:3px;
+}
+
+.estado{
+font-size:30px;
+margin:0 0 40px 0;
+min-height:40px;
+}
+
+.tituloPanel{
+font-size:28px;
+margin:0 0 40px 0;
+letter-spacing:4px;
+}
+
+.pinTitle{
+font-size:28px;
+margin-bottom:24px;
+letter-spacing:6px;
+}
+
+.pinRow{
+display:flex;
+gap:20px;
+margin-bottom:20px;
+}
+
+.pinInput{
+width:50px;
+height:50px;
+border:none;
+border-bottom:3px solid #f0b33a;
+background:transparent;
+color:#f0b33a;
+font-size:32px;
+text-align:center;
+outline:none;
+font-family:'Cinzel', serif;
+}
+
+.pinDots{
+display:flex;
+gap:18px;
+margin-bottom:70px;
+}
+
+.pinDots span{
+width:12px;
+height:12px;
+background:#f0b33a;
+border-radius:50%;
+box-shadow:0 0 8px #f0b33a;
+}
+
+.boton{
+width:260px;
+padding:14px 20px;
+font-size:22px;
+letter-spacing:2px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+margin-bottom:20px;
+}
+
+.boton:hover{
+background:#f0b33a;
+color:black;
+}
+
+.botonPeque{
+width:100%;
+padding:12px 16px;
+font-size:18px;
+letter-spacing:1px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+margin-bottom:14px;
+}
+
+.botonPeque:hover{
+background:#f0b33a;
+color:black;
+}
+
+.mensaje{
+margin-top:10px;
+min-height:24px;
+font-size:14px;
+}
+
+.oculto{
+display:none !important;
+}
+
+.modalFondo{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.88);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:999;
+}
+
+.modalCaja{
+width:100%;
+max-width:380px;
+border:2px solid #f0b33a;
+padding:24px 20px;
+background:black;
+box-shadow:0 0 18px rgba(240,179,58,0.18);
+text-align:center;
+max-height:86vh;
+overflow:auto;
+}
+
+.modalTitulo{
+font-size:26px;
+margin:0 0 24px 0;
+letter-spacing:3px;
+}
+
+.listaObras,
+.listaTrabajando,
+.listaSemana{
+display:flex;
+flex-direction:column;
+gap:14px;
+margin-bottom:24px;
+}
+
+.botonObra,
+.botonTrabajador{
+width:100%;
+padding:12px 16px;
+font-size:18px;
+letter-spacing:1px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+text-align:center;
+}
+
+.botonObra:hover,
+.botonTrabajador:hover{
+background:#f0b33a;
+color:black;
+}
+
+.botonCerrar{
+width:100%;
+padding:12px 16px;
+font-size:18px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+}
+
+.lineaSemana{
+display:flex;
+justify-content:space-between;
+gap:12px;
+border:1px solid #f0b33a;
+padding:10px 12px;
+font-size:17px;
+}
+
+.totalSemana,
+.totalMes{
+margin:10px 0 24px 0;
+font-size:22px;
+letter-spacing:2px;
+}
+
+.mesCabecera{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+margin-bottom:16px;
+}
+
+.mesTitulo{
+font-size:24px;
+letter-spacing:2px;
+}
+
+.botonMesNav{
+width:52px;
+padding:8px 0;
+font-size:22px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+}
+
+.diasSemanaMes{
+display:grid;
+grid-template-columns:repeat(7, 1fr);
+gap:6px;
+margin-bottom:8px;
+font-size:12px;
+letter-spacing:1px;
+}
+
+.diaSemanaCabecera{
+padding:6px 2px;
+text-align:center;
+border-bottom:1px solid #f0b33a;
+}
+
+.calendarioMes{
+display:grid;
+grid-template-columns:repeat(7, 1fr);
+gap:6px;
+margin-bottom:18px;
+}
+
+.celdaMes{
+min-height:72px;
+border:1px solid rgba(240,179,58,0.55);
+padding:6px 4px;
+display:flex;
+flex-direction:column;
+justify-content:flex-start;
+align-items:center;
+font-size:12px;
+}
+
+.celdaMesVacia{
+opacity:0.18;
+}
+
+.numeroDia{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.horasDia{
+font-size:12px;
+line-height:1.2;
+text-align:center;
+}
+
+.celdaConHoras{
+box-shadow:0 0 8px rgba(240,179,58,0.15);
+}
+
+.accionesMes{
+display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="pantallaLogin" class="pantalla">
+<h1 class="logo">LUXOIS</h1>
+<h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+<h3 class="pinTitle">PIN</h3>
+
+<div class="pinRow">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+<input class="pinInput" maxlength="1" inputmode="numeric">
+</div>
+
+<div class="pinDots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<button class="boton" id="btnEntrarApp">ENTRAR</button>
+<div class="mensaje" id="mensajeLogin"></div>
+</div>
+
+<div id="pantallaTrabajador" class="pantalla oculto">
+<h1 class="logo">LUXOIS</h1>
+<h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+<h3 class="estado" id="estadoTrabajador">HOLA</h3>
+
+<button class="boton" id="btnEntrada">ENTRAR</button>
+<button class="boton" id="btnSalida">SALIR</button>
+<button class="boton" id="btnSemana">HORAS SEMANA</button>
+<button class="boton" id="btnMes">HORAS MES</button>
+<div class="mensaje" id="mensajeTrabajador"></div>
+</div>
+
+<div id="pantallaEncargado" class="pantalla oculto">
+<h1 class="logo">LUXOIS</h1>
+<h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+<h3 class="tituloPanel">PANEL ENCARGADO</h3>
+
+<button class="boton" id="btnObra">OBRA</button>
+<button class="boton" id="btnAñadirObra">AÑADIR OBRA</button>
+<button class="boton" id="btnAñadirTrabajador">AÑADIR TRABAJADOR</button>
+<button class="boton" id="btnTrabajando">TRABAJANDO</button>
+<button class="boton" id="btnHorasSemanaEnc">HORAS SEMANA</button>
+<button class="boton" id="btnHorasMesEnc">HORAS MES</button>
+</div>
+
+<div id="modalObras" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo">SELECCIONAR OBRA</h3>
+<div id="listaObras" class="listaObras"></div>
+<button class="botonCerrar" id="btnCerrarModalObras">CERRAR</button>
+</div>
+</div>
+
+<div id="modalTrabajando" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo">TRABAJADORES DE LA OBRA</h3>
+<div id="listaTrabajando" class="listaTrabajando"></div>
+<button class="botonCerrar" id="btnCerrarModalTrabajando">CERRAR</button>
+</div>
+</div>
+
+<div id="modalFichaTrabajador" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo" id="tituloFichaTrabajador">TRABAJADOR</h3>
+<button class="boton" id="btnFichaHorasSemana">HORAS SEMANA</button>
+<button class="boton" id="btnFichaHorasMes">HORAS MES</button>
+<button class="botonCerrar" id="btnCerrarFichaTrabajador">CERRAR</button>
+</div>
+</div>
+
+<div id="modalHorasSemana" class="modalFondo oculto">
+<div class="modalCaja">
+<h3 class="modalTitulo" id="tituloHorasSemana">HORAS SEMANA</h3>
+<div id="listaHorasSemana" class="listaSemana"></div>
+<div id="totalHorasSemana" class="totalSemana"></div>
+<button class="botonPeque" id="btnModificarSemana">MODIFICAR</button>
+<button class="botonPeque" id="btnImprimirObraSemana">IMPRIMIR OBRA</button>
+<button class="botonPeque" id="btnImprimirGestoriaSemana">IMPRIMIR GESTORÍA</button>
+<button class="botonCerrar" id="btnCerrarHorasSemana">CERRAR</button>
+</div>
+</div>
+
+<div id="modalHorasMes" class="modalFondo oculto">
+<div class="modalCaja">
+<div class="mesCabecera">
+<button class="botonMesNav" id="btnMesAnterior">&lt;</button>
+<div class="mesTitulo" id="tituloHorasMes">MES</div>
+<button class="botonMesNav" id="btnMesSiguiente">&gt;</button>
+</div>
+
+<div class="diasSemanaMes">
+<div class="diaSemanaCabecera">LUN</div>
+<div class="diaSemanaCabecera">MAR</div>
+<div class="diaSemanaCabecera">MIÉ</div>
+<div class="diaSemanaCabecera">JUE</div>
+<div class="diaSemanaCabecera">VIE</div>
+<div class="diaSemanaCabecera">SÁB</div>
+<div class="diaSemanaCabecera">DOM</div>
+</div>
+
+<div id="calendarioMes" class="calendarioMes"></div>
+<div id="totalHorasMes" class="totalMes"></div>
+
+<div class="accionesMes">
+<button class="botonPeque" id="btnModificarMes">MODIFICAR</button>
+<button class="botonPeque" id="btnImprimirObraMes">IMPRIMIR OBRA</button>
+<button class="botonPeque" id="btnImprimirGestoriaMes">IMPRIMIR GESTORÍA</button>
+<button class="botonCerrar" id="btnCerrarHorasMes">CERRAR</button>
+</div>
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+const { createClient } = supabase;
+
+const supabaseClient = createClient(
+  "https://rldffnkqebxigtygpxwa.supabase.co",
+  "sb_publishable_e8lnYDhwxDcj44ZmrAsuIg_zplmJRAK"
+);
+
+const PIN_ENCARGADO = "7126";
+
+const inputs = document.querySelectorAll(".pinInput");
+const mensajeLogin = document.getElementById("mensajeLogin");
+const mensajeTrabajador = document.getElementById("mensajeTrabajador");
+
+const pantallaLogin = document.getElementById("pantallaLogin");
+const pantallaTrabajador = document.getElementById("pantallaTrabajador");
+const pantallaEncargado = document.getElementById("pantallaEncargado");
+
+const estadoTrabajador = document.getElementById("estadoTrabajador");
+const btnSemana = document.getElementById("btnSemana");
+const btnMes = document.getElementById("btnMes");
+const btnEntrarApp = document.getElementById("btnEntrarApp");
+const btnEntrada = document.getElementById("btnEntrada");
+const btnSalida = document.getElementById("btnSalida");
+
+const btnObra = document.getElementById("btnObra");
+const btnAñadirObra = document.getElementById("btnAñadirObra");
+const btnAñadirTrabajador = document.getElementById("btnAñadirTrabajador");
+const btnTrabajando = document.getElementById("btnTrabajando");
+const btnHorasSemanaEnc = document.getElementById("btnHorasSemanaEnc");
+const btnHorasMesEnc = document.getElementById("btnHorasMesEnc");
+
+const modalObras = document.getElementById("modalObras");
+const listaObrasDiv = document.getElementById("listaObras");
+const btnCerrarModalObras = document.getElementById("btnCerrarModalObras");
+
+const modalTrabajando = document.getElementById("modalTrabajando");
+const listaTrabajandoDiv = document.getElementById("listaTrabajando");
+const btnCerrarModalTrabajando = document.getElementById("btnCerrarModalTrabajando");
+
+const modalFichaTrabajador = document.getElementById("modalFichaTrabajador");
+const tituloFichaTrabajador = document.getElementById("tituloFichaTrabajador");
+const btnFichaHorasSemana = document.getElementById("btnFichaHorasSemana");
+const btnFichaHorasMes = document.getElementById("btnFichaHorasMes");
+const btnCerrarFichaTrabajador = document.getElementById("btnCerrarFichaTrabajador");
+
+const modalHorasSemana = document.getElementById("modalHorasSemana");
+const tituloHorasSemana = document.getElementById("tituloHorasSemana");
+const listaHorasSemana = document.getElementById("listaHorasSemana");
+const totalHorasSemana = document.getElementById("totalHorasSemana");
+const btnCerrarHorasSemana = document.getElementById("btnCerrarHorasSemana");
+const btnModificarSemana = document.getElementById("btnModificarSemana");
+const btnImprimirObraSemana = document.getElementById("btnImprimirObraSemana");
+const btnImprimirGestoriaSemana = document.getElementById("btnImprimirGestoriaSemana");
+
+const modalHorasMes = document.getElementById("modalHorasMes");
+const tituloHorasMes = document.getElementById("tituloHorasMes");
+const calendarioMes = document.getElementById("calendarioMes");
+const totalHorasMes = document.getElementById("totalHorasMes");
+const btnMesAnterior = document.getElementById("btnMesAnterior");
+const btnMesSiguiente = document.getElementById("btnMesSiguiente");
+const btnModificarMes = document.getElementById("btnModificarMes");
+const btnImprimirObraMes = document.getElementById("btnImprimirObraMes");
+const btnImprimirGestoriaMes = document.getElementById("btnImprimirGestoriaMes");
+const btnCerrarHorasMes = document.getElementById("btnCerrarHorasMes");
+
+let nombreTrabajadorActual = "";
+let obraSeleccionada = "";
+let obraSeleccionadaId = null;
+let listaObras = [];
+let trabajadorActual = null;
+let obraTrabajadorActual = null;
+let trabajadorSeleccionadoFicha = null;
+let datosSemanaActual = [];
+let datosMesActual = [];
+let mesVisualizado = null;
+let añoVisualizado = null;
+
+function hoyString(){
+  return new Date().toISOString().split("T")[0];
+}
+
+function leerEstadoDia(){
+  const guardado = localStorage.getItem("estado_trabajador");
+  const fecha = localStorage.getItem("estado_fecha");
+
+  if(fecha !== hoyString()){
+    localStorage.setItem("estado_fecha", hoyString());
+    localStorage.setItem("estado_trabajador", "inicio");
+    return "inicio";
+  }
+
+  return guardado || "inicio";
+}
+
+function guardarEstadoDia(estado){
+  localStorage.setItem("estado_fecha", hoyString());
+  localStorage.setItem("estado_trabajador", estado);
+}
+
+function actualizarPantallaTrabajador(){
+  const estado = leerEstadoDia();
+
+  if(estado === "inicio"){
+    estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
+  } else if(estado === "trabajando"){
+    estadoTrabajador.textContent = "TRABAJANDO";
+  } else if(estado === "salido"){
+    estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
+  }
+}
+
+function obtenerUbicacionActual(){
+  return new Promise((resolve, reject) => {
+    if(!navigator.geolocation){
+      reject(new Error("Tu dispositivo no permite geolocalización"));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      posicion => {
+        resolve({
+          latitud: posicion.coords.latitude,
+          longitud: posicion.coords.longitude
+        });
+      },
+      error => {
+        reject(error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+  });
+}
+
+function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
+  const R = 6371000;
+  const toRad = grados => grados * Math.PI / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function calcularHorasRedondeadasDesdeFichaje(fichaje){
+  if(!fichaje){
+    return 0;
+  }
+
+  if(fichaje.horas_redondeadas != null){
+    return Number(fichaje.horas_redondeadas);
+  }
+
+  if(!fichaje.entrada || !fichaje.salida){
+    return 0;
+  }
+
+  const entrada = new Date(fichaje.entrada);
+  const salida = new Date(fichaje.salida);
+
+  let horas = (salida - entrada) / 1000 / 60 / 60;
+
+  const minutosSalida = salida.getHours() * 60 + salida.getMinutes();
+  const limiteComida = 14 * 60 + 25;
+
+  if(minutosSalida > limiteComida){
+    horas = horas - 1;
+  }
+
+  if(horas < 0){
+    horas = 0;
+  }
+
+  return Math.round(horas);
+}
+
+function construirHorasPorFecha(fichajes){
+  const mapa = {};
+
+  (fichajes || []).forEach(fichaje => {
+    const fecha = fichaje.fecha;
+    if(!fecha) return;
+
+    const valor = calcularHorasRedondeadasDesdeFichaje(fichaje);
+    const tieneCorreccion = fichaje.horas_redondeadas != null;
+
+    if(!mapa[fecha]){
+      mapa[fecha] = {
+        horas: valor,
+        corregido: tieneCorreccion
+      };
+      return;
+    }
+
+    if(tieneCorreccion){
+      mapa[fecha] = {
+        horas: valor,
+        corregido: true
+      };
+      return;
+    }
+
+    if(!mapa[fecha].corregido){
+      mapa[fecha].horas = valor;
+    }
+  });
+
+  const salida = {};
+  Object.keys(mapa).forEach(fecha => {
+    salida[fecha] = mapa[fecha].horas;
+  });
+
+  return salida;
+}
+
+function obtenerInicioSemana(fecha){
+  const d = new Date(fecha);
+  const dia = d.getDay();
+  const ajuste = dia === 0 ? -6 : 1 - dia;
+  d.setDate(d.getDate() + ajuste);
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function formatearFechaYYYYMMDD(fecha){
+  const año = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha.getDate()).padStart(2, "0");
+  return `${año}-${mes}-${dia}`;
+}
+
+function nombreDiaSemana(indice){
+  const nombres = [
+    "LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES","SÁBADO","DOMINGO"
+  ];
+  return nombres[indice];
+}
+
+function nombreMes(mes){
+  const nombres = [
+    "ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO",
+    "JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"
+  ];
+  return nombres[mes];
+}
+
+function diasEnMes(año, mes){
+  return new Date(año, mes + 1, 0).getDate();
+}
+
+function primerDiaMesLunes0(año, mes){
+  const dia = new Date(año, mes, 1).getDay();
+  return dia === 0 ? 6 : dia - 1;
+}
+
+async function guardarCorreccionHoras(fecha, horasRedondeadas){
+  if(!trabajadorSeleccionadoFicha){
+    throw new Error("No hay trabajador seleccionado");
+  }
+
+  const { data: existentes, error: errorBuscar } = await supabaseClient
+    .from("fichajes")
+    .select("id")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
+    .eq("fecha", fecha);
+
+  if(errorBuscar){
+    throw errorBuscar;
+  }
+
+  if(existentes && existentes.length > 0){
+    const { error: errorUpdate } = await supabaseClient
+      .from("fichajes")
+      .update({
+        horas_redondeadas: horasRedondeadas,
+        horas: horasRedondeadas
+      })
+      .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+      .eq("obra", trabajadorSeleccionadoFicha.obra)
+      .eq("fecha", fecha);
+
+    if(errorUpdate){
+      throw errorUpdate;
+    }
+  } else {
+    const { error: errorInsert } = await supabaseClient
+      .from("fichajes")
+      .insert([{
+        trabajador: trabajadorSeleccionadoFicha.nombre,
+        obra: trabajadorSeleccionadoFicha.obra,
+        fecha: fecha,
+        horas: horasRedondeadas,
+        horas_redondeadas: horasRedondeadas
+      }]);
+
+    if(errorInsert){
+      throw errorInsert;
+    }
+  }
+}
+
+async function cargarObras(){
+  const { data, error } = await supabaseClient
+    .from("obras")
+    .select("*")
+    .order("nombre", { ascending: true });
+
+  if(error){
+    console.log(error);
+    listaObras = [];
+    obraSeleccionada = "";
+    obraSeleccionadaId = null;
+    btnObra.textContent = "OBRA";
+    return;
+  }
+
+  listaObras = data || [];
+
+  if(listaObras.length > 0){
+    if(!obraSeleccionadaId){
+      obraSeleccionadaId = listaObras[0].id;
+      obraSeleccionada = listaObras[0].nombre;
+    } else {
+      const obraActual = listaObras.find(o => o.id === obraSeleccionadaId);
+      if(obraActual){
+        obraSeleccionada = obraActual.nombre;
+      } else {
+        obraSeleccionadaId = listaObras[0].id;
+        obraSeleccionada = listaObras[0].nombre;
+      }
+    }
+    btnObra.textContent = obraSeleccionada;
+  } else {
+    obraSeleccionada = "";
+    obraSeleccionadaId = null;
+    btnObra.textContent = "SIN OBRA";
+  }
+}
+
+async function cargarObraDeTrabajador(nombreObra){
+  const { data, error } = await supabaseClient
+    .from("obras")
+    .select("*")
+    .eq("nombre", nombreObra)
+    .maybeSingle();
+
+  if(error){
+    console.log(error);
+    return null;
+  }
+
+  return data;
+}
+
+function abrirModalObras(){
+  if(listaObras.length === 0){
+    alert("No hay obras creadas");
+    return;
+  }
+
+  listaObrasDiv.innerHTML = "";
+
+  listaObras.forEach(obra => {
+    const boton = document.createElement("button");
+    boton.className = "botonObra";
+    boton.textContent = obra.nombre;
+
+    boton.addEventListener("click", () => {
+      obraSeleccionada = obra.nombre;
+      obraSeleccionadaId = obra.id;
+      btnObra.textContent = obraSeleccionada;
+      cerrarModalObras();
+    });
+
+    listaObrasDiv.appendChild(boton);
+  });
+
+  modalObras.classList.remove("oculto");
+}
+
+function cerrarModalObras(){
+  modalObras.classList.add("oculto");
+}
+
+function abrirFichaTrabajador(trabajador){
+  trabajadorSeleccionadoFicha = trabajador;
+  tituloFichaTrabajador.textContent = trabajador.nombre.toUpperCase();
+  modalFichaTrabajador.classList.remove("oculto");
+}
+
+function cerrarFichaTrabajador(){
+  modalFichaTrabajador.classList.add("oculto");
+}
+
+function renderHorasSemana(datosSemana){
+  datosSemanaActual = datosSemana;
+  listaHorasSemana.innerHTML = "";
+
+  let total = 0;
+
+  datosSemana.forEach(dia => {
+    total += dia.horas;
+
+    const linea = document.createElement("div");
+    linea.className = "lineaSemana";
+    linea.innerHTML = `<span>${dia.nombreDia}</span><span>${dia.horas} H</span>`;
+    listaHorasSemana.appendChild(linea);
+  });
+
+  totalHorasSemana.textContent = "TOTAL: " + total + " H";
+}
+
+function renderHorasMes(){
+  calendarioMes.innerHTML = "";
+
+  tituloHorasMes.textContent = nombreMes(mesVisualizado) + " " + añoVisualizado;
+
+  const primerDia = primerDiaMesLunes0(añoVisualizado, mesVisualizado);
+  const totalDias = diasEnMes(añoVisualizado, mesVisualizado);
+
+  for(let i = 0; i < primerDia; i++){
+    const vacia = document.createElement("div");
+    vacia.className = "celdaMes celdaMesVacia";
+    calendarioMes.appendChild(vacia);
+  }
+
+  let total = 0;
+
+  for(let dia = 1; dia <= totalDias; dia++){
+    const fecha = new Date(añoVisualizado, mesVisualizado, dia);
+    const clave = formatearFechaYYYYMMDD(fecha);
+    const dato = datosMesActual.find(d => d.fecha === clave);
+    const horas = dato ? dato.horas : 0;
+
+    total += horas;
+
+    const celda = document.createElement("div");
+    celda.className = "celdaMes" + (horas > 0 ? " celdaConHoras" : "");
+    celda.innerHTML = `
+      <div class="numeroDia">${dia}</div>
+      <div class="horasDia">${horas} H</div>
+    `;
+
+    calendarioMes.appendChild(celda);
+  }
+
+  totalHorasMes.textContent = "TOTAL MES: " + total + " H";
+}
+
+async function abrirHorasSemanaTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const hoy = new Date();
+  const inicioSemana = obtenerInicioSemana(hoy);
+  const finSemana = new Date(inicioSemana);
+  finSemana.setDate(finSemana.getDate() + 6);
+
+  const fechaInicio = formatearFechaYYYYMMDD(inicioSemana);
+  const fechaFin = formatearFechaYYYYMMDD(finSemana);
+
+  const { data, error } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
+    .gte("fecha", fechaInicio)
+    .lte("fecha", fechaFin)
+    .order("fecha", { ascending: true });
+
+  if(error){
+    console.log(error);
+    alert("Error cargando horas de la semana");
+    return;
+  }
+
+  const horasPorDia = construirHorasPorFecha(data || []);
+  const datosSemana = [];
+
+  for(let i = 0; i < 7; i++){
+    const fechaDia = new Date(inicioSemana);
+    fechaDia.setDate(fechaDia.getDate() + i);
+
+    const clave = formatearFechaYYYYMMDD(fechaDia);
+    const horas = horasPorDia[clave] || 0;
+
+    datosSemana.push({
+      indice: i,
+      nombreDia: nombreDiaSemana(i),
+      fecha: clave,
+      horas: horas
+    });
+  }
+
+  tituloHorasSemana.textContent = "SEMANA DE " + trabajadorSeleccionadoFicha.nombre.toUpperCase();
+  renderHorasSemana(datosSemana);
+  modalHorasSemana.classList.remove("oculto");
+}
+
+async function abrirHorasMesTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const hoy = new Date();
+  mesVisualizado = hoy.getMonth();
+  añoVisualizado = hoy.getFullYear();
+
+  await cargarYRenderizarMes();
+  modalHorasMes.classList.remove("oculto");
+}
+
+async function cargarYRenderizarMes(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const primerDia = new Date(añoVisualizado, mesVisualizado, 1);
+  const ultimoDia = new Date(añoVisualizado, mesVisualizado + 1, 0);
+
+  const fechaInicio = formatearFechaYYYYMMDD(primerDia);
+  const fechaFin = formatearFechaYYYYMMDD(ultimoDia);
+
+  const { data, error } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
+    .gte("fecha", fechaInicio)
+    .lte("fecha", fechaFin)
+    .order("fecha", { ascending: true });
+
+  if(error){
+    console.log(error);
+    alert("Error cargando horas del mes");
+    return;
+  }
+
+  const horasPorDia = construirHorasPorFecha(data || []);
+  const totalDias = diasEnMes(añoVisualizado, mesVisualizado);
+
+  datosMesActual = [];
+
+  for(let dia = 1; dia <= totalDias; dia++){
+    const fecha = new Date(añoVisualizado, mesVisualizado, dia);
+    const clave = formatearFechaYYYYMMDD(fecha);
+
+    datosMesActual.push({
+      dia: dia,
+      fecha: clave,
+      horas: horasPorDia[clave] || 0
+    });
+  }
+
+  renderHorasMes();
+}
+
+function cerrarHorasSemana(){
+  modalHorasSemana.classList.add("oculto");
+}
+
+function cerrarHorasMes(){
+  modalHorasMes.classList.add("oculto");
+}
+
+async function modificarHorasSemana(){
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
+    return;
+  }
+
+  const diaTextoOriginal = prompt(
+    "Escribe el día a modificar.\n\nEjemplo:\nMIERCOLES\n\nDías válidos:\nLUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO"
+  );
+
+  if(!diaTextoOriginal) return;
+
+  const diaTexto = diaTextoOriginal.trim().toUpperCase()
+    .replace("MIÉRCOLES", "MIERCOLES")
+    .replace("SÁBADO", "SABADO");
+
+  const mapaDias = {
+    "LUNES": "LUNES",
+    "MARTES": "MARTES",
+    "MIERCOLES": "MIÉRCOLES",
+    "JUEVES": "JUEVES",
+    "VIERNES": "VIERNES",
+    "SABADO": "SÁBADO",
+    "DOMINGO": "DOMINGO"
+  };
+
+  if(!mapaDias[diaTexto]){
+    alert("Día no válido");
+    return;
+  }
+
+  const horasTexto = prompt("Escribe las horas nuevas para " + mapaDias[diaTexto]);
+  if(horasTexto === null || horasTexto === "") return;
+
+  const nuevasHoras = parseFloat(horasTexto);
+  if(isNaN(nuevasHoras) || nuevasHoras < 0){
+    alert("Horas no válidas");
+    return;
+  }
+
+  const nombreNormalizado = mapaDias[diaTexto];
+  const dia = datosSemanaActual.find(d => d.nombreDia === nombreNormalizado);
+
+  if(!dia){
+    alert("No se encontró ese día en la semana");
+    return;
+  }
+
+  const horasFinales = Math.round(nuevasHoras);
+
+  try{
+    await guardarCorreccionHoras(dia.fecha, horasFinales);
+    dia.horas = horasFinales;
+    renderHorasSemana(datosSemanaActual);
+    alert("Horas guardadas correctamente");
+  }catch(error){
+    console.log(error);
+    alert("Error al guardar las horas");
+  }
+}
+
+async function modificarHorasMes(){
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
+    return;
+  }
+
+  const diaTexto = prompt("Escribe el día del mes a modificar.\n\nEjemplo:\n19");
+  if(!diaTexto) return;
+
+  const diaNumero = parseInt(diaTexto, 10);
+  if(isNaN(diaNumero) || diaNumero < 1 || diaNumero > datosMesActual.length){
+    alert("Día no válido");
+    return;
+  }
+
+  const horasTexto = prompt("Escribe las horas nuevas para el día " + diaNumero);
+  if(horasTexto === null || horasTexto === "") return;
+
+  const nuevasHoras = parseFloat(horasTexto);
+  if(isNaN(nuevasHoras) || nuevasHoras < 0){
+    alert("Horas no válidas");
+    return;
+  }
+
+  const dia = datosMesActual.find(d => d.dia === diaNumero);
+  if(!dia){
+    alert("No se encontró ese día");
+    return;
+  }
+
+  const horasFinales = Math.round(nuevasHoras);
+
+  try{
+    await guardarCorreccionHoras(dia.fecha, horasFinales);
+    dia.horas = horasFinales;
+    renderHorasMes();
+    alert("Horas guardadas correctamente");
+  }catch(error){
+    console.log(error);
+    alert("Error al guardar las horas");
+  }
+}
+
+function abrirVentanaImpresion(titulo, contenidoHtml){
+  const ventana = window.open("", "_blank", "width=800,height=900");
+  if(!ventana){
+    alert("El navegador ha bloqueado la ventana de impresión");
+    return;
+  }
+
+  ventana.document.write(`
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>${titulo}</title>
+      <style>
+        body{ font-family: Arial, sans-serif; padding: 30px; color:#000; }
+        h1{ font-size: 24px; margin-bottom: 10px; }
+        h2{ font-size: 18px; margin-bottom: 20px; }
+        table{ width:100%; border-collapse: collapse; margin-bottom:20px; }
+        th, td{ border:1px solid #000; padding:8px; text-align:left; }
+        .total{ font-size:18px; font-weight:bold; margin-top:20px; }
+      </style>
+    </head>
+    <body>
+      ${contenidoHtml}
+    </body>
+    </html>
+  `);
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+}
+
+function imprimirObraSemana(){
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
+    return;
+  }
+
+  const total = datosSemanaActual.reduce((acc, d) => acc + d.horas, 0);
+
+  let filas = "";
+  datosSemanaActual.forEach(dia => {
+    filas += `<tr><td>${dia.nombreDia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE SEMANAL OBRA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir obra semana", html);
+}
+
+function imprimirGestoriaSemana(){
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
+    return;
+  }
+
+  const total = datosSemanaActual.reduce((acc, d) => acc + d.horas, 0);
+  const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
+  const totalPagar = total * precioHora;
+
+  let filas = "";
+  datosSemanaActual.forEach(dia => {
+    filas += `<tr><td>${dia.nombreDia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE SEMANAL GESTORÍA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+    <div class="total">PRECIO HORA: ${precioHora.toFixed(2)} €</div>
+    <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir gestoría semana", html);
+}
+
+function imprimirObraMes(){
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
+    return;
+  }
+
+  const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
+
+  let filas = "";
+  datosMesActual.forEach(dia => {
+    filas += `<tr><td>${dia.dia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE MENSUAL OBRA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <h2>Mes: ${nombreMes(mesVisualizado)} ${añoVisualizado}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir obra mes", html);
+}
+
+function imprimirGestoriaMes(){
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
+    return;
+  }
+
+  const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
+  const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
+  const totalPagar = total * precioHora;
+
+  let filas = "";
+  datosMesActual.forEach(dia => {
+    filas += `<tr><td>${dia.dia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE MENSUAL GESTORÍA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <h2>Mes: ${nombreMes(mesVisualizado)} ${añoVisualizado}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>${filas}</tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+    <div class="total">PRECIO HORA: ${precioHora.toFixed(2)} €</div>
+    <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir gestoría mes", html);
+}
+
+async function abrirModalTrabajando(){
+  if(!obraSeleccionada){
+    alert("Selecciona primero una obra");
+    return;
+  }
+
+  listaTrabajandoDiv.innerHTML = "";
+
+  const hoy = hoyString();
+
+  const { data: trabajadores, error: errorTrabajadores } = await supabaseClient
+    .from("trabajadores")
+    .select("*")
+    .eq("obra", obraSeleccionada)
+    .order("nombre", { ascending: true });
+
+  if(errorTrabajadores){
+    console.log(errorTrabajadores);
+    alert("Error cargando trabajadores");
+    return;
+  }
+
+  const { data: fichajesHoy, error: errorFichajes } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("obra", obraSeleccionada)
+    .eq("fecha", hoy);
+
+  if(errorFichajes){
+    console.log(errorFichajes);
+    alert("Error cargando fichajes");
+    return;
+  }
+
+  if(!trabajadores || trabajadores.length === 0){
+    listaTrabajandoDiv.innerHTML = "<div>No hay trabajadores en esta obra</div>";
+    modalTrabajando.classList.remove("oculto");
+    return;
+  }
+
+  trabajadores.forEach(trabajador => {
+    const fichajesTrabajador = (fichajesHoy || []).filter(f => f.trabajador === trabajador.nombre);
+
+    let estado = "NO FICHO ENTRADA";
+
+    if(fichajesTrabajador.length > 0){
+      const fichajeConSalida = fichajesTrabajador.find(f => f.entrada && f.salida);
+      const fichajeTrabajando = fichajesTrabajador.find(f => f.entrada && !f.salida);
+
+      if(fichajeTrabajando){
+        estado = "TRABAJANDO";
+      } else if(fichajeConSalida){
+        const horasTexto = calcularHorasRedondeadasDesdeFichaje(fichajeConSalida);
+        estado = "SALIO, " + horasTexto + " H";
+      } else {
+        estado = "FICHAJE INCOMPLETO";
+      }
+    }
+
+    const boton = document.createElement("button");
+    boton.className = "botonTrabajador";
+    boton.textContent = trabajador.nombre + " — " + estado;
+
+    boton.addEventListener("click", () => {
+      abrirFichaTrabajador(trabajador);
+    });
+
+    listaTrabajandoDiv.appendChild(boton);
+  });
+
+  modalTrabajando.classList.remove("oculto");
+}
+
+function cerrarModalTrabajando(){
+  modalTrabajando.classList.add("oculto");
+}
+
+inputs.forEach((input, index) => {
+  input.addEventListener("input", () => {
+    input.value = input.value.replace(/[^0-9]/g, "");
+
+    if(input.value && index < inputs.length - 1){
+      inputs[index + 1].focus();
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if(e.key === "Backspace" && !input.value && index > 0){
+      inputs[index - 1].focus();
+    }
+  });
+});
+
+async function entrarApp(){
+  let pin = "";
+
+  inputs.forEach(input => {
+    pin += input.value;
+  });
+
+  if(pin.length !== 4){
+    mensajeLogin.textContent = "Introduce el PIN completo";
+    return;
+  }
+
+  if(pin === PIN_ENCARGADO){
+    mensajeLogin.textContent = "";
+    pantallaLogin.classList.add("oculto");
+    pantallaEncargado.classList.remove("oculto");
+    await cargarObras();
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("trabajadores")
+    .select("*")
+    .eq("pin", pin)
+    .maybeSingle();
+
+  if(error){
+    console.log(error);
+    mensajeLogin.textContent = "Error conectando";
+    return;
+  }
+
+  if(!data){
+    mensajeLogin.textContent = "PIN incorrecto";
+    return;
+  }
+
+  trabajadorActual = data;
+  nombreTrabajadorActual = data.nombre || "TRABAJADOR";
+  obraTrabajadorActual = await cargarObraDeTrabajador(data.obra);
+
+  mensajeLogin.textContent = "";
+  mensajeTrabajador.textContent = "";
+  pantallaLogin.classList.add("oculto");
+  pantallaTrabajador.classList.remove("oculto");
+
+  actualizarPantallaTrabajador();
+}
+
+async function ficharEntrada(){
+  mensajeTrabajador.textContent = "";
+
+  if(!trabajadorActual){
+    mensajeTrabajador.textContent = "No se encontró el trabajador";
+    return;
+  }
+
+  if(!obraTrabajadorActual){
+    mensajeTrabajador.textContent = "No se encontró la obra del trabajador";
+    return;
+  }
+
+  if(
+    obraTrabajadorActual.latitud == null ||
+    obraTrabajadorActual.longitud == null ||
+    obraTrabajadorActual.radio_fichaje == null
+  ){
+    mensajeTrabajador.textContent = "La obra no tiene ubicación o radio configurado";
+    return;
+  }
+
+  try{
+    mensajeTrabajador.textContent = "Comprobando ubicación...";
+
+    const ubicacion = await obtenerUbicacionActual();
+
+    const distancia = calcularDistanciaMetros(
+      ubicacion.latitud,
+      ubicacion.longitud,
+      parseFloat(obraTrabajadorActual.latitud),
+      parseFloat(obraTrabajadorActual.longitud)
+    );
+
+    const radioPermitido = parseFloat(obraTrabajadorActual.radio_fichaje);
+
+    if(distancia > radioPermitido){
+      mensajeTrabajador.textContent = "Fuera del radio permitido de la obra";
+      return;
+    }
+
+    guardarEstadoDia("trabajando");
+    actualizarPantallaTrabajador();
+    mensajeTrabajador.textContent = "Fichaje correcto";
+
+  }catch(error){
+    console.log(error);
+    mensajeTrabajador.textContent = "No se pudo comprobar la ubicación";
+  }
+}
+
+function ficharSalida(){
+  guardarEstadoDia("salido");
+  actualizarPantallaTrabajador();
+  mensajeTrabajador.textContent = "";
+}
+
+function verHorasSemana(){
+  btnSemana.textContent = "SEMANA: 32 H";
+  setTimeout(() => {
+    btnSemana.textContent = "HORAS SEMANA";
+  }, 5000);
+}
+
+function verHorasMes(){
+  btnMes.textContent = "MES: 118 H";
+  setTimeout(() => {
+    btnMes.textContent = "HORAS MES";
+  }, 5000);
+}
+
+async function añadirObra(){
+  const nombreObra = prompt("Nombre de la obra");
+  if(!nombreObra) return;
+
+  const latitud = prompt("Latitud de la obra");
+  if(!latitud) return;
+
+  const longitud = prompt("Longitud de la obra");
+  if(!longitud) return;
+
+  const radioFichaje = prompt("Radio de fichaje en metros");
+  if(!radioFichaje) return;
+
+  const { error } = await supabaseClient
+    .from("obras")
+    .insert([{
+      nombre: nombreObra.trim(),
+      latitud: parseFloat(latitud),
+      longitud: parseFloat(longitud),
+      radio_fichaje: parseFloat(radioFichaje)
+    }]);
+
+  if(error){
+    console.log(error);
+    alert("Error al crear la obra: " + (error.message || ""));
+    return;
+  }
+
+  alert("Obra creada correctamente");
+  await cargarObras();
+}
+
+async function añadirTrabajador(){
+  if(!obraSeleccionada){
+    alert("Selecciona primero una obra");
+    return;
+  }
+
+  const nombre = prompt("Nombre del trabajador");
+  if(!nombre) return;
+
+  const pin = prompt("PIN del trabajador (4 números)");
+  if(!pin) return;
+
+  const precioHora = prompt("Precio por hora");
+  if(!precioHora) return;
+
+  const telefono = prompt("Teléfono");
+  if(!telefono) return;
+
+  const datosTrabajador = {
+    nombre: nombre.trim(),
+    pin: pin.trim(),
+    obra: obraSeleccionada,
+    precio_hora: parseFloat(precioHora),
+    telefono: telefono.trim(),
+    movil_id: null
+  };
+
+  const { error } = await supabaseClient
+    .from("trabajadores")
+    .insert([datosTrabajador]);
+
+  if(error){
+    console.log(error);
+    alert(
+      "Error al crear trabajador:\n\n" +
+      (error.message || "") +
+      "\n\n" +
+      (error.details || "") +
+      "\n\n" +
+      (error.hint || "")
+    );
+    return;
+  }
+
+  alert("Trabajador creado correctamente en la obra " + obraSeleccionada);
+}
+
+function funcionNoDisponible(){
+  alert("Esta función la añadiremos en el siguiente paso");
+}
+
+btnEntrarApp.addEventListener("click", entrarApp);
+btnEntrada.addEventListener("click", ficharEntrada);
+btnSalida.addEventListener("click", ficharSalida);
+btnSemana.addEventListener("click", verHorasSemana);
+btnMes.addEventListener("click", verHorasMes);
+
+btnObra.addEventListener("click", abrirModalObras);
+btnAñadirObra.addEventListener("click", añadirObra);
+btnAñadirTrabajador.addEventListener("click", añadirTrabajador);
+btnTrabajando.addEventListener("click", abrirModalTrabajando);
+
+btnHorasSemanaEnc.addEventListener("click", funcionNoDisponible);
+btnHorasMesEnc.addEventListener("click", funcionNoDisponible);
+
+btnCerrarModalObras.addEventListener("click", cerrarModalObras);
+btnCerrarModalTrabajando.addEventListener("click", cerrarModalTrabajando);
+
+btnFichaHorasSemana.addEventListener("click", abrirHorasSemanaTrabajador);
+btnFichaHorasMes.addEventListener("click", abrirHorasMesTrabajador);
+
+btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
+
+btnCerrarHorasSemana.addEventListener("click", cerrarHorasSemana);
+btnModificarSemana.addEventListener("click", modificarHorasSemana);
+btnImprimirObraSemana.addEventListener("click", imprimirObraSemana);
+btnImprimirGestoriaSemana.addEventListener("click", imprimirGestoriaSemana);
+
+btnCerrarHorasMes.addEventListener("click", cerrarHorasMes);
+btnModificarMes.addEventListener("click", modificarHorasMes);
+btnImprimirObraMes.addEventListener("click", imprimirObraMes);
+btnImprimirGestoriaMes.addEventListener("click", imprimirGestoriaMes);
+
+btnMesAnterior.addEventListener("click", async () => {
+  if(mesVisualizado === 0){
+    mesVisualizado = 11;
+    añoVisualizado--;
+  } else {
+    mesVisualizado--;
+  }
+  await cargarYRenderizarMes();
+});
+
+btnMesSiguiente.addEventListener("click", async () => {
+  if(mesVisualizado === 11){
+    mesVisualizado = 0;
+    añoVisualizado++;
+  } else {
+    mesVisualizado++;
+  }
+  await cargarYRenderizarMes();
+});
+
+});
+</script>
+
+</body>
+</html>
