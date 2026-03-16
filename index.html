@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUXOIS Control de Obras</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 *{
   box-sizing:border-box;
@@ -14,13 +16,13 @@ body{
   margin:0;
   min-height:100vh;
   background:
-    linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.52)),
+    linear-gradient(rgba(0,0,0,0.18), rgba(0,0,0,0.48)),
     url("https://luxois.vercel.app/luxois-login.png") no-repeat center center;
   background-size:cover;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:Georgia, "Times New Roman", serif;
+  font-family:'Cinzel', serif;
 }
 
 .loginBox{
@@ -32,58 +34,64 @@ body{
   align-items:center;
   justify-content:flex-start;
   text-align:center;
-  padding:70px 24px 40px 24px;
+  padding:72px 24px 40px 24px;
 }
 
 .logo{
   margin:0;
-  color:#f2b233;
-  font-size:72px;
+  color:#f0b33a;
+  font-size:68px;
   line-height:0.95;
+  font-weight:700;
   letter-spacing:1px;
-  font-weight:bold;
   text-shadow:
-    0 0 8px rgba(242,178,51,0.35),
-    0 0 20px rgba(242,178,51,0.10);
+    0 0 6px rgba(240,179,58,0.25),
+    0 0 16px rgba(240,179,58,0.10);
+}
+
+.logo .bigX{
+  font-size:1.18em;
+  display:inline-block;
+  transform:translateY(2px);
 }
 
 .sublogo{
   margin:8px 0 110px 0;
-  color:#f2b233;
-  font-size:24px;
-  font-weight:bold;
+  color:#f0b33a;
+  font-size:21px;
+  font-weight:600;
   letter-spacing:2px;
   text-shadow:
-    0 0 8px rgba(242,178,51,0.25);
+    0 0 6px rgba(240,179,58,0.18);
 }
 
 .pinTitle{
-  margin:0 0 22px 0;
-  color:#f2b233;
+  margin:0 0 26px 0;
+  color:#f0b33a;
   font-size:34px;
-  letter-spacing:4px;
-  font-weight:bold;
+  font-weight:600;
+  letter-spacing:6px;
   text-shadow:
-    0 0 8px rgba(242,178,51,0.25);
+    0 0 6px rgba(240,179,58,0.18);
 }
 
 .pinRow{
   display:flex;
-  gap:18px;
+  gap:22px;
   margin-bottom:22px;
 }
 
 .pinInput{
-  width:56px;
+  width:52px;
   height:48px;
   border:none;
-  border-bottom:3px solid #f2b233;
+  border-bottom:3px solid #f0b33a;
   background:transparent;
-  color:#f2b233;
+  color:#f0b33a;
   font-size:34px;
+  font-family:'Cinzel', serif;
   text-align:center;
   outline:none;
-  box-shadow:0 8px 12px rgba(242,178,51,0.08);
 }
 
 .pinInput::-webkit-outer-spin-button,
@@ -94,59 +102,61 @@ body{
 
 .pinDots{
   display:flex;
-  gap:20px;
+  gap:18px;
   margin-bottom:120px;
 }
 
 .pinDots span{
-  width:12px;
-  height:12px;
+  width:14px;
+  height:14px;
   border-radius:50%;
-  background:#f2b233;
+  background:#f0b33a;
   box-shadow:
-    0 0 8px rgba(242,178,51,0.80),
-    0 0 16px rgba(242,178,51,0.25);
+    0 0 10px rgba(240,179,58,0.65),
+    0 0 18px rgba(240,179,58,0.15);
 }
 
 .entrarBtn{
   min-width:230px;
-  padding:16px 34px;
-  font-size:24px;
-  font-weight:bold;
+  padding:15px 34px;
+  font-size:22px;
+  font-weight:700;
   letter-spacing:2px;
-  color:#f2b233;
-  background:rgba(0,0,0,0.45);
-  border:2px solid #f2b233;
+  font-family:'Cinzel', serif;
+  color:#f0b33a;
+  background:rgba(0,0,0,0.34);
+  border:2px solid #f0b33a;
   cursor:pointer;
   box-shadow:
-    0 0 14px rgba(242,178,51,0.30),
-    inset 0 0 10px rgba(242,178,51,0.10);
+    0 0 12px rgba(240,179,58,0.18),
+    inset 0 0 8px rgba(240,179,58,0.06);
 }
 
 .entrarBtn:hover{
-  background:rgba(242,178,51,0.12);
+  background:rgba(240,179,58,0.10);
 }
 
 .mensaje{
   margin-top:24px;
-  color:#f2b233;
-  font-size:16px;
+  color:#f0b33a;
+  font-size:15px;
   min-height:24px;
+  text-shadow:0 0 6px rgba(240,179,58,0.18);
 }
 
 @media (max-width:600px){
   .loginBox{
     max-width:100%;
-    padding-top:72px;
+    padding-top:76px;
   }
 
   .logo{
-    font-size:68px;
+    font-size:64px;
   }
 
   .sublogo{
-    font-size:22px;
-    margin-bottom:100px;
+    font-size:20px;
+    margin-bottom:104px;
   }
 
   .pinTitle{
@@ -154,21 +164,21 @@ body{
   }
 
   .pinRow{
-    gap:16px;
+    gap:18px;
   }
 
   .pinInput{
-    width:52px;
+    width:48px;
     font-size:32px;
   }
 
   .pinDots{
-    margin-bottom:110px;
+    margin-bottom:112px;
   }
 
   .entrarBtn{
     min-width:220px;
-    font-size:22px;
+    font-size:21px;
   }
 }
 </style>
@@ -178,7 +188,7 @@ body{
 
 <div class="loginBox">
 
-  <h1 class="logo">LUXOIS</h1>
+  <h1 class="logo">LU<span class="bigX">X</span>OIS</h1>
   <h2 class="sublogo">CONTROL DE OBRAS</h2>
 
   <h3 class="pinTitle">PIN</h3>
