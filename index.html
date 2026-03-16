@@ -135,6 +135,24 @@ background:#f0b33a;
 color:black;
 }
 
+.botonPeligro{
+width:100%;
+padding:12px 16px;
+font-size:18px;
+letter-spacing:1px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+margin-bottom:14px;
+}
+
+.botonPeligro:hover{
+background:#f0b33a;
+color:black;
+}
+
 .mensaje{
 margin-top:10px;
 min-height:24px;
@@ -391,6 +409,7 @@ margin-top:8px;
     <button class="boton" id="btnFichaHorasMes">HORAS MES</button>
     <button class="boton" id="btnFichaPrecioHora">PRECIO HORA</button>
     <button class="boton" id="btnFichaCambiarObra">CAMBIAR OBRA</button>
+    <button class="botonPeligro" id="btnFichaBajaTrabajador">DAR DE BAJA</button>
     <button class="botonCerrar" id="btnCerrarFichaTrabajador">CERRAR</button>
   </div>
 </div>
@@ -485,6 +504,7 @@ const btnFichaHorasSemana = document.getElementById("btnFichaHorasSemana");
 const btnFichaHorasMes = document.getElementById("btnFichaHorasMes");
 const btnFichaPrecioHora = document.getElementById("btnFichaPrecioHora");
 const btnFichaCambiarObra = document.getElementById("btnFichaCambiarObra");
+const btnFichaBajaTrabajador = document.getElementById("btnFichaBajaTrabajador");
 const btnCerrarFichaTrabajador = document.getElementById("btnCerrarFichaTrabajador");
 
 const modalHorasSemana = document.getElementById("modalHorasSemana");
@@ -1348,6 +1368,37 @@ async function cambiarObraTrabajador(){
   alert("Obra cambiada correctamente a " + nuevaObra);
 }
 
+async function darDeBajaTrabajador(){
+  if(!trabajadorSeleccionadoFicha){
+    return;
+  }
+
+  const confirmar = confirm(
+    "¿Seguro que quieres dar de baja a " +
+    trabajadorSeleccionadoFicha.nombre +
+    "?\n\nNo podrá entrar con su PIN ni saldrá en la lista de trabajadores activos, pero su historial y sus horas seguirán guardados."
+  );
+
+  if(!confirmar) return;
+
+  const { error } = await supabaseClient
+    .from("trabajadores")
+    .update({
+      activo: false
+    })
+    .eq("id", trabajadorSeleccionadoFicha.id);
+
+  if(error){
+    console.log(error);
+    alert("Error al dar de baja al trabajador");
+    return;
+  }
+
+  alert("Trabajador dado de baja correctamente");
+  cerrarFichaTrabajador();
+  cerrarModalTrabajando();
+}
+
 async function abrirModalTrabajando(){
   if(!obraSeleccionada){
     alert("Selecciona primero una obra");
@@ -1668,6 +1719,7 @@ btnFichaHorasSemana.addEventListener("click", abrirHorasSemanaTrabajador);
 btnFichaHorasMes.addEventListener("click", abrirHorasMesTrabajador);
 btnFichaPrecioHora.addEventListener("click", actualizarPrecioHoraTrabajador);
 btnFichaCambiarObra.addEventListener("click", cambiarObraTrabajador);
+btnFichaBajaTrabajador.addEventListener("click", darDeBajaTrabajador);
 
 btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
 
