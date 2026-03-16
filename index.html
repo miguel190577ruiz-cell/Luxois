@@ -1,69 +1,122 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>LUXOIS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXOIS Control de Obras</title>
 
 <style>
-
 body{
-margin:0;
-height:100vh;
-background:black url("https://luxois.vercel.app/luxois-login.png") no-repeat center center;
-background-size:cover;
-display:flex;
-justify-content:center;
-align-items:center;
+  margin:0;
+  min-height:100vh;
+  background:black url("https://luxois.vercel.app/luxois-login.png") no-repeat center center;
+  background-size:cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial, sans-serif;
+}
+
+.loginBox{
+  width:100%;
+  max-width:420px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.logo{
+  color:#f2b233;
+  font-size:72px;
+  font-weight:bold;
+  margin:0;
+  line-height:1;
+  letter-spacing:2px;
+  text-shadow:0 0 10px rgba(242,178,51,0.35);
+}
+
+.sublogo{
+  color:#f2b233;
+  font-size:22px;
+  font-weight:bold;
+  margin:8px 0 40px 0;
+  letter-spacing:2px;
+  text-shadow:0 0 8px rgba(242,178,51,0.25);
 }
 
 .pin{
-display:flex;
-gap:10px;
+  display:flex;
+  gap:12px;
+  margin-bottom:35px;
 }
 
-.pin input{
-width:60px;
-height:60px;
-font-size:30px;
-text-align:center;
-border:2px solid gold;
-background:black;
-color:gold;
+.pinInput{
+  width:58px;
+  height:58px;
+  font-size:30px;
+  text-align:center;
+  border:2px solid #f2b233;
+  background:rgba(0,0,0,0.75);
+  color:#f2b233;
+  outline:none;
+  box-shadow:0 0 10px rgba(242,178,51,0.25);
 }
 
-button{
-margin-top:30px;
-padding:12px 40px;
-font-size:22px;
-background:black;
-color:gold;
-border:2px solid gold;
-cursor:pointer;
+.entrarBtn{
+  padding:14px 46px;
+  font-size:24px;
+  font-weight:bold;
+  background:rgba(0,0,0,0.75);
+  color:#f2b233;
+  border:2px solid #f2b233;
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(242,178,51,0.25);
 }
 
+.entrarBtn:hover{
+  background:#f2b233;
+  color:black;
+}
 </style>
 </head>
 
 <body>
 
-<div>
-<h1 class="logo">LUXOIS</h1>
-<h2 class="sublogo">CONTROL DE OBRAS</h2>
-<br>
-<div class="pin">
-<input maxlength="1">
-<input maxlength="1">
-<input maxlength="1">
-<input maxlength="1">
+<div class="loginBox">
+  <h1 class="logo">LUXOIS</h1>
+  <h2 class="sublogo">CONTROL DE OBRAS</h2>
+
+  <div class="pin">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+    <input class="pinInput" maxlength="1" inputmode="numeric">
+  </div>
+
+  <button class="entrarBtn" onclick="entrar()">ENTRAR</button>
 </div>
 
-<br>
+<script>
+function entrar(){
+  const inputs = document.querySelectorAll(".pinInput");
+  let pin = "";
 
-<button>ENTRAR</button>
+  inputs.forEach(input => {
+    pin += input.value;
+  });
 
-</div>
+  if(pin.length !== 4){
+    alert("Introduce el PIN completo");
+    return;
+  }
+
+  alert("PIN introducido: " + pin);
+}
+</script>
 
 </body>
-
 </html>
