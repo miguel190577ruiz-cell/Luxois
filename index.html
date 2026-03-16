@@ -504,13 +504,17 @@ if(!latitud) return;
 const longitud = prompt("Longitud de la obra");
 if(!longitud) return;
 
+const radioFichaje = prompt("Radio de fichaje en metros");
+if(!radioFichaje) return;
+
 const { error } = await supabaseClient
 .from("obras")
 .insert([
 {
 nombre: nombreObra.trim(),
 latitud: parseFloat(latitud),
-longitud: parseFloat(longitud)
+longitud: parseFloat(longitud),
+radio_fichaje: parseFloat(radioFichaje)
 }
 ]);
 
