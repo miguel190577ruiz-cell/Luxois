@@ -10,325 +10,421 @@
 
 <style>
 *{
-box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-margin:0;
-min-height:100vh;
-background:black;
-display:flex;
-justify-content:center;
-align-items:center;
-font-family:'Cinzel', serif;
-color:#f0b33a;
+  margin:0;
+  min-height:100vh;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Cinzel', serif;
+  color:#f0b33a;
 }
 
 .pantalla{
-width:100%;
-max-width:420px;
-min-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:flex-start;
-text-align:center;
-padding:40px 24px;
+  width:100%;
+  max-width:420px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
+  padding:40px 24px;
 }
 
 .logo{
-font-size:64px;
-margin:0;
-letter-spacing:2px;
+  font-size:64px;
+  margin:0;
+  letter-spacing:2px;
 }
 
 .sublogo{
-font-size:22px;
-margin:0 0 40px 0;
-letter-spacing:3px;
+  font-size:22px;
+  margin:0 0 40px 0;
+  letter-spacing:3px;
 }
 
 .estado{
-font-size:30px;
-margin:0 0 40px 0;
-min-height:40px;
+  font-size:30px;
+  margin:0 0 40px 0;
+  min-height:40px;
 }
 
 .tituloPanel{
-font-size:28px;
-margin:0 0 40px 0;
-letter-spacing:4px;
+  font-size:28px;
+  margin:0 0 40px 0;
+  letter-spacing:4px;
 }
 
 .pinTitle{
-font-size:28px;
-margin-bottom:24px;
-letter-spacing:6px;
+  font-size:28px;
+  margin-bottom:24px;
+  letter-spacing:6px;
 }
 
 .pinRow{
-display:flex;
-gap:20px;
-margin-bottom:20px;
+  display:flex;
+  gap:20px;
+  margin-bottom:20px;
 }
 
 .pinInput{
-width:50px;
-height:50px;
-border:none;
-border-bottom:3px solid #f0b33a;
-background:transparent;
-color:#f0b33a;
-font-size:32px;
-text-align:center;
-outline:none;
-font-family:'Cinzel', serif;
+  width:50px;
+  height:50px;
+  border:none;
+  border-bottom:3px solid #f0b33a;
+  background:transparent;
+  color:#f0b33a;
+  font-size:32px;
+  text-align:center;
+  outline:none;
+  font-family:'Cinzel', serif;
 }
 
 .pinDots{
-display:flex;
-gap:18px;
-margin-bottom:70px;
+  display:flex;
+  gap:18px;
+  margin-bottom:70px;
 }
 
 .pinDots span{
-width:12px;
-height:12px;
-background:#f0b33a;
-border-radius:50%;
-box-shadow:0 0 8px #f0b33a;
+  width:12px;
+  height:12px;
+  background:#f0b33a;
+  border-radius:50%;
+  box-shadow:0 0 8px #f0b33a;
 }
 
 .boton{
-width:260px;
-padding:14px 20px;
-font-size:22px;
-letter-spacing:2px;
-background:black;
-border:2px solid #f0b33a;
-color:#f0b33a;
-cursor:pointer;
-font-family:'Cinzel', serif;
-margin-bottom:20px;
+  width:260px;
+  padding:14px 20px;
+  font-size:22px;
+  letter-spacing:2px;
+  background:black;
+  border:2px solid #f0b33a;
+  color:#f0b33a;
+  cursor:pointer;
+  font-family:'Cinzel', serif;
+  margin-bottom:20px;
 }
 
 .boton:hover{
-background:#f0b33a;
-color:black;
+  background:#f0b33a;
+  color:black;
 }
 
 .botonPeque{
-width:100%;
-padding:12px 16px;
-font-size:18px;
-letter-spacing:1px;
-background:black;
-border:2px solid #f0b33a;
-color:#f0b33a;
-cursor:pointer;
-font-family:'Cinzel', serif;
-margin-bottom:14px;
+  width:100%;
+  padding:12px 16px;
+  font-size:18px;
+  letter-spacing:1px;
+  background:black;
+  border:2px solid #f0b33a;
+  color:#f0b33a;
+  cursor:pointer;
+  font-family:'Cinzel', serif;
+  margin-bottom:14px;
 }
 
 .botonPeque:hover{
-background:#f0b33a;
-color:black;
+  background:#f0b33a;
+  color:black;
 }
 
 .botonPeligro{
-width:100%;
-padding:12px 16px;
-font-size:18px;
-letter-spacing:1px;
-background:black;
-border:2px solid #f0b33a;
-color:#f0b33a;
-cursor:pointer;
-font-family:'Cinzel', serif;
-margin-bottom:14px;
+  width:100%;
+  padding:12px 16px;
+  font-size:18px;
+  letter-spacing:1px;
+  background:black;
+  border:2px solid #f0b33a;
+  color:#f0b33a;
+  cursor:pointer;
+  font-family:'Cinzel', serif;
+  margin-bottom:14px;
 }
 
 .botonPeligro:hover{
-background:#f0b33a;
-color:black;
+  background:#f0b33a;
+  color:black;
 }
 
 .mensaje{
-margin-top:10px;
-min-height:24px;
-font-size:14px;
+  margin-top:10px;
+  min-height:24px;
+  font-size:14px;
 }
 
 .oculto{
-display:none !important;
+  display:none !important;
 }
 
 .modalFondo{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.88);
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-z-index:999;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.88);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  z-index:999;
 }
 
 .modalCaja{
-width:100%;
-max-width:380px;
-border:2px solid #f0b33a;
-padding:24px 20px;
-background:black;
-box-shadow:0 0 18px rgba(240,179,58,0.18);
-text-align:center;
-max-height:86vh;
-overflow:auto;
+  width:100%;
+  max-width:380px;
+  border:2px solid #f0b33a;
+  padding:24px 20px;
+  background:black;
+  box-shadow:0 0 18px rgba(240,179,58,0.18);
+  text-align:center;
+  max-height:86vh;
+  overflow:auto;
+}
+
+.modalCajaGrande{
+  width:100%;
+  max-width:700px;
+  border:2px solid #f0b33a;
+  padding:24px 20px;
+  background:black;
+  box-shadow:0 0 18px rgba(240,179,58,0.18);
+  text-align:center;
+  max-height:90vh;
+  overflow:auto;
 }
 
 .modalTitulo{
-font-size:26px;
-margin:0 0 24px 0;
-letter-spacing:3px;
+  font-size:26px;
+  margin:0 0 24px 0;
+  letter-spacing:3px;
 }
 
 .listaObras,
 .listaTrabajando,
 .listaSemana{
-display:flex;
-flex-direction:column;
-gap:14px;
-margin-bottom:24px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-bottom:24px;
 }
 
 .botonObra,
 .botonTrabajador{
-width:100%;
-padding:12px 16px;
-font-size:18px;
-letter-spacing:1px;
-background:black;
-border:2px solid #f0b33a;
-color:#f0b33a;
-cursor:pointer;
-font-family:'Cinzel', serif;
-text-align:center;
+  width:100%;
+  padding:12px 16px;
+  font-size:18px;
+  letter-spacing:1px;
+  background:black;
+  border:2px solid #f0b33a;
+  color:#f0b33a;
+  cursor:pointer;
+  font-family:'Cinzel', serif;
+  text-align:center;
 }
 
 .botonObra:hover,
 .botonTrabajador:hover{
-background:#f0b33a;
-color:black;
+  background:#f0b33a;
+  color:black;
 }
 
 .botonCerrar{
-width:100%;
-padding:12px 16px;
-font-size:18px;
-background:black;
-border:2px solid #f0b33a;
-color:#f0b33a;
-cursor:pointer;
-font-family:'Cinzel', serif;
+  width:100%;
+  padding:12px 16px;
+  font-size:18px;
+  background:black;
+  border:2px solid #f0b33a;
+  color:#f0b33a;
+  cursor:pointer;
+  font-family:'Cinzel', serif;
 }
 
 .lineaSemana{
-display:flex;
-justify-content:space-between;
-gap:12px;
-border:1px solid #f0b33a;
-padding:10px 12px;
-font-size:17px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  border:1px solid #f0b33a;
+  padding:10px 12px;
+  font-size:17px;
 }
 
 .totalSemana,
 .totalMes{
-margin:10px 0 24px 0;
-font-size:22px;
-letter-spacing:2px;
+  margin:10px 0 24px 0;
+  font-size:22px;
+  letter-spacing:2px;
 }
 
 .mesCabecera{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-margin-bottom:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
 }
 
 .mesTitulo{
-font-size:24px;
-letter-spacing:2px;
+  font-size:24px;
+  letter-spacing:2px;
 }
 
 .botonMesNav{
-width:52px;
-padding:8px 0;
-font-size:22px;
-background:black;
-border:2px solid #f0b33a;
-color:#f0b33a;
-cursor:pointer;
-font-family:'Cinzel', serif;
+  width:52px;
+  padding:8px 0;
+  font-size:22px;
+  background:black;
+  border:2px solid #f0b33a;
+  color:#f0b33a;
+  cursor:pointer;
+  font-family:'Cinzel', serif;
 }
 
 .diasSemanaMes{
-display:grid;
-grid-template-columns:repeat(7, 1fr);
-gap:6px;
-margin-bottom:8px;
-font-size:12px;
-letter-spacing:1px;
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  gap:6px;
+  margin-bottom:8px;
+  font-size:12px;
+  letter-spacing:1px;
 }
 
 .diaSemanaCabecera{
-padding:6px 2px;
-text-align:center;
-border-bottom:1px solid #f0b33a;
+  padding:6px 2px;
+  text-align:center;
+  border-bottom:1px solid #f0b33a;
 }
 
 .calendarioMes{
-display:grid;
-grid-template-columns:repeat(7, 1fr);
-gap:6px;
-margin-bottom:18px;
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  gap:6px;
+  margin-bottom:18px;
 }
 
 .celdaMes{
-min-height:72px;
-border:1px solid rgba(240,179,58,0.55);
-padding:6px 4px;
-display:flex;
-flex-direction:column;
-justify-content:flex-start;
-align-items:center;
-font-size:12px;
+  min-height:72px;
+  border:1px solid rgba(240,179,58,0.55);
+  padding:6px 4px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
+  font-size:12px;
 }
 
 .celdaMesVacia{
-opacity:0.18;
+  opacity:0.18;
 }
 
 .numeroDia{
-font-size:14px;
-margin-bottom:8px;
+  font-size:14px;
+  margin-bottom:8px;
 }
 
 .horasDia{
-font-size:12px;
-line-height:1.2;
-text-align:center;
+  font-size:12px;
+  line-height:1.2;
+  text-align:center;
 }
 
 .celdaConHoras{
-box-shadow:0 0 8px rgba(240,179,58,0.15);
+  box-shadow:0 0 8px rgba(240,179,58,0.15);
 }
 
 .accionesMes{
-display:flex;
-flex-direction:column;
-gap:12px;
-margin-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:8px;
+}
+
+.previewAcciones{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:20px;
+}
+
+#printPreviewArea{
+  background:white;
+  color:black;
+  padding:24px;
+  border-radius:6px;
+  text-align:left;
+  font-family:Arial, sans-serif;
+}
+
+#printPreviewArea h1{
+  font-size:24px;
+  margin:0 0 10px 0;
+}
+
+#printPreviewArea h2{
+  font-size:18px;
+  margin:0 0 15px 0;
+}
+
+#printPreviewArea table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:20px;
+}
+
+#printPreviewArea th,
+#printPreviewArea td{
+  border:1px solid #000;
+  padding:8px;
+  text-align:left;
+}
+
+#printPreviewArea .total{
+  font-size:18px;
+  font-weight:bold;
+  margin-top:12px;
+}
+
+@media print{
+  body *{
+    visibility:hidden !important;
+  }
+
+  #modalImpresion,
+  #modalImpresion *{
+    visibility:visible !important;
+  }
+
+  #modalImpresion{
+    position:absolute !important;
+    inset:0 !important;
+    background:white !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+
+  #modalImpresion .modalCajaGrande{
+    border:none !important;
+    box-shadow:none !important;
+    max-width:none !important;
+    max-height:none !important;
+    overflow:visible !important;
+    padding:0 !important;
+    background:white !important;
+  }
+
+  #printPreviewArea{
+    padding:20px !important;
+    border:none !important;
+    border-radius:0 !important;
+  }
+
+  #printPreviewButtons{
+    display:none !important;
+  }
 }
 </style>
 </head>
@@ -457,6 +553,17 @@ margin-top:8px;
   </div>
 </div>
 
+<div id="modalImpresion" class="modalFondo oculto">
+  <div class="modalCajaGrande">
+    <h3 class="modalTitulo" id="printPreviewTitle">VISTA PREVIA</h3>
+    <div id="printPreviewArea"></div>
+    <div class="previewAcciones" id="printPreviewButtons">
+      <button class="botonPeque" id="btnPrintNow">IMPRIMIR AHORA</button>
+      <button class="botonCerrar" id="btnCerrarPrintPreview">CERRAR</button>
+    </div>
+  </div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -528,6 +635,12 @@ const btnModificarMes = document.getElementById("btnModificarMes");
 const btnImprimirObraMes = document.getElementById("btnImprimirObraMes");
 const btnImprimirGestoriaMes = document.getElementById("btnImprimirGestoriaMes");
 const btnCerrarHorasMes = document.getElementById("btnCerrarHorasMes");
+
+const modalImpresion = document.getElementById("modalImpresion");
+const printPreviewTitle = document.getElementById("printPreviewTitle");
+const printPreviewArea = document.getElementById("printPreviewArea");
+const btnPrintNow = document.getElementById("btnPrintNow");
+const btnCerrarPrintPreview = document.getElementById("btnCerrarPrintPreview");
 
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
@@ -604,7 +717,6 @@ function obtenerUbicacionActual(){
 function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
   const R = 6371000;
   const toRad = grados => grados * Math.PI / 180;
-
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
 
@@ -618,9 +730,7 @@ function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
 }
 
 function calcularHorasRedondeadasDesdeFichaje(fichaje){
-  if(!fichaje){
-    return 0;
-  }
+  if(!fichaje) return 0;
 
   if(fichaje.horas_redondeadas != null){
     return Number(fichaje.horas_redondeadas);
@@ -634,7 +744,6 @@ function calcularHorasRedondeadasDesdeFichaje(fichaje){
   const salida = new Date(fichaje.salida);
 
   let horas = (salida - entrada) / 1000 / 60 / 60;
-
   const minutosSalida = salida.getHours() * 60 + salida.getMinutes();
   const limiteComida = 14 * 60 + 25;
 
@@ -741,9 +850,7 @@ function formatearFechaYYYYMMDD(fecha){
 }
 
 function nombreDiaSemana(indice){
-  const nombres = [
-    "LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES","SÁBADO","DOMINGO"
-  ];
+  const nombres = ["LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES","SÁBADO","DOMINGO"];
   return nombres[indice];
 }
 
@@ -762,6 +869,16 @@ function diasEnMes(año, mes){
 function primerDiaMesLunes0(año, mes){
   const dia = new Date(año, mes, 1).getDay();
   return dia === 0 ? 6 : dia - 1;
+}
+
+function abrirVistaImpresion(titulo, contenidoHtml){
+  printPreviewTitle.textContent = titulo;
+  printPreviewArea.innerHTML = contenidoHtml;
+  modalImpresion.classList.remove("oculto");
+}
+
+function cerrarVistaImpresion(){
+  modalImpresion.classList.add("oculto");
 }
 
 async function guardarCorreccionHoras(fecha, horasRedondeadas){
@@ -959,9 +1076,7 @@ function renderHorasMes(){
 }
 
 async function abrirHorasSemanaTrabajador(){
-  if(!trabajadorSeleccionadoFicha){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha) return;
 
   const hoy = new Date();
   const inicioSemana = obtenerInicioSemana(hoy);
@@ -1010,9 +1125,7 @@ async function abrirHorasSemanaTrabajador(){
 }
 
 async function abrirHorasMesTrabajador(){
-  if(!trabajadorSeleccionadoFicha){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha) return;
 
   const hoy = new Date();
   mesVisualizado = hoy.getMonth();
@@ -1023,9 +1136,7 @@ async function abrirHorasMesTrabajador(){
 }
 
 async function cargarYRenderizarMes(){
-  if(!trabajadorSeleccionadoFicha){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha) return;
 
   const primerDia = new Date(añoVisualizado, mesVisualizado, 1);
   const ultimoDia = new Date(añoVisualizado, mesVisualizado + 1, 0);
@@ -1075,9 +1186,7 @@ function cerrarHorasMes(){
 }
 
 async function modificarHorasSemana(){
-  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0) return;
 
   const diaTextoOriginal = prompt(
     "Escribe el día a modificar.\n\nEjemplo:\nMIERCOLES\n\nDías válidos:\nLUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO"
@@ -1135,9 +1244,7 @@ async function modificarHorasSemana(){
 }
 
 async function modificarHorasMes(){
-  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0) return;
 
   const diaTexto = prompt("Escribe el día del mes a modificar.\n\nEjemplo:\n19");
   if(!diaTexto) return;
@@ -1176,46 +1283,12 @@ async function modificarHorasMes(){
   }
 }
 
-function abrirVentanaImpresion(titulo, contenidoHtml){
-  const ventana = window.open("", "_blank", "width=800,height=900");
-  if(!ventana){
-    alert("El navegador ha bloqueado la ventana de impresión");
-    return;
-  }
-
-  ventana.document.write(`
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-      <meta charset="UTF-8">
-      <title>${titulo}</title>
-      <style>
-        body{ font-family: Arial, sans-serif; padding: 30px; color:#000; }
-        h1{ font-size: 24px; margin-bottom: 10px; }
-        h2{ font-size: 18px; margin-bottom: 20px; }
-        table{ width:100%; border-collapse: collapse; margin-bottom:20px; }
-        th, td{ border:1px solid #000; padding:8px; text-align:left; }
-        .total{ font-size:18px; font-weight:bold; margin-top:20px; }
-      </style>
-    </head>
-    <body>
-      ${contenidoHtml}
-    </body>
-    </html>
-  `);
-  ventana.document.close();
-  ventana.focus();
-  ventana.print();
-}
-
 function imprimirObraSemana(){
-  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0) return;
 
   const total = datosSemanaActual.reduce((acc, d) => acc + d.horas, 0);
-
   let filas = "";
+
   datosSemanaActual.forEach(dia => {
     filas += `<tr><td>${dia.nombreDia}</td><td>${dia.horas} H</td></tr>`;
   });
@@ -1224,27 +1297,23 @@ function imprimirObraSemana(){
     <h1>PARTE SEMANAL OBRA</h1>
     <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
     <table>
-      <thead>
-        <tr><th>Día</th><th>Horas</th></tr>
-      </thead>
+      <thead><tr><th>Día</th><th>Horas</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL HORAS: ${total} H</div>
   `;
 
-  abrirVentanaImpresion("Imprimir obra semana", html);
+  abrirVistaImpresion("IMPRESIÓN OBRA SEMANA", html);
 }
 
 function imprimirGestoriaSemana(){
-  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0) return;
 
   const total = datosSemanaActual.reduce((acc, d) => acc + d.horas, 0);
   const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
   const totalPagar = total * precioHora;
-
   let filas = "";
+
   datosSemanaActual.forEach(dia => {
     filas += `<tr><td>${dia.nombreDia}</td><td>${dia.horas} H</td></tr>`;
   });
@@ -1253,9 +1322,7 @@ function imprimirGestoriaSemana(){
     <h1>PARTE SEMANAL GESTORÍA</h1>
     <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
     <table>
-      <thead>
-        <tr><th>Día</th><th>Horas</th></tr>
-      </thead>
+      <thead><tr><th>Día</th><th>Horas</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL HORAS: ${total} H</div>
@@ -1263,17 +1330,15 @@ function imprimirGestoriaSemana(){
     <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
   `;
 
-  abrirVentanaImpresion("Imprimir gestoría semana", html);
+  abrirVistaImpresion("IMPRESIÓN GESTORÍA SEMANA", html);
 }
 
 function imprimirObraMes(){
-  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0) return;
 
   const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
-
   let filas = "";
+
   datosMesActual.forEach(dia => {
     filas += `<tr><td>${dia.dia}</td><td>${dia.horas} H</td></tr>`;
   });
@@ -1283,27 +1348,23 @@ function imprimirObraMes(){
     <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
     <h2>Mes: ${nombreMes(mesVisualizado)} ${añoVisualizado}</h2>
     <table>
-      <thead>
-        <tr><th>Día</th><th>Horas</th></tr>
-      </thead>
+      <thead><tr><th>Día</th><th>Horas</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL HORAS: ${total} H</div>
   `;
 
-  abrirVentanaImpresion("Imprimir obra mes", html);
+  abrirVistaImpresion("IMPRESIÓN OBRA MES", html);
 }
 
 function imprimirGestoriaMes(){
-  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0) return;
 
   const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
   const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
   const totalPagar = total * precioHora;
-
   let filas = "";
+
   datosMesActual.forEach(dia => {
     filas += `<tr><td>${dia.dia}</td><td>${dia.horas} H</td></tr>`;
   });
@@ -1313,9 +1374,7 @@ function imprimirGestoriaMes(){
     <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
     <h2>Mes: ${nombreMes(mesVisualizado)} ${añoVisualizado}</h2>
     <table>
-      <thead>
-        <tr><th>Día</th><th>Horas</th></tr>
-      </thead>
+      <thead><tr><th>Día</th><th>Horas</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL HORAS: ${total} H</div>
@@ -1323,7 +1382,7 @@ function imprimirGestoriaMes(){
     <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
   `;
 
-  abrirVentanaImpresion("Imprimir gestoría mes", html);
+  abrirVistaImpresion("IMPRESIÓN GESTORÍA MES", html);
 }
 
 async function imprimirResumenObraAntesDeBorrar(){
@@ -1373,21 +1432,17 @@ async function imprimirResumenObraAntesDeBorrar(){
     <h1>RESUMEN DE OBRA</h1>
     <h2>Obra: ${obraSeleccionada}</h2>
     <table>
-      <thead>
-        <tr><th>Trabajador</th><th>Total horas</th></tr>
-      </thead>
+      <thead><tr><th>Trabajador</th><th>Total horas</th></tr></thead>
       <tbody>${filas}</tbody>
     </table>
     <div class="total">TOTAL GENERAL: ${totalGeneral} H</div>
   `;
 
-  abrirVentanaImpresion("Resumen obra", html);
+  abrirVistaImpresion("IMPRESIÓN RESUMEN OBRA", html);
 }
 
 async function actualizarPrecioHoraTrabajador(){
-  if(!trabajadorSeleccionadoFicha){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha) return;
 
   const actual = trabajadorSeleccionadoFicha.precio_hora != null
     ? String(trabajadorSeleccionadoFicha.precio_hora)
@@ -1404,9 +1459,7 @@ async function actualizarPrecioHoraTrabajador(){
 
   const { error } = await supabaseClient
     .from("trabajadores")
-    .update({
-      precio_hora: nuevoPrecio
-    })
+    .update({ precio_hora: nuevoPrecio })
     .eq("id", trabajadorSeleccionadoFicha.id);
 
   if(error){
@@ -1420,9 +1473,7 @@ async function actualizarPrecioHoraTrabajador(){
 }
 
 async function cambiarObraTrabajador(){
-  if(!trabajadorSeleccionadoFicha){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha) return;
 
   await cargarObras();
 
@@ -1449,9 +1500,7 @@ async function cambiarObraTrabajador(){
 
   const { error } = await supabaseClient
     .from("trabajadores")
-    .update({
-      obra: nuevaObra
-    })
+    .update({ obra: nuevaObra })
     .eq("id", trabajadorSeleccionadoFicha.id);
 
   if(error){
@@ -1465,9 +1514,7 @@ async function cambiarObraTrabajador(){
 }
 
 async function darDeBajaTrabajador(){
-  if(!trabajadorSeleccionadoFicha){
-    return;
-  }
+  if(!trabajadorSeleccionadoFicha) return;
 
   const opcion = prompt(
     "Vas a dar de baja a " + trabajadorSeleccionadoFicha.nombre + ".\n\n" +
@@ -1487,17 +1534,13 @@ async function darDeBajaTrabajador(){
     );
 
     if(opcionImpresion === "1"){
-      if(!datosMesActual.length){
-        await abrirHorasMesTrabajador();
-      }
+      await abrirHorasMesTrabajador();
       imprimirObraMes();
       return;
     }
 
     if(opcionImpresion === "2"){
-      if(!datosMesActual.length){
-        await abrirHorasMesTrabajador();
-      }
+      await abrirHorasMesTrabajador();
       imprimirGestoriaMes();
       return;
     }
@@ -1505,9 +1548,7 @@ async function darDeBajaTrabajador(){
     return;
   }
 
-  if(opcion !== "2"){
-    return;
-  }
+  if(opcion !== "2") return;
 
   const confirmar = confirm(
     "¿Confirmas la baja de " + trabajadorSeleccionadoFicha.nombre + "?\n\n" +
@@ -1518,9 +1559,7 @@ async function darDeBajaTrabajador(){
 
   const { error } = await supabaseClient
     .from("trabajadores")
-    .update({
-      activo: false
-    })
+    .update({ activo: false })
     .eq("id", trabajadorSeleccionadoFicha.id);
 
   if(error){
@@ -1554,9 +1593,7 @@ async function borrarObra(){
     return;
   }
 
-  if(opcion !== "2"){
-    return;
-  }
+  if(opcion !== "2") return;
 
   const { data: trabajadoresActivos, error: errorTrabajadores } = await supabaseClient
     .from("trabajadores")
@@ -1606,7 +1643,6 @@ async function abrirModalTrabajando(){
   }
 
   listaTrabajandoDiv.innerHTML = "";
-
   const hoy = hoyString();
 
   const { data: trabajadores, error: errorTrabajadores } = await supabaseClient
@@ -1642,7 +1678,6 @@ async function abrirModalTrabajando(){
 
   trabajadores.forEach(trabajador => {
     const fichajesTrabajador = (fichajesHoy || []).filter(f => f.trabajador === trabajador.nombre);
-
     let estado = "NO FICHO ENTRADA";
 
     if(fichajesTrabajador.length > 0){
@@ -1680,7 +1715,6 @@ function cerrarModalTrabajando(){
 inputs.forEach((input, index) => {
   input.addEventListener("input", () => {
     input.value = input.value.replace(/[^0-9]/g, "");
-
     if(input.value && index < inputs.length - 1){
       inputs[index + 1].focus();
     }
@@ -1695,7 +1729,6 @@ inputs.forEach((input, index) => {
 
 async function entrarApp(){
   let pin = "";
-
   inputs.forEach(input => {
     pin += input.value;
   });
@@ -1953,6 +1986,12 @@ btnMesSiguiente.addEventListener("click", async () => {
   }
   await cargarYRenderizarMes();
 });
+
+btnPrintNow.addEventListener("click", () => {
+  window.print();
+});
+
+btnCerrarPrintPreview.addEventListener("click", cerrarVistaImpresion);
 
 });
 </script>
