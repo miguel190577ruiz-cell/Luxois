@@ -127,7 +127,6 @@ font-size:14px;
 display:none !important;
 }
 
-/* MODAL LUXOIS */
 .modalFondo{
 position:fixed;
 inset:0;
@@ -194,7 +193,6 @@ font-family:'Cinzel', serif;
 
 <body>
 
-<!-- LOGIN -->
 <div id="pantallaLogin" class="pantalla">
 <h1 class="logo">LUXOIS</h1>
 <h2 class="sublogo">CONTROL DE OBRAS</h2>
@@ -219,7 +217,6 @@ font-family:'Cinzel', serif;
 <div class="mensaje" id="mensajeLogin"></div>
 </div>
 
-<!-- TRABAJADOR -->
 <div id="pantallaTrabajador" class="pantalla oculto">
 <h1 class="logo">LUXOIS</h1>
 <h2 class="sublogo">CONTROL DE OBRAS</h2>
@@ -232,7 +229,6 @@ font-family:'Cinzel', serif;
 <button class="boton" id="btnMes">HORAS MES</button>
 </div>
 
-<!-- ENCARGADO -->
 <div id="pantallaEncargado" class="pantalla oculto">
 <h1 class="logo">LUXOIS</h1>
 <h2 class="sublogo">CONTROL DE OBRAS</h2>
@@ -247,7 +243,6 @@ font-family:'Cinzel', serif;
 <button class="boton" id="btnHorasMesEnc">HORAS MES</button>
 </div>
 
-<!-- MODAL OBRAS -->
 <div id="modalObras" class="modalFondo oculto">
 <div class="modalCaja">
 <h3 class="modalTitulo">SELECCIONAR OBRA</h3>
@@ -498,7 +493,7 @@ const { error } = await supabaseClient
 
 if(error){
 console.log(error);
-alert("Error al crear la obra");
+alert("Error al crear la obra: " + error.message);
 return;
 }
 
@@ -525,22 +520,31 @@ if(!precioHora) return;
 const telefono = prompt("Teléfono");
 if(!telefono) return;
 
-const { error } = await supabaseClient
-.from("trabajadores")
-.insert([
-{
-nombre: nombre,
-pin: pin,
+const datosTrabajador = {
+nombre: nombre.trim(),
+pin: pin.trim(),
 obra: obraSeleccionada,
 precio_hora: parseFloat(precioHora),
-telefono: telefono,
+telefono: telefono.trim(),
 movil_id: null
-}
-]);
+};
+
+console.log("Intentando crear trabajador:", datosTrabajador);
+
+const { error } = await supabaseClient
+.from("trabajadores")
+.insert([datosTrabajador]);
 
 if(error){
 console.log(error);
-alert("Error al crear trabajador");
+alert(
+"Error al crear trabajador:\\n\\n" +
+(error.message || "") +
+"\\n\\n" +
+(error.details || "") +
+"\\n\\n" +
+(error.hint || "")
+);
 return;
 }
 
