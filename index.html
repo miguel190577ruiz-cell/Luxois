@@ -103,8 +103,7 @@ body{
   display:flex;flex-direction:column;gap:14px;margin-bottom:24px;
 }
 
-.lineaSemana,
-.lineaResumen{
+.lineaSemana,.lineaResumen{
   display:flex;justify-content:space-between;gap:12px;
   border:1px solid #f0b33a;padding:10px 12px;font-size:17px;
 }
@@ -415,69 +414,8 @@ function hoyString(){
   return new Date().toISOString().split("T")[0];
 }
 
-function leerEstadoDia(){
-  const guardado = localStorage.getItem("estado_trabajador");
-  const fecha = localStorage.getItem("estado_fecha");
-
-  if(fecha !== hoyString()){
-    localStorage.setItem("estado_fecha", hoyString());
-    localStorage.setItem("estado_trabajador", "inicio");
-    return "inicio";
-  }
-
-  return guardado || "inicio";
-}
-
-function guardarEstadoDia(estado){
-  localStorage.setItem("estado_fecha", hoyString());
-  localStorage.setItem("estado_trabajador", estado);
-}
-
-function actualizarPantallaTrabajador(){
-  const estado = leerEstadoDia();
-
-  if(estado === "inicio"){
-    estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
-  } else if(estado === "trabajando"){
-    estadoTrabajador.textContent = "TRABAJANDO";
-  } else if(estado === "salido"){
-    estadoTrabajador.textContent = "HAS HECHO 9 HORAS";
-  }
-}
-
-function obtenerUbicacionActual(){
-  return new Promise((resolve, reject) => {
-    if(!navigator.geolocation){
-      reject(new Error("Tu dispositivo no permite geolocalización"));
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      posicion => {
-        resolve({
-          latitud: posicion.coords.latitude,
-          longitud: posicion.coords.longitude
-        });
-      },
-      error => reject(error),
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-    );
-  });
-}
-
-function calcularDistanciaMetros(lat1, lon1, lat2, lon2){
-  const R = 6371000;
-  const toRad = grados => grados * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
+function ahoraISO(){
+  return new Date().toISOString();
 }
 
 function calcularHorasRedondeadasDesdeFichaje(fichaje){
@@ -617,8 +555,8 @@ function cerrarVistaImpresion(){
 
 function renderResumenObra(){
   listaResumenObra.innerHTML = "";
-
   let total = 0;
+
   resumenObraItems.forEach(item => {
     total += item.horas;
     const linea = document.createElement("div");
@@ -634,42 +572,42 @@ function renderResumenObra(){
   totalResumenObra.textContent = "TOTAL OBRA: " + total + " H";
 }
 
-async function guardarCorreccionHoras(fecha, horasRedondeadas){
-  if(!trabajadorSeleccionadoFicha) throw new Error("No hay trabajador seleccionado");
+async function comprobarUbicacionDentroDeObra(obra){
+  if(!obra){
+    throw new Error("No se encontró la obra");
+  }
 
-  const { data: existentes, error: errorBuscar } = await supabaseClient
-    .from("fichajes")
-    .select("id")
-    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
-    .eq("obra", trabajadorSeleccionadoFicha.obra)
-    .eq("fecha", fecha);
+  if(
+    obra.latitud == null ||
+    obra.longitud == null ||
+    obra.radio_fichaje == null
+  ){
+    throw new Error("La obra no tiene ubicación o radio configurado");
+  }
 
-  if(errorBuscar) throw errorBuscar;
+  if(!navigator.geolocation){
+    throw new Error("Tu dispositivo no permite geolocalización");
+  }
 
-  if(existentes && existentes.length > 0){
-    const { error: errorUpdate } = await supabaseClient
-      .from("fichajes")
-      .update({
-        horas_redondeadas: horasRedondeadas,
-        horas: horasRedondeadas
-      })
-      .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
-      .eq("obra", trabajadorSeleccionadoFicha.obra)
-      .eq("fecha", fecha);
+  const posicion = await new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      p => resolve(p),
+      e => reject(e),
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  });
 
-    if(errorUpdate) throw errorUpdate;
-  } else {
-    const { error: errorInsert } = await supabaseClient
-      .from("fichajes")
-      .insert([{
-        trabajador: trabajadorSeleccionadoFicha.nombre,
-        obra: trabajadorSeleccionadoFicha.obra,
-        fecha: fecha,
-        horas: horasRedondeadas,
-        horas_redondeadas: horasRedondeadas
-      }]);
+  const distancia = calcularDistanciaMetros(
+    posicion.coords.latitude,
+    posicion.coords.longitude,
+    parseFloat(obra.latitud),
+    parseFloat(obra.longitud)
+  );
 
-    if(errorInsert) throw errorInsert;
+  const radioPermitido = parseFloat(obra.radio_fichaje);
+
+  if(distancia > radioPermitido){
+    throw new Error("Fuera del radio permitido de la obra");
   }
 }
 
@@ -723,6 +661,43 @@ async function cargarObraDeTrabajador(nombreObra){
     return null;
   }
   return data;
+}
+
+async function cargarEstadoTrabajadorActual(){
+  if(!trabajadorActual) return;
+
+  const fecha = hoyString();
+
+  const { data, error } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorActual.nombre)
+    .eq("obra", trabajadorActual.obra)
+    .eq("fecha", fecha)
+    .order("entrada", { ascending: false });
+
+  if(error){
+    console.log(error);
+    estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
+    return;
+  }
+
+  const fichajes = data || [];
+  const abierto = fichajes.find(f => f.entrada && !f.salida);
+  const cerrado = fichajes.find(f => f.entrada && f.salida);
+
+  if(abierto){
+    estadoTrabajador.textContent = "TRABAJANDO";
+    return;
+  }
+
+  if(cerrado){
+    const horas = calcularHorasRedondeadasDesdeFichaje(cerrado);
+    estadoTrabajador.textContent = "HAS HECHO " + horas + " HORAS";
+    return;
+  }
+
+  estadoTrabajador.textContent = "HOLA, " + nombreTrabajadorActual.toUpperCase();
 }
 
 function abrirModalObras(){
@@ -795,7 +770,6 @@ function renderHorasMes(){
     const clave = formatearFechaYYYYMMDD(fecha);
     const dato = datosMesActual.find(d => d.fecha === clave);
     const horas = dato ? dato.horas : 0;
-
     total += horas;
 
     const celda = document.createElement("div");
@@ -941,9 +915,7 @@ async function abrirHorasSemanaObra(){
   const mapaTrabajadores = {};
 
   agrupados.forEach(item => {
-    if(!mapaTrabajadores[item.trabajador]){
-      mapaTrabajadores[item.trabajador] = 0;
-    }
+    if(!mapaTrabajadores[item.trabajador]) mapaTrabajadores[item.trabajador] = 0;
     mapaTrabajadores[item.trabajador] += item.horas;
   });
 
@@ -995,9 +967,7 @@ async function abrirHorasMesObra(){
   const mapaTrabajadores = {};
 
   agrupados.forEach(item => {
-    if(!mapaTrabajadores[item.trabajador]){
-      mapaTrabajadores[item.trabajador] = 0;
-    }
+    if(!mapaTrabajadores[item.trabajador]) mapaTrabajadores[item.trabajador] = 0;
     mapaTrabajadores[item.trabajador] += item.horas;
   });
 
@@ -1553,18 +1523,14 @@ async function abrirModalTrabajando(){
     const fichajesTrabajador = (fichajesHoy || []).filter(f => f.trabajador === trabajador.nombre);
     let estado = "NO FICHO ENTRADA";
 
-    if(fichajesTrabajador.length > 0){
-      const fichajeConSalida = fichajesTrabajador.find(f => f.entrada && f.salida);
-      const fichajeTrabajando = fichajesTrabajador.find(f => f.entrada && !f.salida);
+    const fichajeAbierto = fichajesTrabajador.find(f => f.entrada && !f.salida);
+    const fichajeCerrado = fichajesTrabajador.find(f => f.entrada && f.salida);
 
-      if(fichajeTrabajando){
-        estado = "TRABAJANDO";
-      } else if(fichajeConSalida){
-        const horasTexto = calcularHorasRedondeadasDesdeFichaje(fichajeConSalida);
-        estado = "SALIO, " + horasTexto + " H";
-      } else {
-        estado = "FICHAJE INCOMPLETO";
-      }
+    if(fichajeAbierto){
+      estado = "TRABAJANDO";
+    } else if(fichajeCerrado){
+      const horasTexto = calcularHorasRedondeadasDesdeFichaje(fichajeCerrado);
+      estado = "SALIO, " + horasTexto + " H";
     }
 
     const boton = document.createElement("button");
@@ -1637,7 +1603,8 @@ async function entrarApp(){
   mensajeTrabajador.textContent = "";
   pantallaLogin.classList.add("oculto");
   pantallaTrabajador.classList.remove("oculto");
-  actualizarPantallaTrabajador();
+
+  await cargarEstadoTrabajadorActual();
 }
 
 async function ficharEntrada(){
@@ -1653,56 +1620,144 @@ async function ficharEntrada(){
     return;
   }
 
-  if(
-    obraTrabajadorActual.latitud == null ||
-    obraTrabajadorActual.longitud == null ||
-    obraTrabajadorActual.radio_fichaje == null
-  ){
-    mensajeTrabajador.textContent = "La obra no tiene ubicación o radio configurado";
+  try{
+    mensajeTrabajador.textContent = "Comprobando ubicación...";
+    await comprobarUbicacionDentroDeObra(obraTrabajadorActual);
+
+    const fecha = hoyString();
+
+    const { data: fichajesHoy, error: errorBuscar } = await supabaseClient
+      .from("fichajes")
+      .select("*")
+      .eq("trabajador", trabajadorActual.nombre)
+      .eq("obra", trabajadorActual.obra)
+      .eq("fecha", fecha)
+      .order("entrada", { ascending: false });
+
+    if(errorBuscar){
+      console.log(errorBuscar);
+      mensajeTrabajador.textContent = "Error comprobando fichaje";
+      return;
+    }
+
+    const abierto = (fichajesHoy || []).find(f => f.entrada && !f.salida);
+    const cerrado = (fichajesHoy || []).find(f => f.entrada && f.salida);
+
+    if(abierto){
+      mensajeTrabajador.textContent = "Ya has fichado entrada hoy";
+      await cargarEstadoTrabajadorActual();
+      return;
+    }
+
+    if(cerrado){
+      mensajeTrabajador.textContent = "Ya has completado el fichaje de hoy";
+      await cargarEstadoTrabajadorActual();
+      return;
+    }
+
+    const { error: errorInsert } = await supabaseClient
+      .from("fichajes")
+      .insert([{
+        trabajador: trabajadorActual.nombre,
+        obra: trabajadorActual.obra,
+        fecha: fecha,
+        entrada: ahoraISO()
+      }]);
+
+    if(errorInsert){
+      console.log(errorInsert);
+      mensajeTrabajador.textContent = "Error guardando entrada";
+      return;
+    }
+
+    mensajeTrabajador.textContent = "Entrada registrada correctamente";
+    await cargarEstadoTrabajadorActual();
+  }catch(error){
+    console.log(error);
+    mensajeTrabajador.textContent = error.message || "No se pudo comprobar la ubicación";
+  }
+}
+
+async function ficharSalida(){
+  mensajeTrabajador.textContent = "";
+
+  if(!trabajadorActual){
+    mensajeTrabajador.textContent = "No se encontró el trabajador";
+    return;
+  }
+
+  if(!obraTrabajadorActual){
+    mensajeTrabajador.textContent = "No se encontró la obra del trabajador";
     return;
   }
 
   try{
     mensajeTrabajador.textContent = "Comprobando ubicación...";
-    const ubicacion = await obtenerUbicacionActual();
+    await comprobarUbicacionDentroDeObra(obraTrabajadorActual);
 
-    const distancia = calcularDistanciaMetros(
-      ubicacion.latitud,
-      ubicacion.longitud,
-      parseFloat(obraTrabajadorActual.latitud),
-      parseFloat(obraTrabajadorActual.longitud)
-    );
+    const fecha = hoyString();
 
-    const radioPermitido = parseFloat(obraTrabajadorActual.radio_fichaje);
+    const { data: fichajesHoy, error: errorBuscar } = await supabaseClient
+      .from("fichajes")
+      .select("*")
+      .eq("trabajador", trabajadorActual.nombre)
+      .eq("obra", trabajadorActual.obra)
+      .eq("fecha", fecha)
+      .order("entrada", { ascending: false });
 
-    if(distancia > radioPermitido){
-      mensajeTrabajador.textContent = "Fuera del radio permitido de la obra";
+    if(errorBuscar){
+      console.log(errorBuscar);
+      mensajeTrabajador.textContent = "Error comprobando fichaje";
       return;
     }
 
-    guardarEstadoDia("trabajando");
-    actualizarPantallaTrabajador();
-    mensajeTrabajador.textContent = "Fichaje correcto";
+    const abierto = (fichajesHoy || []).find(f => f.entrada && !f.salida);
+
+    if(!abierto){
+      mensajeTrabajador.textContent = "No tienes una entrada abierta hoy";
+      await cargarEstadoTrabajadorActual();
+      return;
+    }
+
+    const salidaISO = ahoraISO();
+    const fichajeCalculado = {
+      ...abierto,
+      salida: salidaISO
+    };
+
+    const horasRedondeadas = calcularHorasRedondeadasDesdeFichaje(fichajeCalculado);
+
+    const { error: errorUpdate } = await supabaseClient
+      .from("fichajes")
+      .update({
+        salida: salidaISO,
+        horas: horasRedondeadas,
+        horas_redondeadas: horasRedondeadas
+      })
+      .eq("id", abierto.id);
+
+    if(errorUpdate){
+      console.log(errorUpdate);
+      mensajeTrabajador.textContent = "Error guardando salida";
+      return;
+    }
+
+    mensajeTrabajador.textContent = "Salida registrada correctamente";
+    await cargarEstadoTrabajadorActual();
   }catch(error){
     console.log(error);
-    mensajeTrabajador.textContent = "No se pudo comprobar la ubicación";
+    mensajeTrabajador.textContent = error.message || "No se pudo comprobar la ubicación";
   }
 }
 
-function ficharSalida(){
-  guardarEstadoDia("salido");
-  actualizarPantallaTrabajador();
-  mensajeTrabajador.textContent = "";
-}
-
 function verHorasSemana(){
-  btnSemana.textContent = "SEMANA: 32 H";
-  setTimeout(() => { btnSemana.textContent = "HORAS SEMANA"; }, 5000);
+  btnSemana.textContent = "CONSULTA DESDE ENCARGADO";
+  setTimeout(() => { btnSemana.textContent = "HORAS SEMANA"; }, 2500);
 }
 
 function verHorasMes(){
-  btnMes.textContent = "MES: 118 H";
-  setTimeout(() => { btnMes.textContent = "HORAS MES"; }, 5000);
+  btnMes.textContent = "CONSULTA DESDE ENCARGADO";
+  setTimeout(() => { btnMes.textContent = "HORAS MES"; }, 2500);
 }
 
 async function añadirObra(){
@@ -1781,10 +1836,6 @@ async function añadirTrabajador(){
   }
 
   alert("Trabajador creado correctamente en la obra " + obraSeleccionada);
-}
-
-function funcionNoDisponible(){
-  alert("Esta función la añadiremos en el siguiente paso");
 }
 
 btnEntrarApp.addEventListener("click", entrarApp);
