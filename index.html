@@ -117,6 +117,24 @@ background:#f0b33a;
 color:black;
 }
 
+.botonPeque{
+width:100%;
+padding:12px 16px;
+font-size:18px;
+letter-spacing:1px;
+background:black;
+border:2px solid #f0b33a;
+color:#f0b33a;
+cursor:pointer;
+font-family:'Cinzel', serif;
+margin-bottom:14px;
+}
+
+.botonPeque:hover{
+background:#f0b33a;
+color:black;
+}
+
 .mensaje{
 margin-top:10px;
 min-height:24px;
@@ -296,6 +314,9 @@ letter-spacing:2px;
 <h3 class="modalTitulo" id="tituloHorasSemana">HORAS SEMANA</h3>
 <div id="listaHorasSemana" class="listaSemana"></div>
 <div id="totalHorasSemana" class="totalSemana"></div>
+<button class="botonPeque" id="btnModificarSemana">MODIFICAR</button>
+<button class="botonPeque" id="btnImprimirObraSemana">IMPRIMIR OBRA</button>
+<button class="botonPeque" id="btnImprimirGestoriaSemana">IMPRIMIR GESTORÍA</button>
 <button class="botonCerrar" id="btnCerrarHorasSemana">CERRAR</button>
 </div>
 </div>
@@ -353,6 +374,9 @@ const tituloHorasSemana = document.getElementById("tituloHorasSemana");
 const listaHorasSemana = document.getElementById("listaHorasSemana");
 const totalHorasSemana = document.getElementById("totalHorasSemana");
 const btnCerrarHorasSemana = document.getElementById("btnCerrarHorasSemana");
+const btnModificarSemana = document.getElementById("btnModificarSemana");
+const btnImprimirObraSemana = document.getElementById("btnImprimirObraSemana");
+const btnImprimirGestoriaSemana = document.getElementById("btnImprimirGestoriaSemana");
 
 let nombreTrabajadorActual = "";
 let obraSeleccionada = "";
@@ -361,6 +385,7 @@ let listaObras = [];
 let trabajadorActual = null;
 let obraTrabajadorActual = null;
 let trabajadorSeleccionadoFicha = null;
+let datosSemanaActual = [];
 
 const HORAS_SEMANA_PRUEBA = 32;
 const HORAS_MES_PRUEBA = 118;
@@ -593,6 +618,24 @@ function cerrarFichaTrabajador(){
   modalFichaTrabajador.classList.add("oculto");
 }
 
+function renderHorasSemana(datosSemana){
+  datosSemanaActual = datosSemana;
+  listaHorasSemana.innerHTML = "";
+
+  let total = 0;
+
+  datosSemana.forEach(dia => {
+    total += dia.horas;
+
+    const linea = document.createElement("div");
+    linea.className = "lineaSemana";
+    linea.innerHTML = `<span>${dia.nombreDia}</span><span>${dia.horas} H</span>`;
+    listaHorasSemana.appendChild(linea);
+  });
+
+  totalHorasSemana.textContent = "TOTAL: " + total + " H";
+}
+
 async function abrirHorasSemanaTrabajador(){
   if(!trabajadorSeleccionadoFicha){
     return;
@@ -626,8 +669,7 @@ async function abrirHorasSemanaTrabajador(){
     horasPorDia[fichaje.fecha] = calcularHorasRedondeadasDesdeFichaje(fichaje);
   });
 
-  listaHorasSemana.innerHTML = "";
-  let total = 0;
+  const datosSemana = [];
 
   for(let i = 0; i < 7; i++){
     const fechaDia = new Date(inicioSemana);
@@ -635,22 +677,148 @@ async function abrirHorasSemanaTrabajador(){
 
     const clave = formatearFechaYYYYMMDD(fechaDia);
     const horas = horasPorDia[clave] || 0;
-    total += horas;
 
-    const linea = document.createElement("div");
-    linea.className = "lineaSemana";
-    linea.innerHTML = `<span>${nombreDiaSemana(i)}</span><span>${horas} H</span>`;
-    listaHorasSemana.appendChild(linea);
+    datosSemana.push({
+      indice: i,
+      nombreDia: nombreDiaSemana(i),
+      fecha: clave,
+      horas: horas
+    });
   }
 
   tituloHorasSemana.textContent = "SEMANA DE " + trabajadorSeleccionadoFicha.nombre.toUpperCase();
-  totalHorasSemana.textContent = "TOTAL: " + total + " H";
-
+  renderHorasSemana(datosSemana);
   modalHorasSemana.classList.remove("oculto");
 }
 
 function cerrarHorasSemana(){
   modalHorasSemana.classList.add("oculto");
+}
+
+async function modificarHorasSemana(){
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
+    return;
+  }
+
+  let texto = "Elige el día a modificar:\\n\\n";
+  datosSemanaActual.forEach((dia, index) => {
+    texto += (index + 1) + ". " + dia.nombreDia + " - " + dia.horas + " H\\n";
+  });
+
+  const opcion = prompt(texto);
+  if(!opcion) return;
+
+  const indice = parseInt(opcion, 10) - 1;
+  if(isNaN(indice) || indice < 0 || indice >= datosSemanaActual.length){
+    alert("Opción no válida");
+    return;
+  }
+
+  const nuevoValor = prompt("Nuevas horas para " + datosSemanaActual[indice].nombreDia, String(datosSemanaActual[indice].horas));
+  if(nuevoValor === null || nuevoValor === "") return;
+
+  const nuevasHoras = parseFloat(nuevoValor);
+  if(isNaN(nuevasHoras) || nuevasHoras < 0){
+    alert("Horas no válidas");
+    return;
+  }
+
+  datosSemanaActual[indice].horas = Math.round(nuevasHoras);
+  renderHorasSemana(datosSemanaActual);
+}
+
+function abrirVentanaImpresion(titulo, contenidoHtml){
+  const ventana = window.open("", "_blank", "width=800,height=900");
+  if(!ventana){
+    alert("El navegador ha bloqueado la ventana de impresión");
+    return;
+  }
+
+  ventana.document.write(`
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <title>${titulo}</title>
+      <style>
+        body{ font-family: Arial, sans-serif; padding: 30px; color:#000; }
+        h1{ font-size: 24px; margin-bottom: 10px; }
+        h2{ font-size: 18px; margin-bottom: 20px; }
+        table{ width:100%; border-collapse: collapse; margin-bottom:20px; }
+        th, td{ border:1px solid #000; padding:8px; text-align:left; }
+        .total{ font-size:18px; font-weight:bold; margin-top:20px; }
+      </style>
+    </head>
+    <body>
+      ${contenidoHtml}
+    </body>
+    </html>
+  `);
+  ventana.document.close();
+  ventana.focus();
+  ventana.print();
+}
+
+function imprimirObraSemana(){
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
+    return;
+  }
+
+  const total = datosSemanaActual.reduce((acc, d) => acc + d.horas, 0);
+
+  let filas = "";
+  datosSemanaActual.forEach(dia => {
+    filas += `<tr><td>${dia.nombreDia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE SEMANAL OBRA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>
+        ${filas}
+      </tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir obra semana", html);
+}
+
+function imprimirGestoriaSemana(){
+  if(!trabajadorSeleccionadoFicha || datosSemanaActual.length === 0){
+    return;
+  }
+
+  const total = datosSemanaActual.reduce((acc, d) => acc + d.horas, 0);
+  const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
+  const totalPagar = total * precioHora;
+
+  let filas = "";
+  datosSemanaActual.forEach(dia => {
+    filas += `<tr><td>${dia.nombreDia}</td><td>${dia.horas} H</td></tr>`;
+  });
+
+  const html = `
+    <h1>PARTE SEMANAL GESTORÍA</h1>
+    <h2>Trabajador: ${trabajadorSeleccionadoFicha.nombre}</h2>
+    <table>
+      <thead>
+        <tr><th>Día</th><th>Horas</th></tr>
+      </thead>
+      <tbody>
+        ${filas}
+      </tbody>
+    </table>
+    <div class="total">TOTAL HORAS: ${total} H</div>
+    <div class="total">PRECIO HORA: ${precioHora.toFixed(2)} €</div>
+    <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
+  `;
+
+  abrirVentanaImpresion("Imprimir gestoría semana", html);
 }
 
 async function abrirModalTrabajando(){
@@ -976,6 +1144,10 @@ btnFichaHorasMes.addEventListener("click", () => {
 
 btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
 btnCerrarHorasSemana.addEventListener("click", cerrarHorasSemana);
+
+btnModificarSemana.addEventListener("click", modificarHorasSemana);
+btnImprimirObraSemana.addEventListener("click", imprimirObraSemana);
+btnImprimirGestoriaSemana.addEventListener("click", imprimirGestoriaSemana);
 
 });
 </script>
