@@ -700,30 +700,56 @@ async function modificarHorasSemana(){
     return;
   }
 
-  let texto = "Elige el día a modificar:\\n\\n";
-  datosSemanaActual.forEach((dia, index) => {
-    texto += (index + 1) + ". " + dia.nombreDia + " - " + dia.horas + " H\\n";
-  });
+  let resumen = "Escribe DIA y HORAS.\\n\\nEjemplo:\\nMIERCOLES 8\\n\\nDías válidos:\\nLUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO";
+  const entrada = prompt(resumen);
 
-  const opcion = prompt(texto);
-  if(!opcion) return;
+  if(!entrada) return;
 
-  const indice = parseInt(opcion, 10) - 1;
-  if(isNaN(indice) || indice < 0 || indice >= datosSemanaActual.length){
-    alert("Opción no válida");
+  const texto = entrada.trim().toUpperCase()
+    .replace("MIÉRCOLES", "MIERCOLES")
+    .replace("SÁBADO", "SABADO");
+
+  const partes = texto.split(/\\s+/);
+
+  if(partes.length < 2){
+    alert("Formato no válido. Usa por ejemplo: MIERCOLES 8");
     return;
   }
 
-  const nuevoValor = prompt("Nuevas horas para " + datosSemanaActual[indice].nombreDia, String(datosSemanaActual[indice].horas));
-  if(nuevoValor === null || nuevoValor === "") return;
+  const diaTexto = partes[0];
+  const horasTexto = partes[1];
 
-  const nuevasHoras = parseFloat(nuevoValor);
+  const mapaDias = {
+    "LUNES": "LUNES",
+    "MARTES": "MARTES",
+    "MIERCOLES": "MIÉRCOLES",
+    "JUEVES": "JUEVES",
+    "VIERNES": "VIERNES",
+    "SABADO": "SÁBADO",
+    "DOMINGO": "DOMINGO"
+  };
+
+  if(!mapaDias[diaTexto]){
+    alert("Día no válido");
+    return;
+  }
+
+  const nuevasHoras = parseFloat(horasTexto);
+
   if(isNaN(nuevasHoras) || nuevasHoras < 0){
     alert("Horas no válidas");
     return;
   }
 
-  datosSemanaActual[indice].horas = Math.round(nuevasHoras);
+  const nombreNormalizado = mapaDias[diaTexto];
+  const dia = datosSemanaActual.find(d => d.nombreDia === nombreNormalizado);
+
+  if(!dia){
+    alert("No se encontró ese día en la semana");
+    return;
+  }
+
+  dia.horas = Math.round(nuevasHoras);
   renderHorasSemana(datosSemanaActual);
 }
 
