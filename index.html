@@ -505,6 +505,24 @@ function renderResumenObra(){
   totalResumenObra.textContent = "TOTAL OBRA: " + total + " H";
 }
 
+async function obtenerAnticipoMensual(trabajador, obra, mes, anio){
+  const { data, error } = await supabaseClient
+    .from("anticipos")
+    .select("*")
+    .eq("trabajador", trabajador)
+    .eq("obra", obra)
+    .eq("mes", mes)
+    .eq("anio", anio)
+    .maybeSingle();
+
+  if(error){
+    console.log(error);
+    return null;
+  }
+
+  return data;
+}
+
 async function comprobarUbicacionDentroDeObra(obra){
   if(!obra) throw new Error("No se encontró la obra");
   if(obra.latitud == null || obra.longitud == null || obra.radio_fichaje == null){
@@ -1127,12 +1145,18 @@ function imprimirObraMes(){
   `);
 }
 
-function imprimirGestoriaMes(){
+async function imprimirGestoriaMes(){
   if(!trabajadorSeleccionadoFicha || datosMesActual.length === 0) return;
 
   const total = datosMesActual.reduce((acc, d) => acc + d.horas, 0);
   const precioHora = Number(trabajadorSeleccionadoFicha.precio_hora || 0);
-  const anticipo = Number(trabajadorSeleccionadoFicha.anticipo || 0);
+  const anticipoRegistro = await obtenerAnticipoMensual(
+    trabajadorSeleccionadoFicha.nombre,
+    trabajadorSeleccionadoFicha.obra,
+    mesVisualizado + 1,
+    añoVisualizado
+  );
+  const anticipo = Number((anticipoRegistro && anticipoRegistro.importe) || 0);
   const totalBruto = total * precioHora;
   const totalPagar = totalBruto - anticipo;
 
@@ -1152,7 +1176,7 @@ function imprimirGestoriaMes(){
     <div class="total">TOTAL HORAS: ${total} H</div>
     <div class="total">PRECIO HORA: ${precioHora.toFixed(2)} €</div>
     <div class="total">TOTAL BRUTO: ${totalBruto.toFixed(2)} €</div>
-    <div class="total">ANTICIPO: ${anticipo.toFixed(2)} €</div>
+    <div class="total">ANTICIPO MES: ${anticipo.toFixed(2)} €</div>
     <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
   `);
 }
@@ -1185,13 +1209,81 @@ function imprimirObraResumen(){
 async function imprimirGestoriaResumen(){
   let filas = "";
   let totalHoras = 0;
+  let totalBrutoGeneral = 0;
+  let totalAnticipos = 0;
   let totalPagar = 0;
+
+  if(resumenObraTipo === "mes"){
+    for(const item of resumenObraItems){
+      const { data: trabajadorData } = await supabaseClient
+        .from("trabajadores")
+        .select("precio_hora")
+        .eq("nombre", item.nombre)
+        .eq("obra", obraSeleccionada)
+        .limit(1);
+
+      const precio = Number((trabajadorData && trabajadorData[0] && trabajadorData[0].precio_hora) || 0);
+      const bruto = item.horas * precio;
+
+      const anticipoRegistro = await obtenerAnticipoMensual(
+        item.nombre,
+        obraSeleccionada,
+        resumenObraMesVisual + 1,
+        resumenObraAñoVisual
+      );
+      const anticipo = Number((anticipoRegistro && anticipoRegistro.importe) || 0);
+      const pagar = bruto - anticipo;
+
+      totalHoras += item.horas;
+      totalBrutoGeneral += bruto;
+      totalAnticipos += anticipo;
+      totalPagar += pagar;
+
+      filas += `<tr>
+        <td>${item.nombre}</td>
+        <td>${item.horas} H</td>
+        <td>${precio.toFixed(2)} €</td>
+        <td>${bruto.toFixed(2)} €</td>
+        <td>${anticipo.toFixed(2)} €</td>
+        <td>${pagar.toFixed(2)} €</td>
+      </tr>`;
+    }
+
+    if(!filas){
+      filas = `<tr><td colspan="6">No hay horas registradas en este periodo</td></tr>`;
+    }
+
+    abrirVistaImpresion("IMPRESIÓN GESTORÍA OBRA", `
+      <h1>RESUMEN ${resumenObraTipo.toUpperCase()} GESTORÍA</h1>
+      <h2>Obra: ${obraSeleccionada}</h2>
+      <h2>${resumenObraEtiquetaPeriodo}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Trabajador</th>
+            <th>Horas</th>
+            <th>Precio hora</th>
+            <th>Total bruto</th>
+            <th>Anticipo</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>${filas}</tbody>
+      </table>
+      <div class="total">TOTAL HORAS: ${totalHoras} H</div>
+      <div class="total">TOTAL BRUTO: ${totalBrutoGeneral.toFixed(2)} €</div>
+      <div class="total">TOTAL ANTICIPOS: ${totalAnticipos.toFixed(2)} €</div>
+      <div class="total">TOTAL A PAGAR: ${totalPagar.toFixed(2)} €</div>
+    `);
+    return;
+  }
 
   for(const item of resumenObraItems){
     const { data: trabajadorData } = await supabaseClient
       .from("trabajadores")
       .select("precio_hora")
       .eq("nombre", item.nombre)
+      .eq("obra", obraSeleccionada)
       .limit(1);
 
     const precio = Number((trabajadorData && trabajadorData[0] && trabajadorData[0].precio_hora) || 0);
@@ -1303,39 +1395,78 @@ async function actualizarPrecioHoraTrabajador(){
 
 async function mostrarContactoTrabajador(){
   if(!trabajadorSeleccionadoFicha) return;
-  const telefono = trabajadorSeleccionadoFicha.telefono || "SIN TELÉFONO";
-  alert("TELÉFONO DE " + trabajadorSeleccionadoFicha.nombre.toUpperCase() + ":\n\n" + telefono);
+
+  const telefono = (trabajadorSeleccionadoFicha.telefono || "").trim();
+
+  if(!telefono){
+    alert("SIN TELÉFONO");
+    return;
+  }
+
+  if(confirm("TELÉFONO:\n\n" + telefono + "\n\n¿LLAMAR?")){
+    window.location.href = "tel:" + telefono;
+  }
 }
 
 async function actualizarAnticipoTrabajador(){
   if(!trabajadorSeleccionadoFicha) return;
 
-  const actual = trabajadorSeleccionadoFicha.anticipo != null
-    ? String(trabajadorSeleccionadoFicha.anticipo)
-    : "0";
+  const hoy = new Date();
+  const mes = hoy.getMonth() + 1;
+  const anio = hoy.getFullYear();
 
-  const nuevoAnticipoTexto = prompt("Anticipo actual: " + actual + "\n\nEscribe el nuevo anticipo", actual);
-  if(nuevoAnticipoTexto === null || nuevoAnticipoTexto === "") return;
+  const registroActual = await obtenerAnticipoMensual(
+    trabajadorSeleccionadoFicha.nombre,
+    trabajadorSeleccionadoFicha.obra,
+    mes,
+    anio
+  );
 
-  const nuevoAnticipo = parseFloat(nuevoAnticipoTexto);
-  if(isNaN(nuevoAnticipo) || nuevoAnticipo < 0){
-    alert("Anticipo no válido");
+  const actual = Number((registroActual && registroActual.importe) || 0);
+
+  const nuevoTexto = prompt(
+    "Anticipo actual de " + nombreMes(mes - 1) + " " + anio + ": " + actual + "\n\nIntroduce nuevo anticipo",
+    actual
+  );
+
+  if(nuevoTexto === null || nuevoTexto === "") return;
+
+  const nuevo = parseFloat(nuevoTexto);
+  if(isNaN(nuevo) || nuevo < 0){
+    alert("Valor no válido");
     return;
   }
 
-  const { error } = await supabaseClient
-    .from("trabajadores")
-    .update({ anticipo: nuevoAnticipo })
-    .eq("id", trabajadorSeleccionadoFicha.id);
+  if(registroActual){
+    const { error } = await supabaseClient
+      .from("anticipos")
+      .update({ importe: nuevo })
+      .eq("id", registroActual.id);
 
-  if(error){
-    console.log(error);
-    alert("Error al guardar el anticipo");
-    return;
+    if(error){
+      console.log(error);
+      alert("Error al guardar el anticipo");
+      return;
+    }
+  } else {
+    const { error } = await supabaseClient
+      .from("anticipos")
+      .insert([{
+        trabajador: trabajadorSeleccionadoFicha.nombre,
+        obra: trabajadorSeleccionadoFicha.obra,
+        mes: mes,
+        anio: anio,
+        importe: nuevo
+      }]);
+
+    if(error){
+      console.log(error);
+      alert("Error al guardar el anticipo");
+      return;
+    }
   }
 
-  trabajadorSeleccionadoFicha.anticipo = nuevoAnticipo;
-  alert("Anticipo actualizado correctamente");
+  alert("Anticipo guardado correctamente para " + nombreMes(mes - 1) + " " + anio);
 }
 
 async function cambiarObraTrabajador(){
@@ -1404,7 +1535,7 @@ async function darDeBajaTrabajador(){
 
     if(opcionImpresion === "2"){
       await abrirHorasMesTrabajador();
-      imprimirGestoriaMes();
+      await imprimirGestoriaMes();
       return;
     }
 
@@ -1894,8 +2025,7 @@ async function añadirTrabajador(){
     precio_hora: parseFloat(precioHora),
     telefono: telefono.trim(),
     movil_id: null,
-    activo: true,
-    anticipo: 0
+    activo: true
   };
 
   const { error } = await supabaseClient
