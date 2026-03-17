@@ -2267,7 +2267,38 @@ btnMesSiguiente.addEventListener("click", async () => {
 
 btnPrintNow.addEventListener("click", () => window.print());
 btnCerrarPrintPreview.addEventListener("click", cerrarVistaImpresion);
+function obtenerTextoPlanoDocumento() {
+  const contenido = document.getElementById("printPreviewArea").innerText || "";
+  return contenido;
+}
 
+btnSendWhatsApp.addEventListener("click", () => {
+  const texto = encodeURIComponent(obtenerTextoPlanoDocumento());
+  window.open("https://wa.me/?text=" + texto, "_blank");
+});
+
+btnSendEmail.addEventListener("click", () => {
+  const asunto = encodeURIComponent("Parte de trabajo LUXOIS");
+  const cuerpo = encodeURIComponent(obtenerTextoPlanoDocumento());
+  window.location.href = "mailto:?subject=" + asunto + "&body=" + cuerpo;
+});
+
+btnShareDoc.addEventListener("click", async () => {
+  const texto = obtenerTextoPlanoDocumento();
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Parte de trabajo LUXOIS",
+        text: texto
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  } else {
+    alert("Tu dispositivo no permite compartir directamente");
+  }
+});
 });
 </script>
 </body>
