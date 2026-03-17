@@ -173,6 +173,8 @@ body{
     <button class="boton" id="btnFichaCambiarObra">CAMBIAR OBRA</button>
     <button class="boton" id="btnFichaContacto">CONTACTO</button>
     <button class="boton" id="btnFichaAnticipo">ANTICIPO</button>
+    <button class="boton" id="btnFichaEntradaManual">FICHAR ENTRADA MANUAL</button>
+    <button class="boton" id="btnFichaSalidaManual">FICHAR SALIDA MANUAL</button>
     <button class="botonPeligro" id="btnFichaBajaTrabajador">DAR DE BAJA</button>
     <button class="botonCerrar" id="btnCerrarFichaTrabajador">CERRAR</button>
   </div>
@@ -293,6 +295,8 @@ const btnFichaPrecioHora = document.getElementById("btnFichaPrecioHora");
 const btnFichaCambiarObra = document.getElementById("btnFichaCambiarObra");
 const btnFichaContacto = document.getElementById("btnFichaContacto");
 const btnFichaAnticipo = document.getElementById("btnFichaAnticipo");
+const btnFichaEntradaManual = document.getElementById("btnFichaEntradaManual");
+const btnFichaSalidaManual = document.getElementById("btnFichaSalidaManual");
 const btnFichaBajaTrabajador = document.getElementById("btnFichaBajaTrabajador");
 const btnCerrarFichaTrabajador = document.getElementById("btnCerrarFichaTrabajador");
 
@@ -355,6 +359,26 @@ function hoyString(){
 
 function ahoraISO(){
   return new Date().toISOString();
+}
+
+function construirISOHoyDesdeHora(horaTexto){
+  const partes = horaTexto.split(":");
+  if(partes.length !== 2) return null;
+
+  const horas = parseInt(partes[0], 10);
+  const minutos = parseInt(partes[1], 10);
+
+  if(
+    isNaN(horas) || isNaN(minutos) ||
+    horas < 0 || horas > 23 ||
+    minutos < 0 || minutos > 59
+  ){
+    return null;
+  }
+
+  const ahora = new Date();
+  ahora.setHours(horas, minutos, 0, 0);
+  return ahora.toISOString();
 }
 
 function calcularHorasRedondeadasDesdeFichaje(fichaje){
@@ -1469,6 +1493,133 @@ async function actualizarAnticipoTrabajador(){
   alert("Anticipo guardado correctamente para " + nombreMes(mes - 1) + " " + anio);
 }
 
+async function ficharEntradaManualEncargado(){
+  if(!trabajadorSeleccionadoFicha) return;
+
+  const horaTexto = prompt("Escribe la hora de entrada manual.\n\nFormato: 08:00");
+  if(!horaTexto) return;
+
+  const entradaISO = construirISOHoyDesdeHora(horaTexto.trim());
+  if(!entradaISO){
+    alert("Hora no válida");
+    return;
+  }
+
+  const fecha = hoyString();
+
+  const { data: fichajesHoy, error: errorBuscar } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
+    .eq("fecha", fecha)
+    .order("entrada", { ascending: false });
+
+  if(errorBuscar){
+    console.log(errorBuscar);
+    alert("Error comprobando fichajes de hoy");
+    return;
+  }
+
+  const abierto = (fichajesHoy || []).find(f => f.entrada && !f.salida);
+  const cerrado = (fichajesHoy || []).find(f => f.entrada && f.salida);
+
+  if(abierto){
+    alert("Ese trabajador ya tiene una entrada abierta hoy");
+    return;
+  }
+
+  if(cerrado){
+    alert("Ese trabajador ya tiene un fichaje completo hoy");
+    return;
+  }
+
+  const { error: errorInsert } = await supabaseClient
+    .from("fichajes")
+    .insert([{
+      trabajador: trabajadorSeleccionadoFicha.nombre,
+      obra: trabajadorSeleccionadoFicha.obra,
+      fecha: fecha,
+      entrada: entradaISO
+    }]);
+
+  if(errorInsert){
+    console.log(errorInsert);
+    alert("Error guardando la entrada manual");
+    return;
+  }
+
+  alert("Entrada manual guardada correctamente");
+  cerrarFichaTrabajador();
+  await abrirModalTrabajando();
+}
+
+async function ficharSalidaManualEncargado(){
+  if(!trabajadorSeleccionadoFicha) return;
+
+  const horaTexto = prompt("Escribe la hora de salida manual.\n\nFormato: 17:30");
+  if(!horaTexto) return;
+
+  const salidaISO = construirISOHoyDesdeHora(horaTexto.trim());
+  if(!salidaISO){
+    alert("Hora no válida");
+    return;
+  }
+
+  const fecha = hoyString();
+
+  const { data: fichajesHoy, error: errorBuscar } = await supabaseClient
+    .from("fichajes")
+    .select("*")
+    .eq("trabajador", trabajadorSeleccionadoFicha.nombre)
+    .eq("obra", trabajadorSeleccionadoFicha.obra)
+    .eq("fecha", fecha)
+    .order("entrada", { ascending: false });
+
+  if(errorBuscar){
+    console.log(errorBuscar);
+    alert("Error comprobando fichajes de hoy");
+    return;
+  }
+
+  const abierto = (fichajesHoy || []).find(f => f.entrada && !f.salida);
+
+  if(!abierto){
+    alert("Ese trabajador no tiene una entrada abierta hoy");
+    return;
+  }
+
+  const entradaFecha = new Date(abierto.entrada);
+  const salidaFecha = new Date(salidaISO);
+
+  if(salidaFecha <= entradaFecha){
+    alert("La salida debe ser posterior a la entrada");
+    return;
+  }
+
+  const fichajeCalculado = { ...abierto, salida: salidaISO };
+  const horasRedondeadas = calcularHorasRedondeadasDesdeFichaje(fichajeCalculado);
+
+  const { error: errorUpdate } = await supabaseClient
+    .from("fichajes")
+    .update({
+      salida: salidaISO,
+      horas: horasRedondeadas,
+      horas_redondeadas: horasRedondeadas
+    })
+    .eq("id", abierto.id);
+
+  if(errorUpdate){
+    console.log(errorUpdate);
+    alert("Error guardando la salida manual");
+    return;
+  }
+
+  alert("Salida manual guardada correctamente");
+  cerrarFichaTrabajador();
+  await abrirModalTrabajando();
+}
+
 async function cambiarObraTrabajador(){
   if(!trabajadorSeleccionadoFicha) return;
 
@@ -2069,6 +2220,8 @@ btnFichaPrecioHora.addEventListener("click", actualizarPrecioHoraTrabajador);
 btnFichaCambiarObra.addEventListener("click", cambiarObraTrabajador);
 btnFichaContacto.addEventListener("click", mostrarContactoTrabajador);
 btnFichaAnticipo.addEventListener("click", actualizarAnticipoTrabajador);
+btnFichaEntradaManual.addEventListener("click", ficharEntradaManualEncargado);
+btnFichaSalidaManual.addEventListener("click", ficharSalidaManualEncargado);
 btnFichaBajaTrabajador.addEventListener("click", darDeBajaTrabajador);
 btnCerrarFichaTrabajador.addEventListener("click", cerrarFichaTrabajador);
 
