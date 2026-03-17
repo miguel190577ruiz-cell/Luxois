@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUXOIS | Control horario profesional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#050505;
+      --gold:#d8a33e;
+      --gold2:#f0c46a;
+      --text:#f5e7c7;
+      --muted:#d0b27a;
+      --line:rgba(216,163,62,.34);
+      --card:rgba(255,255,255,.03);
+      --shadow:0 0 28px rgba(216,163,62,.10);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top, rgba(216,163,62,.10), transparent 28%),
+        linear-gradient(180deg, #060606 0%, #050505 100%);
+      color:var(--text);
+      font-family:"Inter", sans-serif;
+    }
+
+    a{text-decoration:none;color:inherit}
+
+    .wrap{
+      width:min(1140px, calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(10px);
+      background:rgba(5,5,5,.85);
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:16px 0;
+    }
+
+    .brand{
+      font-family:"Cinzel", serif;
+      font-size:28px;
+      letter-spacing:2px;
+      color:var(--gold2);
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .nav{
+      display:flex;
+      gap:22px;
+      flex-wrap:wrap;
+      align-items:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .nav a:hover{color:var(--gold2)}
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 24px;
+      border:1px solid var(--gold);
+      color:var(--gold2);
+      background:transparent;
+      font-weight:700;
+      letter-spacing:.3px;
+      transition:.2s ease;
+      cursor:pointer;
+      text-align:center;
+    }
+
+    .btn:hover{
+      background:var(--gold);
+      color:#111;
+      box-shadow:var(--shadow);
+    }
+
+    .btn-solid{
+      background:var(--gold);
+      color:#111;
+    }
+
+    .btn-solid:hover{
+      background:var(--gold2);
+    }
+
+    .hero{
+      padding:92px 0 72px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:34px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      border:1px solid var(--line);
+      color:var(--gold2);
+      padding:8px 14px;
+      font-size:12px;
+      letter-spacing:2px;
+      margin-bottom:22px;
+    }
+
+    h1,h2,h3{
+      margin:0;
+      font-family:"Cinzel", serif;
+      color:var(--gold2);
+    }
+
+    h1{
+      font-size:clamp(42px, 7vw, 82px);
+      line-height:1.04;
+      margin-bottom:18px;
+      letter-spacing:1px;
+    }
+
+    .hero p{
+      margin:0 0 28px;
+      font-size:18px;
+      line-height:1.75;
+      max-width:760px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+
+    .hero-note{
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+      max-width:760px;
+    }
+
+    .hero-card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card-title{
+      font-family:"Cinzel", serif;
+      font-size:28px;
+      margin-bottom:18px;
+      color:var(--gold2);
+    }
+
+    .mini-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .mini-item{
+      border:1px solid var(--line);
+      background:var(--card);
+      padding:14px 16px;
+      color:var(--text);
+    }
+
+    section{
+      padding:72px 0;
+      border-top:1px solid rgba(216,163,62,.16);
+    }
+
+    .section-head{
+      max-width:780px;
+      margin:0 auto 38px;
+      text-align:center;
+    }
+
+    .section-head h2{
+      font-size:clamp(30px, 5vw, 48px);
+      margin-bottom:14px;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:16px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:20px;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      background:var(--card);
+      padding:24px;
+      box-shadow:var(--shadow);
+      min-height:100%;
+    }
+
+    .card h3{
+      font-size:24px;
+      margin-bottom:12px;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.75;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .list-item{
+      border:1px solid var(--line);
+      background:var(--card);
+      padding:14px 16px;
+      color:var(--text);
+    }
+
+    .steps{
+      display:grid;
+      gap:16px;
+      max-width:900px;
+      margin:0 auto;
+      counter-reset:step;
+    }
+
+    .step{
+      position:relative;
+      padding:18px 18px 18px 72px;
+      border:1px solid var(--line);
+      background:var(--card);
+    }
+
+    .step::before{
+      counter-increment:step;
+      content:counter(step);
+      position:absolute;
+      left:18px;
+      top:16px;
+      width:36px;
+      height:36px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--gold);
+      color:var(--gold2);
+      font-family:"Cinzel", serif;
+      font-weight:700;
+    }
+
+    .trial-box{
+      max-width:920px;
+      margin:0 auto;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(216,163,62,.08), rgba(255,255,255,.01));
+      box-shadow:var(--shadow);
+      padding:30px 24px;
+      text-align:center;
+    }
+
+    .trial-box h3{
+      font-size:34px;
+      margin-bottom:12px;
+    }
+
+    .trial-box p{
+      margin:0 auto 22px;
+      color:var(--muted);
+      max-width:720px;
+      line-height:1.8;
+    }
+
+    .price-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:24px;
+      max-width:880px;
+      margin:0 auto;
+    }
+
+    .price-card{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(216,163,62,.06), rgba(255,255,255,.01));
+      padding:28px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    .price-card h3{
+      font-size:28px;
+      margin-bottom:10px;
+    }
+
+    .price{
+      font-family:"Cinzel", serif;
+      font-size:46px;
+      color:var(--gold2);
+      margin-bottom:12px;
+    }
+
+    .price-card p{
+      color:var(--muted);
+      line-height:1.8;
+      margin:0 0 18px;
+    }
+
+    .cta{
+      text-align:center;
+    }
+
+    .cta-box{
+      max-width:960px;
+      margin:0 auto;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(216,163,62,.08), rgba(255,255,255,.01));
+      box-shadow:var(--shadow);
+      padding:34px 24px;
+    }
+
+    .cta-box p{
+      color:var(--muted);
+      max-width:760px;
+      margin:14px auto 24px;
+      line-height:1.85;
+    }
+
+    .cta-actions{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    footer{
+      padding:28px 0 44px;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    @media (max-width: 920px){
+      .topbar-inner,
+      .hero-grid,
+      .grid-3,
+      .grid-2,
+      .price-grid{
+        grid-template-columns:1fr;
+        display:grid;
+      }
+
+      .topbar-inner{
+        gap:12px;
+      }
+
+      .nav{
+        gap:14px;
+      }
+
+      .hero{
+        padding-top:72px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">LUXOIS</div>
+      <nav class="nav">
+        <a href="#que-es">Qué es</a>
+        <a href="#funciones">Funciones</a>
+        <a href="#ventajas">Ventajas</a>
+        <a href="#sectores">Sectores</a>
+        <a href="#precios">Precios</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">CONTROL HORARIO · OBRAS · EQUIPOS · SERVICIOS</div>
+          <h1>Controla las horas de tu empresa sin errores ni papeles</h1>
+          <p>
+            LUXOIS es una solución profesional para controlar fichajes, horas trabajadas,
+            anticipos, pagos y seguimiento de personal desde una sola aplicación.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="#prueba">PRUEBA GRATIS 1 MES</a>
+            <a class="btn" href="#funciones">VER FUNCIONES</a>
+          </div>
+
+          <div class="hero-note">
+            Pensado para empresas que necesitan saber quién está trabajando, cuántas horas lleva,
+            en qué obra o servicio está y cuánto hay que pagar a final de semana o de mes.
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-title">Qué incluye</div>
+          <div class="mini-list">
+            <div class="mini-item">✔ Fichaje con PIN</div>
+            <div class="mini-item">✔ Control por obras o ubicaciones</div>
+            <div class="mini-item">✔ Horas semanales y mensuales</div>
+            <div class="mini-item">✔ Panel de encargado</div>
+            <div class="mini-item">✔ Correcciones manuales</div>
+            <div class="mini-item">✔ Anticipos por mes</div>
+            <div class="mini-item">✔ Impresión para gestoría</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="que-es">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Qué es LUXOIS</h2>
+          <p>
+            LUXOIS es una aplicación de control horario para empresas que quieren trabajar con orden,
+            ahorrar tiempo y tener un control real de las horas, los trabajadores y los pagos.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>Más control</h3>
+            <p>Sabes quién ha entrado, quién sigue trabajando, quién ha salido y cuántas horas lleva cada uno.</p>
+          </div>
+          <div class="card">
+            <h3>Menos errores</h3>
+            <p>Evita fallos con horas, cuentas mal hechas, papeles sueltos y discusiones innecesarias.</p>
+          </div>
+          <div class="card">
+            <h3>Más profesional</h3>
+            <p>Todo queda guardado y listo para revisar, imprimir y entregar a gestoría cuando lo necesites.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="funciones">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Funciones principales</h2>
+          <p>
+            Diseñado para el trabajo real de una empresa, no solo para enseñar una pantalla bonita.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Fichaje simple</h3>
+            <p>Los trabajadores fichan con su PIN de forma rápida y clara.</p>
+          </div>
+          <div class="card">
+            <h3>Panel de encargado</h3>
+            <p>El encargado puede consultar trabajadores, corregir fichajes y gestionar incidencias.</p>
+          </div>
+          <div class="card">
+            <h3>Horas automáticas</h3>
+            <p>Calcula horas por semana, por mes y también el total por obra o ubicación.</p>
+          </div>
+          <div class="card">
+            <h3>Corrección manual</h3>
+            <p>Si un trabajador olvida fichar o tiene un problema con el móvil, se puede corregir.</p>
+          </div>
+          <div class="card">
+            <h3>Anticipos</h3>
+            <p>Permite guardar anticipos del mes y restarlos del total final a pagar.</p>
+          </div>
+          <div class="card">
+            <h3>Impresión</h3>
+            <p>Genera resúmenes listos para obra o para gestoría con horas y cálculos claros.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ventajas">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Ventajas para tu empresa</h2>
+          <p>
+            LUXOIS no es solo una app: es una forma de evitar pérdidas de tiempo y dinero.
+          </p>
+        </div>
+
+        <div class="list">
+          <div class="list-item">✔ Sin Excel, sin libretas y sin papeles sueltos</div>
+          <div class="list-item">✔ Todo guardado y ordenado</div>
+          <div class="list-item">✔ Menos tiempo haciendo cuentas a mano</div>
+          <div class="list-item">✔ Menos errores con horas y pagos</div>
+          <div class="list-item">✔ Más control sobre obras, servicios y trabajadores</div>
+          <div class="list-item">✔ Más tranquilidad para encargado y empresa</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="como-funciona">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Cómo funciona</h2>
+          <p>Preparado para adaptarse a la forma de trabajar de cada empresa.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step">Se crean obras, ubicaciones o centros de trabajo.</div>
+          <div class="step">Se añaden trabajadores con PIN, precio por hora y teléfono.</div>
+          <div class="step">Los trabajadores fichan entrada y salida desde la app.</div>
+          <div class="step">El encargado controla, corrige y gestiona incidencias si hace falta.</div>
+          <div class="step">Se imprimen resúmenes para obra o gestoría con todo calculado.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sectores">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Para quién es</h2>
+          <p>
+            Para cualquier empresa que necesite controlar horas, turnos, personal o equipos desplazados.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>Construcción y reformas</h3>
+            <p>Ideal para obras, cuadrillas y encargados que necesitan control real del día a día.</p>
+          </div>
+          <div class="card">
+            <h3>Mantenimiento y servicios</h3>
+            <p>Perfecto para empresas que trabajan por ubicaciones, avisos o rutas.</p>
+          </div>
+          <div class="card">
+            <h3>Empresas con personal</h3>
+            <p>Si necesitas saber horas, pagos y estado del equipo, LUXOIS te sirve.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prueba">
+      <div class="wrap">
+        <div class="trial-box">
+          <h3>Prueba gratis 1 mes</h3>
+          <p>
+            Prueba LUXOIS sin compromiso durante 1 mes. Configuramos la app según la forma de trabajar
+            de tu empresa: horarios, descansos, turnos, noches, obras o servicios.
+          </p>
+          <div class="cta-actions">
+            <a class="btn btn-solid" href="#contacto">QUIERO PROBARLO</a>
+            <a class="btn" href="#precios">VER PRECIOS</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="precios">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Precios después de la prueba</h2>
+          <p>
+            Puedes ajustarlos más adelante, pero esta base es clara, seria y fácil de explicar a una empresa.
+          </p>
+        </div>
+
+        <div class="price-grid">
+          <div class="price-card">
+            <h3>BÁSICO</h3>
+            <div class="price">30€/mes</div>
+            <p>Hasta 10 trabajadores</p>
+            <p>Control horario, fichajes, horas, obra y resúmenes</p>
+            <a class="btn" href="#contacto">QUIERO INFORMACIÓN</a>
+          </div>
+
+          <div class="price-card">
+            <h3>PRO</h3>
+            <div class="price">50€/mes</div>
+            <p>Trabajadores ilimitados</p>
+            <p>Control completo, anticipos, encargado y gestión avanzada</p>
+            <a class="btn btn-solid" href="#contacto">SOLICITAR DEMO</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="cta">
+      <div class="wrap">
+        <div class="cta-box">
+          <h2>Habla con nosotros</h2>
+          <p>
+            Si quieres probar LUXOIS gratis durante 1 mes o ver cómo se adapta a tu empresa,
+            escríbenos y te enseñamos cómo funciona.
+          </p>
+          <div class="cta-actions">
+            <a class="btn btn-solid" href="https://wa.me/34616880961?text=Hola,%20quiero%20probar%20LUXOIS%20gratis%201%20mes" target="_blank">WHATSAPP</a>
+            <a class="btn" href="mailto:miguel190577ruiz@gmail.com">EMAIL</a>
+            <a class="btn" href="/">ENTRAR EN LA APP</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    LUXOIS · Control horario profesional para empresas
+  </footer>
+
+</body>
+</html>
