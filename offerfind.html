@@ -1,585 +1,191 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OfferFind</title>
-  <style>
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      font-family: Arial, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OfertFind</title>
 
-    body{
-      background:
-        linear-gradient(rgba(90,150,235,.10), rgba(255,255,255,.04)),
-        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
-        center center/cover no-repeat;
-      color:#fff;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover;
+  color:white;
+  text-align:center;
+}
 
-    .pantalla{
-      display:none;
-      width:100%;
-      height:100%;
-    }
+/* capa para que se vea mejor */
+body::before{
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.25);
+  top:0;
+  left:0;
+}
 
-    .pantalla.activa{
-      display:block;
-    }
-
-    .home{
-      width:100%;
-      max-width:430px;
-      height:100%;
-      margin:0 auto;
-      padding:14px 14px 18px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      background:linear-gradient(to bottom, rgba(90,150,235,.12), rgba(255,255,255,.03));
-    }
-
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:14px;
-      font-weight:700;
-      text-shadow:0 2px 6px rgba(0,0,0,.45);
-      margin-bottom:4px;
-    }
-
-    .toplink{
-      cursor:pointer;
-      white-space:nowrap;
-    }
-
-    .logoWrap{
-      text-align:center;
-      margin-top:6px;
-      margin-bottom:6px;
-    }
-
-    .logo{
-      font-size:56px;
-      font-weight:900;
-      font-style:italic;
-      line-height:1;
-      color:#fff;
-      text-shadow:0 3px 10px rgba(0,0,0,.28);
-      letter-spacing:.5px;
-    }
-.logo{
-  font-size:56px;
-  font-weight:900;
-  font-style:italic;
-  line-height:1;
-  color:#ffffff;
-  text-shadow:0 3px 10px rgba(0,0,0,.35);
+.pantalla{
   position:relative;
-  display:inline-block;
+  padding:15px;
 }
 
-.subrayado{
-  width:120%;
-  height:6px;
-  background:linear-gradient(to right, #ffd000, #ff4d00);
-  border-radius:10px;
-  position:absolute;
-  left:-10%;
-  bottom:-6px;
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:10px;
 }
-    .sublogo{
-      margin-top:6px;
-      font-size:20px;
-      font-weight:700;
-      font-style:italic;
-      text-shadow:0 2px 6px rgba(0,0,0,.35);
-    }
 
-    .grid4{
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-      margin-top:4px;
-    }
+/* LOGO */
+.logoWrap{
+  margin-top:5px;
+}
 
-    .grid2{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:10px;
-      width:49%;
-      margin:10px auto 0;
-    }
+.logoSvg{
+  width:100%;
+  max-width:340px;
+}
 
-    .cat{
-      border:none;
-      border-radius:14px;
-      min-height:86px;
-      color:#fff;
-      font-weight:700;
-      font-size:13px;
-      box-shadow:
-        0 4px 10px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.22);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      cursor:pointer;
-      padding:6px;
-      text-shadow:0 1px 2px rgba(0,0,0,.45);
-    }
+.sublogo{
+  font-size:20px;
+  font-style:italic;
+  margin-top:5px;
+  font-weight:bold;
+}
 
-    .cat .icon{
-      font-size:28px;
-      margin-bottom:4px;
-      line-height:1;
-    }
+/* BOTONES */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin:20px 0;
+}
 
-    .naranja{background:linear-gradient(#f8ae2f,#df7b09)}
-    .rojo{background:linear-gradient(#ef6b4d,#cf331c)}
-    .azul{background:linear-gradient(#496fd2,#274b9b)}
-    .verde{background:linear-gradient(#68b24a,#3f8b2d)}
-    .morado{background:linear-gradient(#a63d97,#7e1f73)}
-    .turquesa{background:linear-gradient(#61c3da,#2d92af)}
+.boton{
+  padding:20px;
+  border-radius:18px;
+  font-weight:bold;
+  font-size:16px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.3);
+  cursor:pointer;
+}
 
-    .distanciaBloque{
-      margin-top:10px;
-      text-align:center;
-    }
+.naranja{background:linear-gradient(#ffb347,#ff8c00);}
+.rojo{background:linear-gradient(#ff5e57,#c0392b);}
+.azul{background:linear-gradient(#4b7bec,#3867d6);}
+.verde{background:linear-gradient(#6ab04c,#2ecc71);}
+.morado{background:linear-gradient(#be2edd,#8e44ad);}
+.cian{background:linear-gradient(#48c6ef,#00cec9);}
 
-    .distanciaTitulo{
-      font-size:18px;
-      font-style:italic;
-      font-weight:700;
-      margin-bottom:8px;
-      text-shadow:0 2px 6px rgba(0,0,0,.35);
-    }
+/* DISTANCIA */
+.distancias{
+  margin-top:10px;
+}
 
-    .distancias{
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      margin-bottom:10px;
-    }
+.distancias button{
+  margin:5px;
+  padding:10px 18px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(#4b7bec,#3867d6);
+  color:white;
+  font-weight:bold;
+}
 
-    .distBtn{
-      background:linear-gradient(#4e74c7,#2c4c97);
-      color:#fff;
-      border:none;
-      border-radius:10px;
-      min-width:82px;
-      padding:9px 10px;
-      font-size:14px;
-      font-weight:800;
-      box-shadow:0 4px 10px rgba(0,0,0,.22);
-      cursor:pointer;
-    }
+/* PUBLICIDAD */
+.publicidad{
+  display:flex;
+  overflow-x:auto;
+  gap:12px;
+  margin-top:20px;
+}
 
-    .cambiarDist{
-      display:block;
-      width:220px;
-      margin:0 auto;
-      border:none;
-      border-radius:12px;
-      padding:11px 14px;
-      font-size:14px;
-      font-style:italic;
-      background:linear-gradient(#ffffff,#dfe8f1);
-      color:#2f4058;
-      box-shadow:0 4px 10px rgba(0,0,0,.18);
-    }
+.publicidad img{
+  width:140px;
+  border-radius:12px;
+  box-shadow:0 5px 12px rgba(0,0,0,0.4);
+}
 
-    .carruselWrap{
-      overflow:hidden;
-      width:100%;
-      margin-top:10px;
-    }
+/* FOOTER */
+.footer{
+  margin-top:10px;
+  font-size:14px;
+}
 
-    .carruselTrack{
-      display:flex;
-      gap:10px;
-      width:max-content;
-      animation: mover 18s linear infinite;
-    }
-
-    .carruselWrap:hover .carruselTrack{
-      animation-play-state:paused;
-    }
-
-    @keyframes mover{
-      0%{transform:translateX(0)}
-      100%{transform:translateX(-50%)}
-    }
-
-    .promo{
-      width:128px;
-      height:95px;
-      border-radius:14px;
-      overflow:hidden;
-      position:relative;
-      flex:0 0 auto;
-      box-shadow:0 5px 12px rgba(0,0,0,.22);
-      cursor:pointer;
-      background:#fff;
-    }
-
-    .promo img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .promoText{
-      position:absolute;
-      left:8px;
-      right:8px;
-      bottom:8px;
-      color:#fff;
-      font-size:12px;
-      font-weight:800;
-      line-height:1.1;
-      text-shadow:0 2px 6px rgba(0,0,0,.85);
-    }
-
-    .footerLink{
-      text-align:center;
-      font-size:15px;
-      color:#28364a;
-      font-weight:700;
-      margin-top:8px;
-    }
-
-    .footerLink span{
-      color:#13479c;
-      text-decoration:underline;
-      cursor:pointer;
-    }
-
-    .panelPantalla{
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      background:linear-gradient(rgba(90,150,235,.15), rgba(255,255,255,.08));
-    }
-
-    .panel{
-      width:100%;
-      max-width:430px;
-      background:rgba(255,255,255,.92);
-      color:#223;
-      border-radius:18px;
-      padding:20px;
-      box-shadow:0 10px 25px rgba(0,0,0,.22);
-    }
-
-    .volver{
-      display:inline-block;
-      margin-bottom:14px;
-      color:#1d4ca0;
-      font-weight:700;
-      cursor:pointer;
-    }
-
-    .tituloPantalla{
-      margin:0 0 16px;
-      font-size:26px;
-      color:#173c80;
-    }
-
-    .ofertaLista{
-      display:grid;
-      gap:12px;
-    }
-
-    .itemOferta{
-      background:#fff;
-      border-radius:14px;
-      padding:14px;
-      border:1px solid #d8e0ef;
-      box-shadow:0 4px 10px rgba(0,0,0,.08);
-    }
-
-    .itemOferta strong{
-      display:block;
-      margin-bottom:4px;
-      color:#0e2f6f;
-    }
-  </style>
+.footer u{
+  color:#4da3ff;
+}
+</style>
 </head>
+
 <body>
 
-  <div id="pantallaInicio" class="pantalla activa">
-    <div class="home">
-      <div>
-        <div class="topbar">
-          <div id="btnUbicacion" class="toplink">📍 Tu ubicación</div>
-          <div class="toplink">Seleccionar idioma ›</div>
-        </div>
+<div class="pantalla">
 
-        <div class="logoWrap">
-  <svg class="logoSvg" viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" aria-label="OfertFind logo">
-    <defs>
-      <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#ffd400"/>
-        <stop offset="55%" stop-color="#ff9d00"/>
-        <stop offset="100%" stop-color="#ff2a2a"/>
-      </linearGradient>
+  <div class="topbar">
+    <div>📍 Tu ubicación</div>
+    <div>Seleccionar idioma ></div>
+  </div>
 
-      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.35)"/>
-      </filter>
-    </defs>
+  <!-- LOGO -->
+  <div class="logoWrap">
+    <svg class="logoSvg" viewBox="0 0 900 260">
 
-    <!-- fondo azul del logo -->
-    <text x="92" y="145"
-          font-size="118"
-          font-weight="700"
-          font-style="italic"
-          font-family="Brush Script MT, Segoe Script, Comic Sans MS, cursive"
-          fill="#2b9be6"
-          filter="url(#shadow)">
-      OfertFind
-    </text>
+      <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%">
+          <stop offset="0%" stop-color="#ffd400"/>
+          <stop offset="50%" stop-color="#ff9d00"/>
+          <stop offset="100%" stop-color="#ff2a2a"/>
+        </linearGradient>
+      </defs>
 
-    <!-- texto blanco encima -->
-    <text x="82" y="135"
-          font-size="118"
-          font-weight="700"
-          font-style="italic"
-          font-family="Brush Script MT, Segoe Script, Comic Sans MS, cursive"
-          fill="#ffffff">
-      OfertFind
-    </text>
+      <text x="80" y="135"
+        font-size="110"
+        font-weight="900"
+        font-style="italic"
+        fill="white">
+        OfertFind
+      </text>
 
-    <!-- ala amarilla en la O -->
-    <path d="M54 132
-             C60 102, 70 84, 96 72
-             C76 92, 80 122, 109 140
-             C87 145, 70 144, 54 132 Z"
-          fill="#ffd400"/>
+      <rect x="80" y="150" width="700" height="10" fill="url(#grad)" rx="5"/>
+    </svg>
 
-    <!-- línea inferior azul sombra -->
-    <path d="M90 176
-             C240 160, 430 165, 760 176
-             C810 177, 852 164, 885 150
-             C855 185, 816 197, 742 202
-             C460 213, 245 202, 80 188 Z"
-          fill="#0b5ea8"
-          opacity="0.95"/>
+    <div class="sublogo">¡Ofertas cerca de ti!</div>
+  </div>
 
-    <!-- línea inferior amarilla-roja -->
-    <path d="M92 168
-             C250 152, 442 156, 770 168
-             C818 170, 856 158, 888 144
-             C856 177, 820 188, 745 192
-             C465 203, 250 193, 86 179 Z"
-          fill="url(#lineGrad)"/>
-  </svg>
+  <!-- BOTONES -->
+  <div class="grid">
+    <div class="boton naranja">☕ Desayunar</div>
+    <div class="boton rojo">🍴 Comer</div>
+    <div class="boton azul">🛍 Comprar</div>
+    <div class="boton verde">⚡ Ofertas Express</div>
+    <div class="boton morado">🍸 Happy Hour</div>
+    <div class="boton cian">🌴 Ocio</div>
+  </div>
 
-  <div class="sublogo">¡Ofertas cerca de ti!</div>
+  <!-- DISTANCIA -->
+  <div>
+    <h3>¿A qué distancia?</h3>
+    <div class="distancias">
+      <button>100 m</button>
+      <button>500 m</button>
+      <button>2 km</button>
+    </div>
+  </div>
+
+  <!-- PUBLICIDAD -->
+  <div class="publicidad">
+    <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d">
+    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b">
+    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e">
+  </div>
+
+  <div class="footer">
+    ¿Tienes un negocio? <u>Acceso comerciante</u>
+  </div>
+
 </div>
 
-        <div class="grid4">
-          <button class="cat naranja" onclick="abrirCategoria('Desayunar')">
-            <div class="icon">☕</div>
-            <div>Desayunar</div>
-          </button>
-
-          <button class="cat rojo" onclick="abrirCategoria('Comer')">
-            <div class="icon">🍴</div>
-            <div>Comer</div>
-          </button>
-
-          <button class="cat azul" onclick="abrirCategoria('Comprar')">
-            <div class="icon">🛍️</div>
-            <div>Comprar</div>
-          </button>
-
-          <button class="cat verde" onclick="abrirCategoria('Ofertas Express')">
-            <div class="icon">⚡</div>
-            <div>Ofertas<br>Express</div>
-          </button>
-        </div>
-
-        <div class="grid2">
-          <button class="cat morado" onclick="abrirCategoria('Happy Hour')">
-            <div class="icon">🍸</div>
-            <div>Happy Hour</div>
-          </button>
-
-          <button class="cat turquesa" onclick="abrirCategoria('Ocio')">
-            <div class="icon">🌴</div>
-            <div>Ocio</div>
-          </button>
-        </div>
-
-        <div class="distanciaBloque">
-          <div class="distanciaTitulo">¿A qué distancia?</div>
-
-          <div class="distancias">
-            <button class="distBtn" onclick="seleccionarDistancia('100 m')">100 m</button>
-            <button class="distBtn" onclick="seleccionarDistancia('500 m')">500 m</button>
-            <button class="distBtn" onclick="seleccionarDistancia('2 km')">2 km</button>
-          </div>
-
-          <button class="cambiarDist">⚙ Cambiar distancia...</button>
-        </div>
-      </div>
-
-      <div>
-        <div class="carruselWrap">
-          <div class="carruselTrack">
-            <div class="promo" onclick="abrirOferta('Mojitos a 2,50€')">
-              <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">Mojitos<br>a 2,50€</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('-30% en zapatillas')">
-              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">-30%<br>en zapatillas</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('Oferta de marisco fresco')">
-              <img src="https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">Oferta de<br>marisco fresco</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('Desayuno completo')">
-              <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">Desayuno<br>completo</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('Mojitos a 2,50€')">
-              <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">Mojitos<br>a 2,50€</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('-30% en zapatillas')">
-              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">-30%<br>en zapatillas</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('Oferta de marisco fresco')">
-              <img src="https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">Oferta de<br>marisco fresco</div>
-            </div>
-
-            <div class="promo" onclick="abrirOferta('Desayuno completo')">
-              <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=500&q=80" alt="">
-              <div class="promoText">Desayuno<br>completo</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="footerLink">
-          ¿Tienes un negocio? <span onclick="abrirComerciante()">Acceso comerciante</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="pantallaUbicacion" class="pantalla">
-    <div class="panelPantalla">
-      <div class="panel">
-        <div class="volver" onclick="volverInicio()">← Volver</div>
-        <h2 class="tituloPantalla">Tu ubicación</h2>
-        <p>Aquí iría la pantalla de mapa y ubicación del usuario.</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="pantallaCategoria" class="pantalla">
-    <div class="panelPantalla">
-      <div class="panel">
-        <div class="volver" onclick="volverInicio()">← Volver</div>
-        <h2 id="tituloCategoria" class="tituloPantalla">Categoría</h2>
-        <div class="ofertaLista">
-          <div class="itemOferta">
-            <strong>Oferta destacada</strong>
-            Ejemplo de promoción para esta categoría.
-          </div>
-          <div class="itemOferta">
-            <strong>Negocio cercano</strong>
-            Oferta visible dentro del radio seleccionado.
-          </div>
-          <div class="itemOferta">
-            <strong>Promoción limitada</strong>
-            Disponible solo durante unas horas.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="pantallaOferta" class="pantalla">
-    <div class="panelPantalla">
-      <div class="panel">
-        <div class="volver" onclick="volverInicio()">← Volver</div>
-        <h2 class="tituloPantalla">Detalle de oferta</h2>
-        <div id="detalleOferta" class="itemOferta"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="pantallaComerciante" class="pantalla">
-    <div class="panelPantalla">
-      <div class="panel">
-        <div class="volver" onclick="volverInicio()">← Volver</div>
-        <h2 class="tituloPantalla">Acceso comerciante</h2>
-        <p>Aquí iría el acceso para negocios: alta, login y gestión de ofertas.</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function ocultarTodo(){
-      document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
-    }
-
-    function volverInicio(){
-      ocultarTodo();
-      document.getElementById('pantallaInicio').classList.add('activa');
-    }
-
-    function abrirCategoria(nombre){
-      ocultarTodo();
-      document.getElementById('pantallaCategoria').classList.add('activa');
-      document.getElementById('tituloCategoria').textContent = nombre;
-    }
-
-    function abrirComerciante(){
-      ocultarTodo();
-      document.getElementById('pantallaComerciante').classList.add('activa');
-    }
-
-    function abrirOferta(nombre){
-      ocultarTodo();
-      document.getElementById('pantallaOferta').classList.add('activa');
-      document.getElementById('detalleOferta').innerHTML = `
-        <strong>${nombre}</strong>
-        Oferta demo clicable para enseñar cómo se vería el detalle dentro de la aplicación.
-      `;
-    }
-
-    function seleccionarDistancia(texto){
-      alert('Distancia seleccionada: ' + texto);
-    }
-
-    document.getElementById('btnUbicacion').addEventListener('click', () => {
-      ocultarTodo();
-      document.getElementById('pantallaUbicacion').classList.add('activa');
-    });
-  </script>
 </body>
 </html>
