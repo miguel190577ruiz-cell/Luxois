@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OfferFind</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover;
+  color:white;
+  text-align:center;
+}
+
+.pantalla{
+  padding:20px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:20px;
+  font-size:14px;
+}
+
+.logo{
+  font-size:40px;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.sub{
+  font-size:18px;
+  margin-bottom:30px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.boton{
+  padding:20px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.naranja{background:#ff9800;}
+.rojo{background:#f44336;}
+.azul{background:#3f51b5;}
+.verde{background:#4caf50;}
+.morado{background:#9c27b0;}
+.cian{background:#00bcd4;}
+
+.distancias{
+  margin:20px 0;
+}
+
+.distancias button{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.ofertas{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  margin:20px 0;
+}
+
+.oferta{
+  min-width:140px;
+  background:white;
+  color:black;
+  border-radius:10px;
+  padding:10px;
+}
+
+.link{
+  margin-top:20px;
+  color:white;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+.oculto{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA INICIO -->
+<div id="inicio" class="pantalla">
+
+  <div class="topbar">
+    <div id="btnUbicacion">📍 Tu ubicación</div>
+    <div>Idioma</div>
+  </div>
+
+  <div class="logo">OfferFind</div>
+  <div class="sub">¡Ofertas cerca de ti!</div>
+
+  <div class="grid">
+    <div class="boton naranja" onclick="irCategoria('Desayunar')">Desayunar</div>
+    <div class="boton rojo" onclick="irCategoria('Comer')">Comer</div>
+    <div class="boton azul" onclick="irCategoria('Comprar')">Comprar</div>
+    <div class="boton verde" onclick="irCategoria('Express')">Ofertas Express</div>
+    <div class="boton morado" onclick="irCategoria('Happy Hour')">Happy Hour</div>
+    <div class="boton cian" onclick="irCategoria('Ocio')">Ocio</div>
+  </div>
+
+  <div class="distancias">
+    <button onclick="alert('100m seleccionado')">100 m</button>
+    <button onclick="alert('500m seleccionado')">500 m</button>
+    <button onclick="alert('2km seleccionado')">2 km</button>
+  </div>
+
+  <div class="ofertas">
+    <div class="oferta">Mojitos 2,50€</div>
+    <div class="oferta">-30% zapatillas</div>
+    <div class="oferta">Marisco fresco</div>
+  </div>
+
+  <div class="link" onclick="irComerciante()">Acceso comerciante</div>
+
+</div>
+
+<!-- PANTALLA CATEGORÍA -->
+<div id="categoria" class="pantalla oculto">
+  <h2 id="tituloCategoria"></h2>
+
+  <div class="oferta">Oferta 1</div>
+  <div class="oferta">Oferta 2</div>
+  <div class="oferta">Oferta 3</div>
+
+  <br><br>
+  <button onclick="volver()">← Volver</button>
+</div>
+
+<!-- PANTALLA UBICACIÓN -->
+<div id="ubicacion" class="pantalla oculto">
+  <h2>Tu ubicación</h2>
+  <p>Aquí iría el GPS (demo)</p>
+  <button onclick="volver()">← Volver</button>
+</div>
+
+<!-- PANTALLA COMERCIANTE -->
+<div id="comerciante" class="pantalla oculto">
+  <h2>Acceso comerciante</h2>
+  <p>Login / registro (demo)</p>
+  <button onclick="volver()">← Volver</button>
+</div>
+
+<script>
+
+function ocultarTodo(){
+  document.getElementById("inicio").classList.add("oculto");
+  document.getElementById("categoria").classList.add("oculto");
+  document.getElementById("ubicacion").classList.add("oculto");
+  document.getElementById("comerciante").classList.add("oculto");
+}
+
+function volver(){
+  ocultarTodo();
+  document.getElementById("inicio").classList.remove("oculto");
+}
+
+function irCategoria(nombre){
+  ocultarTodo();
+  document.getElementById("categoria").classList.remove("oculto");
+  document.getElementById("tituloCategoria").innerText = nombre;
+}
+
+function irComerciante(){
+  ocultarTodo();
+  document.getElementById("comerciante").classList.remove("oculto");
+}
+
+document.getElementById("btnUbicacion").addEventListener("click", () => {
+  ocultarTodo();
+  document.getElementById("ubicacion").classList.remove("oculto");
+});
+
+</script>
+
+</body>
+</html>
