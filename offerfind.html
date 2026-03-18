@@ -271,6 +271,7 @@ body{
   cursor:pointer;
 }
 
+/* PANELES GENERALES */
 .panelPantalla{
   width:100%;
   height:100%;
@@ -327,6 +328,7 @@ body{
   color:#0e2f6f;
 }
 
+/* UBICACION */
 .ubicacionBtns{
   display:grid;
   gap:12px;
@@ -385,6 +387,201 @@ body{
   margin:0 0 10px;
   color:#173c80;
   font-size:18px;
+}
+
+/* RESULTADOS DESAYUNO */
+.resultadosPantalla{
+  width:100%;
+  max-width:430px;
+  height:100%;
+  margin:0 auto;
+  background:
+    linear-gradient(rgba(255,255,255,.14), rgba(255,255,255,.08)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
+    center center/cover no-repeat;
+  overflow:auto;
+}
+
+.resultadosTop{
+  padding:12px 12px 0;
+}
+
+.barraBusqueda{
+  background:rgba(255,255,255,.95);
+  border-radius:22px;
+  padding:12px 16px;
+  color:#163b7a;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+.barraBusqueda span{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.mapaDemo{
+  position:relative;
+  height:210px;
+  margin-top:10px;
+  background:
+    linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.12)),
+    url('https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1200&q=80')
+    center/cover no-repeat;
+  border-radius:0 0 24px 24px;
+  overflow:hidden;
+}
+
+.pinCentro{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:74px;
+  height:74px;
+  border-radius:50%;
+  background:rgba(70,120,220,.25);
+  border:8px solid rgba(70,120,220,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+}
+
+.tagMapa{
+  position:absolute;
+  background:#d94848;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:800;
+  box-shadow:0 4px 8px rgba(0,0,0,.18);
+}
+
+.tag1{left:14px; top:36px;}
+.tag2{left:88px; top:118px;}
+.tag3{right:18px; top:98px;}
+.tag4{right:18px; top:28px;}
+
+.listaResultados{
+  padding:10px 10px 16px;
+}
+
+.resultadoCard{
+  background:rgba(255,255,255,.94);
+  color:#1d2435;
+  border-radius:16px;
+  margin-bottom:10px;
+  padding:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+.resultadoBadge{
+  display:inline-block;
+  background:#e34a4a;
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  border-radius:12px;
+  padding:6px 10px;
+  margin-bottom:8px;
+}
+
+.resultadoFila{
+  display:flex;
+  gap:10px;
+  align-items:stretch;
+}
+
+.resultadoImg{
+  width:105px;
+  min-width:105px;
+  height:88px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#ddd;
+}
+
+.resultadoImg img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.resultadoInfo{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.resultadoTopInfo{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.resultadoTitulo{
+  font-size:16px;
+  font-weight:800;
+  color:#182f67;
+  line-height:1.15;
+}
+
+.resultadoDist{
+  font-size:13px;
+  color:#5a647d;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.resultadoPrecio{
+  font-size:18px;
+  font-weight:800;
+  color:#111;
+}
+
+.resultadoAntes{
+  font-size:14px;
+  color:#666;
+  text-decoration:line-through;
+  margin-left:6px;
+}
+
+.resultadoTiempo{
+  font-size:13px;
+  color:#555;
+  font-weight:700;
+  margin-top:2px;
+}
+
+.btnIr{
+  align-self:flex-end;
+  background:linear-gradient(#ffd74a,#e6b81d);
+  color:#2f2600;
+  border:none;
+  border-radius:12px;
+  padding:10px 18px;
+  font-size:16px;
+  font-weight:800;
+  box-shadow:0 3px 8px rgba(0,0,0,.16);
+  cursor:default;
+}
+
+.volverResultados{
+  display:inline-block;
+  color:#fff;
+  font-weight:700;
+  padding:12px 12px 0;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);
+  cursor:pointer;
 }
 </style>
 </head>
@@ -533,27 +730,50 @@ body{
       <h2 class="tituloPantalla">Desayunar</h2>
 
       <div class="ofertaLista">
-        <div class="itemOferta" onclick="abrirSubCategoria('Churrería')">
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Churrería')">
           <strong>Churrería</strong>
           Chocolate con churros y desayunos tradicionales
         </div>
 
-        <div class="itemOferta" onclick="abrirSubCategoria('Panadería')">
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Panadería')">
           <strong>Panadería</strong>
           Pan recién hecho y bollería
         </div>
 
-        <div class="itemOferta" onclick="abrirSubCategoria('Cafetería')">
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Cafetería')">
           <strong>Cafetería</strong>
           Cafés, tostadas y desayunos completos
         </div>
 
-        <div class="itemOferta" onclick="abrirSubCategoria('Todo desayunos')">
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Ver todo')">
           <strong>Ver todo</strong>
           Todas las opciones de desayuno
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="pantallaResultadosDesayuno" class="pantalla">
+  <div class="resultadosPantalla">
+    <div class="volverResultados" onclick="abrirDesayuno()">← Volver</div>
+
+    <div class="resultadosTop">
+      <div class="barraBusqueda">
+        <span>📍 <span id="tituloResultadosDesayuno">Cafetería en 500 m</span></span>
+        <span>›</span>
+      </div>
+
+      <div class="mapaDemo">
+        <div class="tagMapa tag1">33%</div>
+        <div class="tagMapa tag2">+3%</div>
+        <div class="tagMapa tag3">Express!</div>
+        <div class="tagMapa tag4">-31%</div>
+        <div class="pinCentro">📍</div>
+      </div>
+    </div>
+
+    <div id="listaResultadosDesayuno" class="listaResultados"></div>
   </div>
 </div>
 
@@ -628,6 +848,161 @@ const pueblosAxarquia = [
   "Nerja"
 ];
 
+const resultadosDesayuno = {
+  "Churrería": [
+    {
+      badge:"-25%",
+      titulo:"Churros + Chocolate",
+      distancia:"280 m",
+      precio:"€ 3,00",
+      antes:"€ 4,00",
+      tiempo:"4 min.",
+      img:"https://images.unsplash.com/photo-1625944525533-473f1f45c9b5?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"Oferta Express!",
+      titulo:"Porra + Café",
+      distancia:"190 m",
+      precio:"€ 2,50",
+      antes:"€ 3,20",
+      tiempo:"6 min.",
+      img:"https://images.unsplash.com/photo-1515442261605-65987783cb6a?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"+10%",
+      titulo:"Chocolate grande + Churros",
+      distancia:"320 m",
+      precio:"€ 3,80",
+      antes:"€ 4,50",
+      tiempo:"8 min.",
+      img:"https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=600&q=80"
+    }
+  ],
+  "Panadería": [
+    {
+      badge:"Oferta Express!",
+      titulo:"Croissant + Café",
+      distancia:"150 m",
+      precio:"€ 2,00",
+      antes:"€ 3,00",
+      tiempo:"29 min.",
+      img:"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-18%",
+      titulo:"Tostada + Café",
+      distancia:"200 m",
+      precio:"€ 2,20",
+      antes:"€ 3,20",
+      tiempo:"3 min.",
+      img:"https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-12%",
+      titulo:"Bollería variada",
+      distancia:"260 m",
+      precio:"€ 2,90",
+      antes:"€ 3,30",
+      tiempo:"5 min.",
+      img:"https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=600&q=80"
+    }
+  ],
+  "Cafetería": [
+    {
+      badge:"Oferta Express!",
+      titulo:"Café + Croissant",
+      distancia:"150 m",
+      precio:"€ 2,00",
+      antes:"€ 3,00",
+      tiempo:"29 min.",
+      img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-31%",
+      titulo:"Tostada + Café",
+      distancia:"200 m",
+      precio:"€ 2,20",
+      antes:"€ 3,20",
+      tiempo:"3 min.",
+      img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-25%",
+      titulo:"Capuccino + Donut",
+      distancia:"280 m",
+      precio:"€ 3,00",
+      antes:"€ 4,00",
+      tiempo:"4 min.",
+      img:"https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"Happy Hour",
+      titulo:"Mojitos a 2,50€",
+      distancia:"250 m",
+      precio:"19:00 a 20:00",
+      antes:"",
+      tiempo:"",
+      img:"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-30%",
+      titulo:"Zapatillas -30%",
+      distancia:"400 m",
+      precio:"€ -30% en zapatillas",
+      antes:"",
+      tiempo:"3 min.",
+      img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+    }
+  ],
+  "Ver todo": [
+    {
+      badge:"Oferta Express!",
+      titulo:"Café + Croissant",
+      distancia:"150 m",
+      precio:"€ 2,00",
+      antes:"€ 3,00",
+      tiempo:"29 min.",
+      img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-31%",
+      titulo:"Tostada + Café",
+      distancia:"200 m",
+      precio:"€ 2,20",
+      antes:"€ 3,20",
+      tiempo:"3 min.",
+      img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-25%",
+      titulo:"Churros + Chocolate",
+      distancia:"280 m",
+      precio:"€ 3,00",
+      antes:"€ 4,00",
+      tiempo:"4 min.",
+      img:"https://images.unsplash.com/photo-1625944525533-473f1f45c9b5?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"Happy Hour",
+      titulo:"Mojitos a 2,50€",
+      distancia:"250 m",
+      precio:"19:00 a 20:00",
+      antes:"",
+      tiempo:"",
+      img:"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      badge:"-30%",
+      titulo:"Zapatillas -30%",
+      distancia:"400 m",
+      precio:"€ -30% en zapatillas",
+      antes:"",
+      tiempo:"3 min.",
+      img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
+    }
+  ]
+};
+
 function ocultarTodo(){
   document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
 }
@@ -690,10 +1065,47 @@ function abrirDesayuno(){
   document.getElementById('pantallaDesayuno').classList.add('activa');
 }
 
-function abrirSubCategoria(nombre){
+function abrirResultadosDesayuno(tipo){
   ocultarTodo();
-  document.getElementById('pantallaCategoria').classList.add('activa');
-  document.getElementById('tituloCategoria').textContent = nombre;
+  document.getElementById('pantallaResultadosDesayuno').classList.add('activa');
+  document.getElementById('tituloResultadosDesayuno').textContent = tipo + ' en 500 m';
+
+  const lista = document.getElementById('listaResultadosDesayuno');
+  lista.innerHTML = '';
+
+  const items = resultadosDesayuno[tipo] || [];
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'resultadoCard';
+
+    const badgeHtml = item.badge ? `<div class="resultadoBadge">${item.badge}</div>` : '';
+    const antesHtml = item.antes ? `<span class="resultadoAntes">${item.antes}</span>` : '';
+    const tiempoHtml = item.tiempo ? `<div class="resultadoTiempo">🕒 ${item.tiempo}</div>` : '';
+
+    card.innerHTML = `
+      ${badgeHtml}
+      <div class="resultadoFila">
+        <div class="resultadoImg">
+          <img src="${item.img}" alt="">
+        </div>
+
+        <div class="resultadoInfo">
+          <div class="resultadoTopInfo">
+            <div class="resultadoTitulo">${item.titulo}</div>
+            <div class="resultadoDist">📍 ${item.distancia}</div>
+          </div>
+
+          <div>
+            <div class="resultadoPrecio">${item.precio}${antesHtml}</div>
+            ${tiempoHtml}
+          </div>
+
+          <button class="btnIr">IR 🚶</button>
+        </div>
+      </div>
+    `;
+    lista.appendChild(card);
+  });
 }
 
 function abrirCategoria(nombre){
