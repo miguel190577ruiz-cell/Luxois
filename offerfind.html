@@ -19,7 +19,7 @@ html,body{
 body{
   font-family:'Poppins',sans-serif;
   background:
-    linear-gradient(rgba(80,140,220,.10), rgba(255,255,255,.04)),
+    linear-gradient(rgba(80,140,220,.08), rgba(255,255,255,.03)),
     url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
     center center/cover no-repeat;
   color:#fff;
@@ -40,11 +40,11 @@ body{
   max-width:430px;
   height:100%;
   margin:0 auto;
-  padding:14px 14px 18px;
+  padding:12px 14px 16px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  background:linear-gradient(to bottom, rgba(90,150,235,.12), rgba(255,255,255,.03));
+  background:linear-gradient(to bottom, rgba(90,150,235,.08), rgba(255,255,255,.02));
 }
 
 .topbar{
@@ -54,7 +54,7 @@ body{
   font-size:14px;
   font-weight:700;
   text-shadow:0 2px 6px rgba(0,0,0,.45);
-  margin-bottom:4px;
+  margin-bottom:2px;
 }
 
 .toplink{
@@ -64,21 +64,22 @@ body{
 
 .logoWrap{
   text-align:center;
-  margin-top:6px;
-  margin-bottom:6px;
+  margin-top:2px;
+  margin-bottom:4px;
 }
 
-.logoSvg{
+.logoImg{
   width:100%;
-  max-width:360px;
+  max-width:310px;
   height:auto;
   display:block;
   margin:0 auto;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.28));
 }
 
 .sublogo{
-  margin-top:2px;
-  font-size:22px;
+  margin-top:0;
+  font-size:20px;
   font-weight:400;
   font-family:'Pacifico',cursive;
   color:#f7fbff;
@@ -102,8 +103,8 @@ body{
 
 .cat{
   border:none;
-  border-radius:14px;
-  min-height:86px;
+  border-radius:16px;
+  min-height:84px;
   color:#fff;
   font-weight:800;
   font-size:12px;
@@ -117,6 +118,12 @@ body{
   cursor:pointer;
   padding:6px;
   text-shadow:0 1px 2px rgba(0,0,0,.45);
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+
+.cat:active{
+  transform:scale(0.95);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
 }
 
 .cat .icon{
@@ -140,7 +147,7 @@ body{
 .turquesa{background:linear-gradient(#61c3da,#2d92af)}
 
 .distanciaBloque{
-  margin-top:10px;
+  margin-top:8px;
   text-align:center;
 }
 
@@ -186,6 +193,7 @@ body{
   background:linear-gradient(#ffffff,#dfe8f1);
   color:#2f4058;
   box-shadow:0 4px 10px rgba(0,0,0,.18);
+  cursor:default;
 }
 
 .carruselWrap{
@@ -220,6 +228,11 @@ body{
   box-shadow:0 5px 12px rgba(0,0,0,.22);
   cursor:pointer;
   background:#fff;
+  transition:transform 0.2s;
+}
+
+.promo:active{
+  transform:scale(0.95);
 }
 
 .promo img{
@@ -247,6 +260,7 @@ body{
   color:#28364a;
   font-weight:700;
   margin-top:8px;
+  text-shadow:0 1px 1px rgba(255,255,255,.25);
 }
 
 .footerLink span{
@@ -268,6 +282,8 @@ body{
 .panel{
   width:100%;
   max-width:430px;
+  max-height:90vh;
+  overflow:auto;
   background:rgba(255,255,255,.92);
   color:#223;
   border-radius:18px;
@@ -307,8 +323,65 @@ body{
   margin-bottom:4px;
   color:#0e2f6f;
 }
-  .cat{
-  transition:transform 0.15s;
+
+.ubicacionBtns{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+
+.ubicacionBtn{
+  width:100%;
+  padding:14px 16px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(#4e74c7,#2c4c97);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);
+}
+
+.ubicacionActualBox{
+  margin-top:16px;
+  background:#eef4ff;
+  color:#173c80;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #c9d8f5;
+  font-weight:600;
+}
+
+.listaPueblos{
+  display:grid;
+  gap:10px;
+  margin-top:14px;
+}
+
+.puebloBtn{
+  width:100%;
+  text-align:left;
+  padding:12px 14px;
+  border:none;
+  border-radius:12px;
+  background:#ffffff;
+  color:#173c80;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.08);
+  border:1px solid #d8e0ef;
+}
+
+.subBloque{
+  margin-top:18px;
+}
+
+.subBloque h3{
+  margin:0 0 10px;
+  color:#173c80;
+  font-size:18px;
 }
 </style>
 </head>
@@ -318,53 +391,12 @@ body{
   <div class="home">
     <div>
       <div class="topbar">
-        <div id="btnUbicacion" class="toplink">📍 Tu ubicación</div>
+        <div id="btnUbicacion" class="toplink">📍 <span id="textoUbicacionTop">Tu ubicación</span></div>
         <div class="toplink">Seleccionar idioma ›</div>
       </div>
 
       <div class="logoWrap">
-        <svg class="logoSvg" viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" aria-label="OfertFind logo">
-          <defs>
-            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#ffd400"/>
-              <stop offset="55%" stop-color="#ff9d00"/>
-              <stop offset="100%" stop-color="#ff2a2a"/>
-            </linearGradient>
-            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.35)"/>
-            </filter>
-          </defs>
-
-          <text x="92" y="145"
-                font-size="118"
-                font-weight="700"
-                font-style="italic"
-                font-family="Pacifico, cursive"
-                fill="#2b9be6"
-                filter="url(#shadow)">
-            OfertFind
-          </text>
-
-          <text x="82" y="135"
-                font-size="118"
-                font-weight="700"
-                font-style="italic"
-                font-family="Pacifico, cursive"
-                fill="#ffffff">
-            OfertFind
-          </text>
-
-          <path d="M54 132 C60 102, 70 84, 96 72 C76 92, 80 122, 109 140 C87 145, 70 144, 54 132 Z"
-                fill="#ffd400"/>
-
-          <path d="M90 176 C240 160, 430 165, 760 176 C810 177, 852 164, 885 150 C855 185, 816 197, 742 202 C460 213, 245 202, 80 188 Z"
-                fill="#0b5ea8"
-                opacity="0.95"/>
-
-          <path d="M92 168 C250 152, 442 156, 770 168 C818 170, 856 158, 888 144 C856 177, 820 188, 745 192 C465 203, 250 193, 86 179 Z"
-                fill="url(#lineGrad)"/>
-        </svg>
-
+        <img src="logo.png" alt="OfertFind" class="logoImg">
         <div class="sublogo">¡Ofertas cerca de ti!</div>
       </div>
 
@@ -471,8 +503,22 @@ body{
   <div class="panelPantalla">
     <div class="panel">
       <div class="volver" onclick="volverInicio()">← Volver</div>
-      <h2 class="tituloPantalla">Tu ubicación</h2>
-      <p>Aquí iría la pantalla de mapa y ubicación del usuario.</p>
+      <h2 class="tituloPantalla">Ubicación</h2>
+
+      <div class="ubicacionBtns">
+        <button class="ubicacionBtn" onclick="mostrarUbicacionGPS()">Ubicación actual GPS</button>
+        <button class="ubicacionBtn" onclick="mostrarSeleccionUbicacion()">Seleccionar ubicación</button>
+      </div>
+
+      <div id="boxUbicacionActual" class="ubicacionActualBox" style="display:none;"></div>
+
+      <div id="boxSeleccionUbicacion" class="subBloque" style="display:none;">
+        <h3>Costa del Sol</h3>
+        <div class="listaPueblos" id="listaCostaSol"></div>
+
+        <h3 style="margin-top:18px;">Axarquía costa</h3>
+        <div class="listaPueblos" id="listaAxarquia"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -521,6 +567,33 @@ body{
 </div>
 
 <script>
+const pueblosCostaSol = [
+  "Málaga",
+  "Torremolinos",
+  "Benalmádena",
+  "Fuengirola",
+  "Mijas Costa",
+  "Marbella",
+  "San Pedro de Alcántara",
+  "Estepona",
+  "Manilva",
+  "Casares Costa",
+  "Nerja"
+];
+
+const pueblosAxarquia = [
+  "Rincón de la Victoria",
+  "Torre de Benagalbón",
+  "Benajarafe",
+  "Chilches Costa",
+  "Torre del Mar",
+  "Caleta de Vélez",
+  "Algarrobo Costa",
+  "Torrox Costa",
+  "El Morche",
+  "Nerja"
+];
+
 function ocultarTodo(){
   document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
 }
@@ -554,10 +627,57 @@ function seleccionarDistancia(texto){
   alert('Distancia seleccionada: ' + texto);
 }
 
-document.getElementById('btnUbicacion').addEventListener('click', () => {
+function abrirPantallaUbicacion(){
   ocultarTodo();
   document.getElementById('pantallaUbicacion').classList.add('activa');
-});
+}
+
+function mostrarUbicacionGPS(){
+  document.getElementById('boxSeleccionUbicacion').style.display = 'none';
+  const box = document.getElementById('boxUbicacionActual');
+  box.style.display = 'block';
+  box.innerHTML = 'Ubicación actual GPS seleccionada.<br><br>En la versión completa aquí se detectaría automáticamente la posición del usuario.';
+  document.getElementById('textoUbicacionTop').textContent = 'GPS actual';
+}
+
+function mostrarSeleccionUbicacion(){
+  document.getElementById('boxUbicacionActual').style.display = 'none';
+  document.getElementById('boxSeleccionUbicacion').style.display = 'block';
+}
+
+function seleccionarPueblo(nombre){
+  document.getElementById('textoUbicacionTop').textContent = nombre;
+  alert('Ubicación seleccionada: ' + nombre);
+  volverInicio();
+}
+
+function pintarPueblos(){
+  const listaCostaSol = document.getElementById('listaCostaSol');
+  const listaAxarquia = document.getElementById('listaAxarquia');
+
+  listaCostaSol.innerHTML = '';
+  listaAxarquia.innerHTML = '';
+
+  pueblosCostaSol.forEach(pueblo => {
+    const btn = document.createElement('button');
+    btn.className = 'puebloBtn';
+    btn.textContent = pueblo;
+    btn.onclick = () => seleccionarPueblo(pueblo);
+    listaCostaSol.appendChild(btn);
+  });
+
+  pueblosAxarquia.forEach(pueblo => {
+    const btn = document.createElement('button');
+    btn.className = 'puebloBtn';
+    btn.textContent = pueblo;
+    btn.onclick = () => seleccionarPueblo(pueblo);
+    listaAxarquia.appendChild(btn);
+  });
+}
+
+document.getElementById('btnUbicacion').addEventListener('click', abrirPantallaUbicacion);
+
+pintarPueblos();
 </script>
 
 </body>
