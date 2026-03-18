@@ -70,10 +70,12 @@ body{
 
 .logoImg{
   width:100%;
-  max-width:310px;
+  max-width:360px;
+  max-height:120px;
+  object-fit:contain;
   height:auto;
   display:block;
-  margin:0 auto;
+  margin:0 auto 6px auto;
   filter:drop-shadow(0 4px 10px rgba(0,0,0,.28));
 }
 
@@ -316,6 +318,7 @@ body{
   padding:14px;
   border:1px solid #d8e0ef;
   box-shadow:0 4px 10px rgba(0,0,0,.08);
+  cursor:pointer;
 }
 
 .itemOferta strong{
@@ -401,7 +404,7 @@ body{
       </div>
 
       <div class="grid4">
-        <button class="cat naranja" onclick="abrirCategoria('Desayunar')">
+        <button class="cat naranja" onclick="abrirDesayuno()">
           <div class="icon">☕</div>
           <div class="txt">Desayunar</div>
         </button>
@@ -523,6 +526,37 @@ body{
   </div>
 </div>
 
+<div id="pantallaDesayuno" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Desayunar</h2>
+
+      <div class="ofertaLista">
+        <div class="itemOferta" onclick="abrirSubCategoria('Churrería')">
+          <strong>Churrería</strong>
+          Chocolate con churros y desayunos tradicionales
+        </div>
+
+        <div class="itemOferta" onclick="abrirSubCategoria('Panadería')">
+          <strong>Panadería</strong>
+          Pan recién hecho y bollería
+        </div>
+
+        <div class="itemOferta" onclick="abrirSubCategoria('Cafetería')">
+          <strong>Cafetería</strong>
+          Cafés, tostadas y desayunos completos
+        </div>
+
+        <div class="itemOferta" onclick="abrirSubCategoria('Todo desayunos')">
+          <strong>Ver todo</strong>
+          Todas las opciones de desayuno
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="pantallaCategoria" class="pantalla">
   <div class="panelPantalla">
     <div class="panel">
@@ -603,30 +637,6 @@ function volverInicio(){
   document.getElementById('pantallaInicio').classList.add('activa');
 }
 
-function abrirCategoria(nombre){
-  ocultarTodo();
-  document.getElementById('pantallaCategoria').classList.add('activa');
-  document.getElementById('tituloCategoria').textContent = nombre;
-}
-
-function abrirComerciante(){
-  ocultarTodo();
-  document.getElementById('pantallaComerciante').classList.add('activa');
-}
-
-function abrirOferta(nombre){
-  ocultarTodo();
-  document.getElementById('pantallaOferta').classList.add('activa');
-  document.getElementById('detalleOferta').innerHTML = `
-    <strong>${nombre}</strong>
-    Oferta demo clicable para enseñar cómo se vería el detalle dentro de la aplicación.
-  `;
-}
-
-function seleccionarDistancia(texto){
-  alert('Distancia seleccionada: ' + texto);
-}
-
 function abrirPantallaUbicacion(){
   ocultarTodo();
   document.getElementById('pantallaUbicacion').classList.add('activa');
@@ -673,6 +683,41 @@ function pintarPueblos(){
     btn.onclick = () => seleccionarPueblo(pueblo);
     listaAxarquia.appendChild(btn);
   });
+}
+
+function abrirDesayuno(){
+  ocultarTodo();
+  document.getElementById('pantallaDesayuno').classList.add('activa');
+}
+
+function abrirSubCategoria(nombre){
+  ocultarTodo();
+  document.getElementById('pantallaCategoria').classList.add('activa');
+  document.getElementById('tituloCategoria').textContent = nombre;
+}
+
+function abrirCategoria(nombre){
+  ocultarTodo();
+  document.getElementById('pantallaCategoria').classList.add('activa');
+  document.getElementById('tituloCategoria').textContent = nombre;
+}
+
+function abrirComerciante(){
+  ocultarTodo();
+  document.getElementById('pantallaComerciante').classList.add('activa');
+}
+
+function abrirOferta(nombre){
+  ocultarTodo();
+  document.getElementById('pantallaOferta').classList.add('activa');
+  document.getElementById('detalleOferta').innerHTML = `
+    <strong>${nombre}</strong>
+    Oferta demo clicable para enseñar cómo se vería el detalle dentro de la aplicación.
+  `;
+}
+
+function seleccionarDistancia(texto){
+  alert('Distancia seleccionada: ' + texto);
 }
 
 document.getElementById('btnUbicacion').addEventListener('click', abrirPantallaUbicacion);
