@@ -328,12 +328,67 @@
         </div>
 
         <div class="logoWrap">
-          <div class="logo">
-  OfertFind
-  <div class="subrayado"></div>
+  <svg class="logoSvg" viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" aria-label="OfertFind logo">
+    <defs>
+      <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#ffd400"/>
+        <stop offset="55%" stop-color="#ff9d00"/>
+        <stop offset="100%" stop-color="#ff2a2a"/>
+      </linearGradient>
+
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="rgba(0,0,0,0.35)"/>
+      </filter>
+    </defs>
+
+    <!-- fondo azul del logo -->
+    <text x="92" y="145"
+          font-size="118"
+          font-weight="700"
+          font-style="italic"
+          font-family="Brush Script MT, Segoe Script, Comic Sans MS, cursive"
+          fill="#2b9be6"
+          filter="url(#shadow)">
+      OfertFind
+    </text>
+
+    <!-- texto blanco encima -->
+    <text x="82" y="135"
+          font-size="118"
+          font-weight="700"
+          font-style="italic"
+          font-family="Brush Script MT, Segoe Script, Comic Sans MS, cursive"
+          fill="#ffffff">
+      OfertFind
+    </text>
+
+    <!-- ala amarilla en la O -->
+    <path d="M54 132
+             C60 102, 70 84, 96 72
+             C76 92, 80 122, 109 140
+             C87 145, 70 144, 54 132 Z"
+          fill="#ffd400"/>
+
+    <!-- línea inferior azul sombra -->
+    <path d="M90 176
+             C240 160, 430 165, 760 176
+             C810 177, 852 164, 885 150
+             C855 185, 816 197, 742 202
+             C460 213, 245 202, 80 188 Z"
+          fill="#0b5ea8"
+          opacity="0.95"/>
+
+    <!-- línea inferior amarilla-roja -->
+    <path d="M92 168
+             C250 152, 442 156, 770 168
+             C818 170, 856 158, 888 144
+             C856 177, 820 188, 745 192
+             C465 203, 250 193, 86 179 Z"
+          fill="url(#lineGrad)"/>
+  </svg>
+
+  <div class="sublogo">¡Ofertas cerca de ti!</div>
 </div>
-          <div class="sublogo">¡Ofertas cerca de ti!</div>
-        </div>
 
         <div class="grid4">
           <button class="cat naranja" onclick="abrirCategoria('Desayunar')">
