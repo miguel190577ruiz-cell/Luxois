@@ -1,198 +1,424 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OfferFind</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OfferFind</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      min-height:100vh;
+      background:
+        linear-gradient(rgba(80,140,220,.18), rgba(255,255,255,.08)),
+        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
+        center/cover no-repeat fixed;
+      color:#fff;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover;
-  color:white;
-  text-align:center;
-}
+    .app{
+      max-width:430px;
+      min-height:100vh;
+      margin:0 auto;
+      padding:18px 16px 28px;
+      background:linear-gradient(to bottom, rgba(70,140,220,.32), rgba(255,255,255,.06));
+      backdrop-filter: blur(2px);
+    }
 
-.pantalla{
-  padding:20px;
-}
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:14px;
+      margin-bottom:18px;
+      text-shadow:0 1px 2px rgba(0,0,0,.45);
+    }
 
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:20px;
-  font-size:14px;
-}
+    .toplink{
+      cursor:pointer;
+      font-weight:600;
+    }
 
-.logo{
-  font-size:40px;
-  font-weight:bold;
-  margin:20px 0;
-}
+    .logoWrap{
+      text-align:center;
+      margin:8px 0 20px;
+    }
 
-.sub{
-  font-size:18px;
-  margin-bottom:30px;
-}
+    .logo{
+      font-size:54px;
+      font-weight:900;
+      font-style:italic;
+      color:#fff;
+      text-shadow:
+        0 2px 0 rgba(0,0,0,.12),
+        0 3px 10px rgba(0,0,0,.25);
+      letter-spacing:.5px;
+      line-height:1;
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-bottom:20px;
-}
+    .sublogo{
+      margin-top:6px;
+      font-size:22px;
+      font-weight:700;
+      font-style:italic;
+      color:#f7fbff;
+      text-shadow:0 2px 6px rgba(0,0,0,.35);
+    }
 
-.boton{
-  padding:20px;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
+    .grid4, .grid2{
+      display:grid;
+      gap:12px;
+      margin-bottom:12px;
+    }
 
-.naranja{background:#ff9800;}
-.rojo{background:#f44336;}
-.azul{background:#3f51b5;}
-.verde{background:#4caf50;}
-.morado{background:#9c27b0;}
-.cian{background:#00bcd4;}
+    .grid4{
+      grid-template-columns:repeat(4,1fr);
+    }
 
-.distancias{
-  margin:20px 0;
-}
+    .grid2{
+      grid-template-columns:repeat(2,1fr);
+      max-width:230px;
+      margin:0 auto 18px;
+    }
 
-.distancias button{
-  padding:10px 15px;
-  margin:5px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
+    .cat{
+      border:none;
+      border-radius:16px;
+      min-height:92px;
+      color:#fff;
+      font-weight:700;
+      font-size:15px;
+      box-shadow:0 6px 14px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.22);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      cursor:pointer;
+      padding:8px;
+      text-shadow:0 1px 2px rgba(0,0,0,.35);
+    }
 
-.ofertas{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  margin:20px 0;
-}
+    .cat span.icon{
+      font-size:30px;
+      display:block;
+      margin-bottom:6px;
+    }
 
-.oferta{
-  min-width:140px;
-  background:white;
-  color:black;
-  border-radius:10px;
-  padding:10px;
-}
+    .naranja{background:linear-gradient(#f3a52d,#df7f0d)}
+    .rojo{background:linear-gradient(#ef6c4f,#d73b22)}
+    .azul{background:linear-gradient(#426fd3,#284c9e)}
+    .verde{background:linear-gradient(#68b34b,#3f8a2f)}
+    .morado{background:linear-gradient(#a03c95,#7f1d70)}
+    .turquesa{background:linear-gradient(#5fc0d9,#2d8eaf)}
 
-.link{
-  margin-top:20px;
-  color:white;
-  text-decoration:underline;
-  cursor:pointer;
-}
+    .distanciaTitulo{
+      text-align:center;
+      font-size:20px;
+      font-style:italic;
+      margin:16px 0 12px;
+      text-shadow:0 1px 2px rgba(0,0,0,.35);
+    }
 
-.oculto{
-  display:none;
-}
-</style>
+    .distancias{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .distBtn{
+      background:linear-gradient(#4d73c6,#2e4e97);
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      padding:10px 16px;
+      font-size:15px;
+      font-weight:700;
+      box-shadow:0 4px 10px rgba(0,0,0,.22);
+      cursor:pointer;
+    }
+
+    .cambiarDist{
+      display:block;
+      width:220px;
+      margin:0 auto 22px;
+      border:none;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:15px;
+      font-style:italic;
+      background:linear-gradient(#ffffff,#dfe7f1);
+      color:#2d3e58;
+      box-shadow:0 4px 10px rgba(0,0,0,.18);
+      cursor:pointer;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    .promo{
+      min-height:108px;
+      border-radius:16px;
+      overflow:hidden;
+      position:relative;
+      box-shadow:0 5px 12px rgba(0,0,0,.22);
+      background:#fff;
+      color:#111;
+      cursor:pointer;
+    }
+
+    .promo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .promoText{
+      position:absolute;
+      inset:auto 8px 8px 8px;
+      color:#fff;
+      font-weight:800;
+      font-size:14px;
+      text-shadow:0 2px 6px rgba(0,0,0,.8);
+      line-height:1.15;
+    }
+
+    .footerLink{
+      text-align:center;
+      font-size:16px;
+      margin-top:6px;
+      color:#1e4fa5;
+      font-weight:700;
+      text-shadow:none;
+      cursor:pointer;
+    }
+
+    .footerLink span{
+      color:#0f3b87;
+      text-decoration:underline;
+    }
+
+    .pantalla{
+      display:none;
+      min-height:100vh;
+      padding:22px 16px;
+    }
+
+    .pantalla.activa{display:block}
+
+    .panel{
+      max-width:430px;
+      margin:0 auto;
+      background:rgba(255,255,255,.88);
+      border-radius:18px;
+      padding:20px;
+      color:#223;
+      box-shadow:0 10px 25px rgba(0,0,0,.22);
+    }
+
+    .volver{
+      display:inline-block;
+      margin-bottom:14px;
+      color:#1d4ca0;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .tituloPantalla{
+      margin:0 0 16px;
+      font-size:26px;
+      color:#173c80;
+    }
+
+    .ofertaLista{
+      display:grid;
+      gap:12px;
+    }
+
+    .itemOferta{
+      background:#fff;
+      border-radius:14px;
+      padding:14px;
+      border:1px solid #d8e0ef;
+      box-shadow:0 4px 10px rgba(0,0,0,.08);
+    }
+
+    .itemOferta strong{
+      display:block;
+      margin-bottom:4px;
+      color:#0e2f6f;
+    }
+
+    @media (max-width:390px){
+      .grid4{grid-template-columns:repeat(2,1fr)}
+      .cards{grid-template-columns:1fr}
+      .grid2{max-width:none}
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- PANTALLA INICIO -->
-<div id="inicio" class="pantalla">
+  <div id="pantallaInicio" class="app pantalla activa">
+    <div class="topbar">
+      <div id="btnUbicacion" class="toplink">📍 Tu ubicación</div>
+      <div class="toplink">Seleccionar idioma ›</div>
+    </div>
 
-  <div class="topbar">
-    <div id="btnUbicacion">📍 Tu ubicación</div>
-    <div>Idioma</div>
+    <div class="logoWrap">
+      <div class="logo">OfferFind</div>
+      <div class="sublogo">¡Ofertas cerca de ti!</div>
+    </div>
+
+    <div class="grid4">
+      <button class="cat naranja" onclick="abrirCategoria('Desayunar')">
+        <span class="icon">☕</span>
+        Desayunar
+      </button>
+      <button class="cat rojo" onclick="abrirCategoria('Comer')">
+        <span class="icon">🍴</span>
+        Comer
+      </button>
+      <button class="cat azul" onclick="abrirCategoria('Comprar')">
+        <span class="icon">🛍️</span>
+        Comprar
+      </button>
+      <button class="cat verde" onclick="abrirCategoria('Ofertas Express')">
+        <span class="icon">⚡</span>
+        Ofertas<br>Express
+      </button>
+    </div>
+
+    <div class="grid2">
+      <button class="cat morado" onclick="abrirCategoria('Happy Hour')">
+        <span class="icon">🍸</span>
+        Happy Hour
+      </button>
+      <button class="cat turquesa" onclick="abrirCategoria('Ocio')">
+        <span class="icon">🌴</span>
+        Ocio
+      </button>
+    </div>
+
+    <div class="distanciaTitulo">¿A qué distancia?</div>
+
+    <div class="distancias">
+      <button class="distBtn" onclick="seleccionarDistancia('100 m')">100 m</button>
+      <button class="distBtn" onclick="seleccionarDistancia('500 m')">500 m</button>
+      <button class="distBtn" onclick="seleccionarDistancia('2 km')">2 km</button>
+    </div>
+
+    <button class="cambiarDist">⚙ Cambiar distancia...</button>
+
+    <div class="cards">
+      <div class="promo" onclick="abrirOferta('Mojitos a 2,50€')">
+        <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=500&q=80" alt="">
+        <div class="promoText">Mojitos<br>a 2,50€</div>
+      </div>
+      <div class="promo" onclick="abrirOferta('-30% en zapatillas')">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="">
+        <div class="promoText">-30%<br>en zapatillas</div>
+      </div>
+      <div class="promo" onclick="abrirOferta('Oferta de marisco fresco')">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80" alt="">
+        <div class="promoText">Oferta de<br>marisco fresco</div>
+      </div>
+    </div>
+
+    <div class="footerLink" onclick="abrirComerciante()">
+      ¿Tienes un negocio? <span>Acceso comerciante</span>
+    </div>
   </div>
 
-  <div class="logo">OfferFind</div>
-  <div class="sub">¡Ofertas cerca de ti!</div>
-
-  <div class="grid">
-    <div class="boton naranja" onclick="irCategoria('Desayunar')">Desayunar</div>
-    <div class="boton rojo" onclick="irCategoria('Comer')">Comer</div>
-    <div class="boton azul" onclick="irCategoria('Comprar')">Comprar</div>
-    <div class="boton verde" onclick="irCategoria('Express')">Ofertas Express</div>
-    <div class="boton morado" onclick="irCategoria('Happy Hour')">Happy Hour</div>
-    <div class="boton cian" onclick="irCategoria('Ocio')">Ocio</div>
+  <div id="pantallaUbicacion" class="pantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Tu ubicación</h2>
+      <p>Aquí iría el mapa y el GPS. En esta demo solo enseñamos cómo sería la pantalla.</p>
+    </div>
   </div>
 
-  <div class="distancias">
-    <button onclick="alert('100m seleccionado')">100 m</button>
-    <button onclick="alert('500m seleccionado')">500 m</button>
-    <button onclick="alert('2km seleccionado')">2 km</button>
+  <div id="pantallaCategoria" class="pantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 id="tituloCategoria" class="tituloPantalla">Categoría</h2>
+      <div class="ofertaLista">
+        <div class="itemOferta">
+          <strong>Oferta destacada</strong>
+          Descuento visible para esta categoría.
+        </div>
+        <div class="itemOferta">
+          <strong>Negocio cercano</strong>
+          Ejemplo de oferta cercana al usuario.
+        </div>
+        <div class="itemOferta">
+          <strong>Promoción limitada</strong>
+          Visible por tiempo o distancia.
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="ofertas">
-    <div class="oferta">Mojitos 2,50€</div>
-    <div class="oferta">-30% zapatillas</div>
-    <div class="oferta">Marisco fresco</div>
+  <div id="pantallaOferta" class="pantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Detalle de oferta</h2>
+      <div id="detalleOferta" class="itemOferta"></div>
+    </div>
   </div>
 
-  <div class="link" onclick="irComerciante()">Acceso comerciante</div>
+  <div id="pantallaComerciante" class="pantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Acceso comerciante</h2>
+      <p>Aquí iría el acceso para negocios: alta, login, subir ofertas y gestionar promociones.</p>
+    </div>
+  </div>
 
-</div>
+  <script>
+    function ocultarTodo(){
+      document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+    }
 
-<!-- PANTALLA CATEGORÍA -->
-<div id="categoria" class="pantalla oculto">
-  <h2 id="tituloCategoria"></h2>
+    function volverInicio(){
+      ocultarTodo();
+      document.getElementById('pantallaInicio').classList.add('activa');
+    }
 
-  <div class="oferta">Oferta 1</div>
-  <div class="oferta">Oferta 2</div>
-  <div class="oferta">Oferta 3</div>
+    function abrirCategoria(nombre){
+      ocultarTodo();
+      document.getElementById('pantallaCategoria').classList.add('activa');
+      document.getElementById('tituloCategoria').textContent = nombre;
+    }
 
-  <br><br>
-  <button onclick="volver()">← Volver</button>
-</div>
+    function abrirComerciante(){
+      ocultarTodo();
+      document.getElementById('pantallaComerciante').classList.add('activa');
+    }
 
-<!-- PANTALLA UBICACIÓN -->
-<div id="ubicacion" class="pantalla oculto">
-  <h2>Tu ubicación</h2>
-  <p>Aquí iría el GPS (demo)</p>
-  <button onclick="volver()">← Volver</button>
-</div>
+    function abrirOferta(nombre){
+      ocultarTodo();
+      document.getElementById('pantallaOferta').classList.add('activa');
+      document.getElementById('detalleOferta').innerHTML = `
+        <strong>${nombre}</strong>
+        Oferta demo para enseñar cómo se vería el detalle dentro de la app.
+      `;
+    }
 
-<!-- PANTALLA COMERCIANTE -->
-<div id="comerciante" class="pantalla oculto">
-  <h2>Acceso comerciante</h2>
-  <p>Login / registro (demo)</p>
-  <button onclick="volver()">← Volver</button>
-</div>
+    function seleccionarDistancia(texto){
+      alert('Distancia seleccionada: ' + texto);
+    }
 
-<script>
-
-function ocultarTodo(){
-  document.getElementById("inicio").classList.add("oculto");
-  document.getElementById("categoria").classList.add("oculto");
-  document.getElementById("ubicacion").classList.add("oculto");
-  document.getElementById("comerciante").classList.add("oculto");
-}
-
-function volver(){
-  ocultarTodo();
-  document.getElementById("inicio").classList.remove("oculto");
-}
-
-function irCategoria(nombre){
-  ocultarTodo();
-  document.getElementById("categoria").classList.remove("oculto");
-  document.getElementById("tituloCategoria").innerText = nombre;
-}
-
-function irComerciante(){
-  ocultarTodo();
-  document.getElementById("comerciante").classList.remove("oculto");
-}
-
-document.getElementById("btnUbicacion").addEventListener("click", () => {
-  ocultarTodo();
-  document.getElementById("ubicacion").classList.remove("oculto");
-});
-
-</script>
-
+    document.getElementById('btnUbicacion').addEventListener('click', () => {
+      ocultarTodo();
+      document.getElementById('pantallaUbicacion').classList.add('activa');
+    });
+  </script>
 </body>
 </html>
