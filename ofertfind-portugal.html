@@ -50,18 +50,31 @@ body{
   margin:0 auto;
   position:relative;
   overflow:hidden;
-  background:
-linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
-url('https://images.unsplash.com/photo-1505842465776-3d90f616310b?auto=format&fit=crop&w=1200&q=80')
-blackground-position:center;
-blackground-size:cover;
-  blackground-repeat:no-repeat;
+
+  background-image:url('https://picsum.photos/900/1600');
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
   padding:24px;
+}
+
+.splashWrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:0;
+}
+
+.splashWrap > *{
+  position:relative;
+  z-index:1;
 }
 
 .splashTitulo{
