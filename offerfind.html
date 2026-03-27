@@ -1431,7 +1431,13 @@ let merchantMarker = null;
 let comercioActual = null;
 
 function abrirPantallaComerciante(){
-  mostrarPantalla('pantallaComerciante');
+  ocultarTodo();
+
+  const pantalla = document.getElementById('pantallaComerciante');
+  if(pantalla){
+    pantalla.classList.remove('hidden');
+    pantalla.classList.add('activa');
+  }
 
   setTimeout(() => {
     iniciarMapaComerciante();
