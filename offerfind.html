@@ -1204,7 +1204,7 @@ body{
         Registra tu negocio para aparecer en el mapa y poder publicar ofertas.
       </p>
 
-      <form id="merchant-form" class="merchant-form">
+      <form id="merchant-form" class="merchant-form" onsubmit="return false;">
         <label for="merchant-name">Nombre del comercio</label>
         <input
           type="text"
@@ -1229,32 +1229,45 @@ body{
           required
         >
 
-        <button type="submit" class="merchant-submit">Registrar comercio</button>
+        <button type="button" class="merchant-submit" onclick="registrarComercioManual()">
+          Registrar comercio
+        </button>
       </form>
 
       <div id="merchant-status" class="merchant-status"></div>
 
-      <div id="merchant-result-card" class="merchant-card hidden">
+      <div id="merchant-result-card" class="merchant-card" style="display:none;">
         <h4>Comercio registrado</h4>
         <div id="merchant-result"></div>
       </div>
 
       <div id="merchant-map"></div>
-      <div id="merchant-dashboard" class="merchant-dashboard hidden">
-  <h3>Panel del comerciante</h3>
 
-  <div class="merchant-card">
-    <div id="merchant-dashboard-info"></div>
-  </div>
+      <div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
+        <h3>Panel del comerciante</h3>
 
-  <div class="merchant-actions">
-    <button type="button" class="merchant-action-btn" onclick="alert('Siguiente paso: pantalla de subir ofertas')">
-      Subir ofertas
-    </button>
+        <div class="merchant-card">
+          <div id="merchant-dashboard-info"></div>
+        </div>
 
-    <button type="button" class="merchant-action-btn" onclick="alert('Siguiente paso: subida de foto o vídeo desde el teléfono')">
-      Subir archivos
-    </button>
+        <div class="merchant-actions">
+          <button
+            type="button"
+            class="merchant-action-btn"
+            onclick="alert('Siguiente paso: pantalla de subir ofertas')"
+          >
+            Subir ofertas
+          </button>
+
+          <button
+            type="button"
+            class="merchant-action-btn"
+            onclick="alert('Siguiente paso: subida de foto o vídeo desde el teléfono')"
+          >
+            Subir archivos
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
