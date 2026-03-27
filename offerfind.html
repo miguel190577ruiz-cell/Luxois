@@ -1542,26 +1542,26 @@ function abrirComer(){
 }
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-    let merchantMap = null;
+
+<script>
+let merchantMap = null;
 let merchantMarker = null;
 let comercioActual = null;
 
 function abrirPantallaComerciante(){
-  alert('entrando a comerciante');
-
-  ocultarTodo();
+  document.querySelectorAll('.pantalla').forEach(el => {
+    el.classList.remove('activa');
+  });
 
   const pantalla = document.getElementById('pantallaComerciante');
   if(pantalla){
-    pantalla.classList.remove('hidden');
     pantalla.classList.add('activa');
   }
 
-  setTimeout(() => {
+  setTimeout(function(){
     iniciarMapaComerciante();
     cargarComercioGuardado();
-  }, 150);
+  }, 200);
 }
 
 function iniciarMapaComerciante(){
@@ -1580,12 +1580,10 @@ function iniciarMapaComerciante(){
 }
 
 async function geocodificarDireccion(address){
-  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(address)}`;
+  const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(address);
 
   const response = await fetch(url, {
-    headers: {
-      'Accept':'application/json'
-    }
+    headers: { 'Accept': 'application/json' }
   });
 
   if(!response.ok){
@@ -1595,7 +1593,7 @@ async function geocodificarDireccion(address){
   const results = await response.json();
 
   if(!results || !results.length){
-    throw new Error('No se encontró esa dirección. Escríbela más completa.');
+    throw new Error('No se encontró esa dirección');
   }
 
   return {
@@ -1614,49 +1612,14 @@ function leerComercioLocal(){
   return saved ? JSON.parse(saved) : null;
 }
 
-function pintarComercioEnMapa(merchant){
-  if(!merchantMap) return;
-
-  if(merchantMarker){
-    merchantMap.removeLayer(merchantMarker);
-  }
-
-  merchantMarker = L.marker([merchant.lat, merchant.lng]).addTo(merchantMap);
-
-  merchantMarker.bindPopup(`
-    <strong>${merchant.name}</strong><br>
-    ${merchant.normalizedAddress}<br>
-    ${merchant.email}
-  `).openPopup();
-
-  merchantMap.setView([merchant.lat, merchant.lng], 17);
-}
-
 function mostrarDashboardComerciante(merchant){
-  const resultCard = document.getElementById('merchant-result-card');
-  const resultBox = document.getElementById('merchant-result');
-  const dashboard = document.getElementById('merchant-dashboard');
-  const dashboardInfo = document.getElementById('merchant-dashboard-info');
+  document.getElementById('merchant-result-card').style.display = 'block';
+  document.getElementById('merchant-dashboard').style.display = 'block';
 
-  if(resultCard && resultBox){
-    resultCard.classList.remove('hidden');
-    resultBox.innerHTML = `
-      <strong>${merchant.name}</strong><br>
-      ${merchant.normalizedAddress}<br>
-      ${merchant.email}
-    `;
-  }
-
-  if(dashboard && dashboardInfo){
-    dashboard.classList.remove('hidden');
-    dashboardInfo.innerHTML = `
-      <strong>${merchant.name}</strong><br>
-      ${merchant.normalizedAddress}<br>
-      ${merchant.email}
-    `;
-  }
-
-  pintarComercioEnMapa(merchant);
+  document.getElementById('merchant-result').innerHTML =
+    '<strong>' + merchant.name + '</strong><br>' +
+    merchant.normalizedAddress + '<br>' +
+    merchant.email;
 }
 
 function cargarComercioGuardado(){
@@ -1667,44 +1630,41 @@ function cargarComercioGuardado(){
   mostrarDashboardComerciante(merchant);
 }
 
-document.addEventListener('DOMContentLoaded', function(){
-  const merchantForm = document.getElementById('merchant-form');
-  if(!merchantForm) return;
+async function registrarComercioManual(){
+  const status = document.getElementById('merchant-status');
 
-  merchantForm.addEventListener('submit', async function(e){
-    e.preventDefault();
+  const name = document.getElementById('merchant-name').value.trim();
+  const address = document.getElementById('merchant-address').value.trim();
+  const email = document.getElementById('merchant-email').value.trim();
 
-    const status = document.getElementById('merchant-status');
-    const name = document.getElementById('merchant-name').value.trim();
-    const address = document.getElementById('merchant-address').value.trim();
-    const email = document.getElementById('merchant-email').value.trim();
+  if(!name || !address || !email){
+    status.textContent = 'Completa los datos';
+    return;
+  }
 
-    status.textContent = 'Registrando comercio...';
+  status.textContent = 'Registrando...';
 
-    try{
-      const geo = await geocodificarDireccion(address);
+  try{
+    const geo = await geocodificarDireccion(address);
 
-      const merchant = {
-        id: crypto.randomUUID(),
-        name,
-        address,
-        normalizedAddress: geo.displayName,
-        email,
-        lat: geo.lat,
-        lng: geo.lng,
-        createdAt: new Date().toISOString()
-      };
+    const merchant = {
+      name,
+      address,
+      normalizedAddress: geo.displayName,
+      email,
+      lat: geo.lat,
+      lng: geo.lng
+    };
 
-      comercioActual = merchant;
-      guardarComercioLocal(merchant);
-      mostrarDashboardComerciante(merchant);
+    guardarComercioLocal(merchant);
+    mostrarDashboardComerciante(merchant);
 
-      status.textContent = 'Comercio registrado correctamente.';
-      merchantForm.reset();
-    }catch(error){
-      status.textContent = error.message || 'Error al registrar el comercio.';
-    }
-  });
-});
+    status.textContent = 'Guardado correctamente';
+  }catch(e){
+    status.textContent = 'Error al registrar';
+  }
+}
+</script>
+
 </body>
 </html>
