@@ -1089,12 +1089,54 @@ body{
   </div>
 </div>
 
-<div id="pantallaComerciante" class="pantalla">
-  <div class="panelPantalla">
-    <div class="panel">
-      <div class="volver" onclick="volverInicio()">← Volver</div>
-      <h2 class="tituloPantalla">Acceso comerciante</h2>
-      <p>Aquí iría el acceso para negocios: alta, login y gestión de ofertas.</p>
+<div id="pantallaComerciante" class="pantalla hidden">
+  <div class="home">
+    <div class="topbar">
+      <span class="volverResultados" onclick="mostrarPantalla('pantallaInicio')">← Volver</span>
+    </div>
+
+    <div class="merchant-box">
+      <h2>Acceso comerciante</h2>
+      <p class="merchant-subtitle">
+        Registra tu negocio para aparecer en el mapa y poder publicar ofertas.
+      </p>
+
+      <form id="merchant-form" class="merchant-form">
+        <label for="merchant-name">Nombre del comercio</label>
+        <input
+          type="text"
+          id="merchant-name"
+          placeholder="Ej. Cafetería La Plaza"
+          required
+        >
+
+        <label for="merchant-address">Dirección</label>
+        <input
+          type="text"
+          id="merchant-address"
+          placeholder="Ej. Calle del Mar 12, Torre del Mar, Málaga"
+          required
+        >
+
+        <label for="merchant-email">Email</label>
+        <input
+          type="email"
+          id="merchant-email"
+          placeholder="ejemplo@comercio.com"
+          required
+        >
+
+        <button type="submit" class="merchant-submit">Registrar comercio</button>
+      </form>
+
+      <div id="merchant-status" class="merchant-status"></div>
+
+      <div id="merchant-result-card" class="merchant-card hidden">
+        <h4>Comercio registrado</h4>
+        <div id="merchant-result"></div>
+      </div>
+
+      <div id="merchant-map"></div>
     </div>
   </div>
 </div>
