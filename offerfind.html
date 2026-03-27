@@ -988,18 +988,7 @@ body{
 
       <div class="footerLink">
   ¿Tienes un negocio?
- <button type="button" onclick="
-  alert('clic comerciante');
-
-  document.querySelectorAll('.pantalla').forEach(el => {
-    el.classList.remove('activa');
-  });
-
-  document.getElementById('pantallaComerciante').classList.add('activa');
-
-">
-  Acceso comerciante
- </button>
+  <span onclick="abrirPantallaComerciante()">Acceso comerciante</span>
       </div>
     </div>
   </div>
