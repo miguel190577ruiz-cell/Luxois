@@ -1299,24 +1299,10 @@ body{
     <div class="topbar">
       <span class="volverResultados" onclick="volverInicio()">← Volver</span>
     </div>
-<div id="pantallaSubirOferta" class="pantalla">
-  <div class="home">
-    <div class="topbar">
-      <span class="volverResultados" onclick="abrirPantallaComerciante()">← Volver</span>
-    </div>
 
-    <div style="padding:16px;">
-      <h2>Subir oferta</h2>
-
-      <p style="color:#666; font-size:14px;">
-        Aquí podrás crear una oferta para tu negocio.
-      </p>
-    </div>
-  </div>
-</div>
     <div class="merchant-box">
-      <h2>Acceso comerciante</h2>
-      <p class="merchant-subtitle">
+      <h2 id="merchantScreenTitle">Acceso comerciante</h2>
+      <p id="merchantScreenSubtitle" class="merchant-subtitle">
         Registra tu negocio para aparecer en el mapa y poder publicar ofertas.
       </p>
 
@@ -1349,38 +1335,53 @@ body{
           Registrar comercio
         </button>
       </form>
-<div id="merchant-status" class="merchant-status"></div>
 
-<div id="merchant-result-card" class="merchant-card" style="display:none;">
-  <h4>Comercio registrado</h4>
-  <div id="merchant-result"></div>
-</div>
+      <div id="merchant-status" class="merchant-status"></div>
 
-<div id="merchant-dashboard" class="merchant-dashboard" style="display:block;">
-  <h3>Panel del comerciante</h3>
+      <div id="merchant-result-card" class="merchant-card" style="display:none;">
+        <h4>Comercio registrado</h4>
+        <div id="merchant-result"></div>
+      </div>
 
-  <div class="merchant-card">
-    <div id="merchant-dashboard-info">
-      Desde aquí podrás gestionar tu comercio.
+      <div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
+        <h3>Panel del comerciante</h3>
+
+        <div class="merchant-card">
+          <div id="merchant-dashboard-info">
+            Desde aquí podrás gestionar tu comercio.
+          </div>
+        </div>
+
+        <div class="merchant-actions">
+          <button type="button" class="merchant-action-btn" onclick="abrirSubirOferta()">
+            Subir ofertas
+          </button>
+
+          <button type="button" class="merchant-action-btn">
+            Subir archivos
+          </button>
+        </div>
+      </div>
+
+      <div id="merchant-map" style="height:220px; margin-top:16px; margin-bottom:20px;"></div>
     </div>
   </div>
+</div>
 
-  <div class="merchant-actions">
-    <button type="button" class="merchant-action-btn" onclick="abrirSubirOferta()">
-      Subir ofertas
-    </button>
+<div id="pantallaSubirOferta" class="pantalla">
+  <div class="home">
+    <div class="topbar">
+      <span class="volverResultados" onclick="abrirPantallaComerciante()">← Volver</span>
+    </div>
 
-    <button type="button" class="merchant-action-btn">
-      Subir archivos
-    </button>
+    <div style="padding:16px;">
+      <h2>Subir oferta</h2>
+
+      <p style="color:#666; font-size:14px;">
+        Aquí podrás crear una oferta para tu negocio.
+      </p>
+    </div>
   </div>
-</div>
-
-<div id="merchant-map" style="height:200px; margin-top:16px; margin-bottom:20px;"></div>
-      
-  
-</div>
-</div>
 </div>
 
 <script>
