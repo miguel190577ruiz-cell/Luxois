@@ -1589,17 +1589,28 @@ function abrirPantallaComerciante(){
   if(pantalla){
     pantalla.classList.add('activa');
   }
+function abrirPantallaComerciante(){
+  document.querySelectorAll('.pantalla').forEach(el => {
+    el.classList.remove('activa');
+  });
+
+  const pantalla = document.getElementById('pantallaComerciante');
+  if(pantalla){
+    pantalla.classList.add('activa');
+  }
+
+  setTimeout(function(){
+    iniciarMapaComerciante();
+    cargarComercioGuardado();
+  }, 200);
+}
+
 function abrirSubirOferta(){
   document.querySelectorAll('.pantalla').forEach(el => {
     el.classList.remove('activa');
   });
 
   document.getElementById('pantallaSubirOferta').classList.add('activa');
-}
-  setTimeout(function(){
-    iniciarMapaComerciante();
-    cargarComercioGuardado();
-  }, 200);
 }
 
 function iniciarMapaComerciante(){
