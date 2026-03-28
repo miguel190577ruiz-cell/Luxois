@@ -1577,9 +1577,37 @@ function abrirPantallaComerciante(){
     }
   }, 300);
 
-  cargarComercioGuardado();
-}, 300);
-}
+  function cargarComercioGuardado(){
+  var merchant = leerComercioLocal();
+  if (!merchant) return;
+
+  comercioActual = merchant;
+
+  var form = document.getElementById('merchant-form');
+  var subtitle = document.querySelector('#pantallaComerciante .merchant-subtitle');
+  var title = document.querySelector('#pantallaComerciante h2');
+
+  if (form) {
+    form.style.display = 'none';
+  }
+
+  if (subtitle) {
+    subtitle.style.display = 'none';
+  }
+
+  if (title) {
+    title.textContent = 'Panel del comerciante';
+  }
+
+  mostrarDashboardComerciante(merchant);
+
+  setTimeout(function(){
+    if (merchantMap) {
+      merchantMap.invalidateSize();
+      merchantMap.setView([merchant.lat, merchant.lng], 16);
+    }
+  }, 400);
+  }
 
 function abrirSubirOferta(){
   document.querySelectorAll('.pantalla').forEach(el => {
