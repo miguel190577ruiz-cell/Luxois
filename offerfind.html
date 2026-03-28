@@ -1589,7 +1589,13 @@ function abrirPantallaComerciante(){
   if(pantalla){
     pantalla.classList.add('activa');
   }
+function abrirSubirOferta(){
+  document.querySelectorAll('.pantalla').forEach(el => {
+    el.classList.remove('activa');
+  });
 
+  document.getElementById('pantallaSubirOferta').classList.add('activa');
+}
   setTimeout(function(){
     iniciarMapaComerciante();
     cargarComercioGuardado();
