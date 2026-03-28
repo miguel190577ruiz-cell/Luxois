@@ -1827,6 +1827,12 @@ async function registrarComercioManual(){
     btn.addEventListener('click', guardarOferta);
   }
 });
+  document.addEventListener('DOMContentLoaded', function(){
+  const inputMediaOferta = document.getElementById('oferta-media');
+  if(inputMediaOferta){
+    inputMediaOferta.addEventListener('change', previsualizarMediaOferta);
+  }
+});
 </script>
 </body>
 </html>
