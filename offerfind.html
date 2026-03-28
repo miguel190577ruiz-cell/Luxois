@@ -1568,10 +1568,17 @@ function abrirPantallaComerciante(){
     pantalla.classList.add('activa');
   }
 
+ setTimeout(function(){
+  iniciarMapaComerciante();
+
   setTimeout(function(){
-    iniciarMapaComerciante();
-    cargarComercioGuardado();
-  }, 200);
+    if (merchantMap) {
+      merchantMap.invalidateSize();
+    }
+  }, 300);
+
+  cargarComercioGuardado();
+}, 300);
 }
 
 function abrirSubirOferta(){
