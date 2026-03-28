@@ -1582,23 +1582,6 @@ function abrirPantallaComerciante(){
   if (!merchant) return;
 
   comercioActual = merchant;
-
-  var form = document.getElementById('merchant-form');
-  var subtitle = document.querySelector('#pantallaComerciante .merchant-subtitle');
-  var title = document.querySelector('#pantallaComerciante h2');
-
-  if (form) {
-    form.style.display = 'none';
-  }
-
-  if (subtitle) {
-    subtitle.style.display = 'none';
-  }
-
-  if (title) {
-    title.textContent = 'Panel del comerciante';
-  }
-
   mostrarDashboardComerciante(merchant);
 
   setTimeout(function(){
