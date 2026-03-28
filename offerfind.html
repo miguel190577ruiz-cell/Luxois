@@ -1690,6 +1690,133 @@ async function registrarComercioManual(){
     status.textContent = e.message || 'Error al registrar';
   }
 }
+<script>
+/* RESCATE DE SPLASH + PANEL COMERCIANTE */
+(function () {
+  function ocultarSplashYMostrarInicio() {
+    var splash = document.getElementById('pantallaSplash');
+    var inicio = document.getElementById('pantallaInicio');
+
+    if (splash) splash.style.display = 'none';
+    if (inicio) inicio.classList.add('activa');
+  }
+
+  window.addEventListener('load', function () {
+    setTimeout(ocultarSplashYMostrarInicio, 3000);
+  });
+
+  setTimeout(ocultarSplashYMostrarInicio, 4000);
+
+  window.abrirPantallaComerciante = function () {
+    document.querySelectorAll('.pantalla').forEach(function (el) {
+      el.classList.remove('activa');
+    });
+
+    var pantalla = document.getElementById('pantallaComerciante');
+    if (pantalla) {
+      pantalla.classList.add('activa');
+    }
+
+    var saved = localStorage.getItem('offerfind_comercio_actual');
+    var merchant = saved ? JSON.parse(saved) : null;
+
+    var title = document.getElementById('merchantScreenTitle');
+    var subtitle = document.getElementById('merchantScreenSubtitle');
+    var form = document.getElementById('merchant-form');
+    var dashboard = document.getElementById('merchant-dashboard');
+    var status = document.getElementById('merchant-status');
+
+    if (!merchant) {
+      if (title) title.textContent = 'Acceso comerciante';
+      if (subtitle) subtitle.style.display = 'block';
+      if (form) form.style.display = 'flex';
+      if (dashboard) dashboard.style.display = 'none';
+      if (status) status.textContent = '';
+      return;
+    }
+
+    if (title) title.textContent = 'Panel del comerciante';
+    if (subtitle) subtitle.style.display = 'none';
+    if (form) form.style.display = 'none';
+    if (dashboard) dashboard.style.display = 'block';
+  };
+
+  window.registrarComercioManual = async function () {
+    var status = document.getElementById('merchant-status');
+    var name = document.getElementById('merchant-name').value.trim();
+    var address = document.getElementById('merchant-address').value.trim();
+    var email = document.getElementById('merchant-email').value.trim();
+
+    if (!name || !address || !email) {
+      if (status) status.textContent = 'Completa los datos';
+      return;
+    }
+
+    if (status) status.textContent = 'Registrando...';
+
+    try {
+      var url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(address);
+      var response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+
+      if (!response.ok) throw new Error('No se pudo consultar la dirección');
+
+      var results = await response.json();
+      if (!results || !results.length) throw new Error('No se encontró esa dirección');
+
+      var merchant = {
+        name: name,
+        address: address,
+        normalizedAddress: results[0].display_name,
+        email: email,
+        lat: parseFloat(results[0].lat),
+        lng: parseFloat(results[0].lon)
+      };
+
+      localStorage.setItem('offerfind_comercio_actual', JSON.stringify(merchant));
+
+      if (status) status.textContent = 'Guardado correctamente';
+      window.abrirPantallaComerciante();
+    } catch (e) {
+      if (status) status.textContent = e.message || 'Error al registrar';
+    }
+  };
+
+  window.previsualizarArchivoComerciante = function (event) {
+    var file = event.target.files[0];
+    var preview = document.getElementById('merchant-file-preview');
+    if (!file || !preview) return;
+
+    var url = URL.createObjectURL(file);
+
+    if (file.type.startsWith('image/')) {
+      preview.innerHTML =
+        '<div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">' +
+        '<div style="font-weight:700; margin-bottom:8px;">Imagen seleccionada</div>' +
+        '<img src="' + url + '" alt="Vista previa" style="width:100%; border-radius:12px;">' +
+        '</div>';
+    } else if (file.type.startsWith('video/')) {
+      preview.innerHTML =
+        '<div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">' +
+        '<div style="font-weight:700; margin-bottom:8px;">Vídeo seleccionado</div>' +
+        '<video controls style="width:100%; border-radius:12px;"><source src="' + url + '" type="' + file.type + '"></video>' +
+        '</div>';
+    } else {
+      preview.innerHTML =
+        '<div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">Archivo seleccionado: ' +
+        file.name +
+        '</div>';
+    }
+  };
+
+  window.abrirSubirOferta = function () {
+    document.querySelectorAll('.pantalla').forEach(function (el) {
+      el.classList.remove('activa');
+    });
+
+    var pantalla = document.getElementById('pantallaSubirOferta');
+    if (pantalla) pantalla.classList.add('activa');
+  };
+})();
 </script>
 </body>
 </html>
