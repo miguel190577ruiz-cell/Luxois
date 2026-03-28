@@ -1681,6 +1681,11 @@ function mostrarDashboardComerciante(merchant){
     merchant.email;
 
   pintarComercioEnMapa(merchant);
+  setTimeout(function(){
+  if (merchantMap) {
+    merchantMap.invalidateSize();
+  }
+}, 500);
 }
 
 function actualizarVistaComerciante(){
