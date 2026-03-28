@@ -1580,15 +1580,7 @@ let merchantMap = null;
 let merchantMarker = null;
 let comercioActual = null;
 
-function abrirPantallaComerciante(){
-  document.querySelectorAll('.pantalla').forEach(el => {
-    el.classList.remove('activa');
-  });
 
-  const pantalla = document.getElementById('pantallaComerciante');
-  if(pantalla){
-    pantalla.classList.add('activa');
-  }
 function abrirPantallaComerciante(){
   document.querySelectorAll('.pantalla').forEach(el => {
     el.classList.remove('activa');
