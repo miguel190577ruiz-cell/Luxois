@@ -1709,7 +1709,20 @@ async function registrarComercioManual(){
     status.textContent = 'Completa los datos';
     return;
   }
+function mostrarFormularioComerciante(){
+  document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'block';
+  document.getElementById('merchant-form').style.display = 'flex';
+  document.getElementById('merchant-dashboard').style.display = 'none';
+  document.getElementById('merchant-status').textContent = '';
+}
 
+function mostrarDashboardComerciante(merchant){
+  document.getElementById('merchantScreenTitle').textContent = 'Panel del comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'none';
+  document.getElementById('merchant-form').style.display = 'none';
+  document.getElementById('merchant-dashboard').style.display = 'block';
+}
   status.textContent = 'Registrando...';
 
   try{
