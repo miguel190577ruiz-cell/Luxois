@@ -1389,9 +1389,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div style="padding:16px;">
       <h2>Subir oferta</h2>
+
       <p style="color:#666; font-size:14px;">
-        Aquí podrás crear una oferta para tu negocio.
+        Crea una oferta para tu negocio.
       </p>
+
+      <!-- FORMULARIO -->
+      <div style="margin-top:16px;">
+        <input id="oferta-titulo" type="text" placeholder="Título de la oferta"
+          style="width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:1px solid #ccc;">
+
+        <input id="oferta-precio" type="text" placeholder="Precio (ej: 2,50 €)"
+          style="width:100%; padding:10px; margin-bottom:10px; border-radius:10px; border:1px solid #ccc;">
+
+        <textarea id="oferta-desc" placeholder="Descripción"
+          style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc;"></textarea>
+
+        <button onclick="guardarOferta()"
+          style="margin-top:12px; width:100%; padding:12px; border:none; border-radius:12px; background:#000; color:#fff; font-weight:700;">
+          Guardar oferta
+        </button>
+      </div>
+
+      <!-- MENSAJE -->
+      <div id="oferta-status" style="margin-top:10px; font-size:14px;"></div>
+
+      <!-- LISTADO -->
+      <div id="lista-ofertas" style="margin-top:16px;"></div>
     </div>
   </div>
 </div>
