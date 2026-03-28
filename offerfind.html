@@ -1671,7 +1671,9 @@ function previsualizarMediaOferta(event){
   const file = event.target.files[0];
   const preview = document.getElementById('oferta-media-preview');
 
-  if(!file || !preview) return;
+  if(!file || !preview){
+    return;
+  }
 
   const url = URL.createObjectURL(file);
 
