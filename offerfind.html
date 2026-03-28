@@ -1535,23 +1535,11 @@ function seleccionarDistancia(texto){
   alert('Distancia seleccionada: ' + texto);
 }
 window.addEventListener("load", function(){
-
-  const comercioGuardado = leerComercioLocal();
-
-  if (comercioGuardado) {
-    comercioActual = comercioGuardado;
-    document.getElementById('pantallaSplash').style.display = 'none';
-    abrirPantallaComerciante();
-    return;
-  }
-
   setTimeout(() => {
     document.getElementById('pantallaSplash').style.display = 'none';
     document.getElementById('pantallaInicio').classList.add('activa');
   }, 3000);
-
 });
-
 document.getElementById('btnUbicacion').addEventListener('click', abrirPantallaUbicacion);
 
 pintarPueblos();
