@@ -1776,6 +1776,12 @@ async function registrarComercioManual(){
     status.textContent = e.message || 'Error al registrar';
   }
 }
+  document.addEventListener('DOMContentLoaded', function(){
+  const btn = document.getElementById('btn-guardar-oferta');
+  if(btn){
+    btn.addEventListener('click', guardarOferta);
+  }
+});
 </script>
 </body>
 </html>
