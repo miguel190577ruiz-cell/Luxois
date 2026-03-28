@@ -898,7 +898,23 @@ body{
     </div>
   </div>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    var splash = document.getElementById('pantallaSplash');
+    var inicio = document.getElementById('pantallaInicio');
 
+    if (splash) {
+      splash.style.display = 'none';
+      splash.classList.remove('activa');
+    }
+
+    if (inicio) {
+      inicio.classList.add('activa');
+    }
+  }, 3000);
+});
+</script>
 <div id="pantallaInicio" class="pantalla">
   <div class="home">
     <div>
