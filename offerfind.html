@@ -1684,40 +1684,7 @@ function pintarComercioEnMapa(merchant){
   }, 300);
 }
 
-function mostrarFormularioComerciante(){
-  document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
-  document.getElementById('merchantScreenSubtitle').style.display = 'block';
-  document.getElementById('merchant-form').style.display = 'flex';
-  document.getElementById('merchant-result-card').style.display = 'none';
-  document.getElementById('merchant-dashboard').style.display = 'none';
-}
 
-function mostrarDashboardComerciante(merchant){
-  document.getElementById('merchantScreenTitle').textContent = 'Panel del comerciante';
-  document.getElementById('merchantScreenSubtitle').style.display = 'none';
-  document.getElementById('merchant-form').style.display = 'none';
-
-  document.getElementById('merchant-result-card').style.display = 'block';
-  document.getElementById('merchant-dashboard').style.display = 'block';
-
-  document.getElementById('merchant-result').innerHTML =
-    '<strong>' + merchant.name + '</strong><br>' +
-    merchant.normalizedAddress + '<br>' +
-    merchant.email;
-
-  document.getElementById('merchant-dashboard-info').innerHTML =
-    '<strong>' + merchant.name + '</strong><br>' +
-    merchant.normalizedAddress + '<br>' +
-    merchant.email;
-
-  pintarComercioEnMapa(merchant);
-  
-  setTimeout(function(){
-  if (merchantMap) {
-    merchantMap.invalidateSize();
-  }
-}, 500);
-}
 
 function actualizarVistaComerciante(){
   const merchant = leerComercioLocal();
