@@ -1105,3 +1105,617 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
 
      
+<div class="footerLink">
+        ¿Tienes un negocio?
+        <span onclick="abrirPantallaComerciante()">Acceso comerciante</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaUbicacion" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Ubicación</h2>
+
+      <div class="ubicacionBtns">
+        <button class="ubicacionBtn" onclick="mostrarUbicacionGPS()">Ubicación actual GPS</button>
+        <button class="ubicacionBtn" onclick="mostrarSeleccionUbicacion()">Seleccionar ubicación</button>
+      </div>
+
+      <div id="boxUbicacionActual" class="ubicacionActualBox" style="display:none;"></div>
+
+      <div id="boxSeleccionUbicacion" class="subBloque" style="display:none;">
+        <h3>Costa del Sol</h3>
+        <div class="listaPueblos" id="listaCostaSol"></div>
+
+        <h3 style="margin-top:18px;">Axarquía costa</h3>
+        <div class="listaPueblos" id="listaAxarquia"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaDesayuno" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Desayunar</h2>
+
+      <div class="ofertaLista">
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Churrería')"><strong>Churrería</strong></div>
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Panadería')"><strong>Panadería</strong></div>
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Cafetería')"><strong>Cafetería</strong></div>
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Ver todo')"><strong>Ver todo</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaResultadosDesayuno" class="pantalla">
+  <div class="resultadosPantalla">
+    <div class="volverResultados" onclick="abrirDesayuno()">← Volver</div>
+
+    <div class="resultadosTop">
+      <div class="barraBusqueda">
+        <span>📍 <span id="tituloResultadosDesayuno">Cafetería en 500 m</span></span>
+        <span>›</span>
+      </div>
+
+      <div class="mapaDemo">
+        <div class="tagMapa tag1">33%</div>
+        <div class="tagMapa tag2">+3%</div>
+        <div class="tagMapa tag3">Express!</div>
+        <div class="tagMapa tag4">-31%</div>
+        <div class="pinCentro">📍</div>
+      </div>
+    </div>
+
+    <div id="listaResultadosDesayuno" class="listaResultados"></div>
+  </div>
+</div>
+
+<div id="pantallaComer" class="pantalla">
+  <div class="resultadosPantalla">
+    <div class="volverResultados" onclick="volverInicio()">← Volver</div>
+
+    <div class="resultadosTop">
+      <div class="barraBusqueda">
+        <span>📍 <span>Comer en 500 m</span></span>
+        <span>›</span>
+      </div>
+
+      <div class="mapaDemo">
+        <div class="tagMapa tag1">33%</div>
+        <div class="tagMapa tag2">+3%</div>
+        <div class="tagMapa tag3">Express!</div>
+        <div class="tagMapa tag4">-31%</div>
+        <div class="pinCentro">📍</div>
+      </div>
+    </div>
+
+    <div class="listaResultados">
+      <div class="resultadoCard">
+        <div class="resultadoBadge">⚡ Oferta Express!</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Espeto + vino</div>
+              <div class="resultadoDist">📍 180 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 6,00</div>
+              <div class="resultadoTiempo">🕒 5 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-30%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Menú del día</div>
+              <div class="resultadoDist">📍 300 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 8,50 <span class="resultadoAntes">€ 12,00</span></div>
+              <div class="resultadoTiempo">🕒 7 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-25%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Pizza familiar</div>
+              <div class="resultadoDist">📍 220 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 10,00</div>
+              <div class="resultadoTiempo">🕒 4 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-20%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Helado de pistacho</div>
+              <div class="resultadoDist">📍 250 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 1,50</div>
+              <div class="resultadoTiempo">🕒 5 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-35%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Kebab</div>
+              <div class="resultadoDist">📍 250 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 3,50 <span class="resultadoAntes">€ 4,90</span></div>
+              <div class="resultadoTiempo">🕒 5 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaCategoria" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 id="tituloCategoria" class="tituloPantalla">Categoría</h2>
+      <div class="ofertaLista">
+        <div class="itemOferta"><strong>Pantalla demo</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaComerciante" class="pantalla">
+  <div class="home">
+    <div class="topbar">
+      <span class="volverResultados" onclick="volverInicio()">← Volver</span>
+    </div>
+
+    <div class="merchant-box">
+      <h2 id="merchantScreenTitle" style="margin:6px 0 10px 0; font-size:18px;">Acceso comerciante</h2>
+
+      <p id="merchantScreenSubtitle" class="merchant-subtitle">
+        Registra tu negocio para aparecer en el mapa y poder publicar ofertas.
+      </p>
+
+      <form id="merchant-form" class="merchant-form" onsubmit="return false;">
+        <label for="merchant-name">Nombre del comercio</label>
+        <input
+          type="text"
+          id="merchant-name"
+          placeholder="Ej. Cafetería La Plaza"
+          required
+        >
+
+        <label for="merchant-address">Dirección</label>
+        <input
+          type="text"
+          id="merchant-address"
+          placeholder="Ej. Calle del Mar 12, Torre del Mar, Málaga"
+          required
+        >
+
+        <label for="merchant-email">Email</label>
+        <input
+          type="email"
+          id="merchant-email"
+          placeholder="ejemplo@comercio.com"
+          required
+        >
+
+        <button type="button" class="merchant-submit" onclick="registrarComercioManual()">
+          Registrar comercio
+        </button>
+      </form>
+
+      <div id="merchant-status" class="merchant-status"></div>
+
+      <div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
+        <div class="merchant-actions">
+          <button type="button" class="merchant-action-btn" onclick="abrirSubirOferta()">
+            Subir ofertas
+          </button>
+
+          <button type="button" class="merchant-action-btn" onclick="document.getElementById('merchant-file-input').click()">
+            Subir archivos
+          </button>
+
+          <input
+            type="file"
+            id="merchant-file-input"
+            accept="image/*,video/*"
+            style="display:none;"
+            onchange="previsualizarArchivoComerciante(event)"
+          >
+
+          <div id="merchant-file-preview" style="margin-top:12px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaSubirOferta" class="pantalla">
+  <div class="home">
+    <div class="topbar">
+      <span class="volverResultados" onclick="abrirPantallaComerciante()">← Volver</span>
+    </div>
+
+    <div style="padding:16px;">
+      <h2>Subir oferta</h2>
+      <p style="color:#666; font-size:14px;">
+        Aquí podrás crear una oferta para tu negocio.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const pueblosCostaSol = [
+  "Málaga","Torremolinos","Benalmádena","Fuengirola","Mijas Costa",
+  "Marbella","San Pedro de Alcántara","Estepona","Manilva","Casares Costa","Nerja"
+];
+
+const pueblosAxarquia = [
+  "Rincón de la Victoria","Torre de Benagalbón","Benajarafe","Chilches Costa",
+  "Torre del Mar","Caleta de Vélez","Algarrobo Costa","Torrox Costa","El Morche","Nerja"
+];
+
+const resultadosDesayuno = {
+  "Churrería": [
+    { badge:"-25%", titulo:"Churros + Chocolate", distancia:"280 m", precio:"€ 3,00", antes:"€ 4,00", tiempo:"4 min.", img:"https://images.unsplash.com/photo-1625944525533-473f1f45c9b5?auto=format&fit=crop&w=600&q=80" },
+    { badge:"Oferta Express!", titulo:"Porra + Café", distancia:"190 m", precio:"€ 2,50", antes:"€ 3,20", tiempo:"6 min.", img:"https://images.unsplash.com/photo-1515442261605-65987783cb6a?auto=format&fit=crop&w=600&q=80" },
+    { badge:"+10%", titulo:"Chocolate grande + Churros", distancia:"320 m", precio:"€ 3,80", antes:"€ 4,50", tiempo:"8 min.", img:"https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=600&q=80" }
+  ],
+  "Panadería": [
+    { badge:"Oferta Express!", titulo:"Croissant + Café", distancia:"150 m", precio:"€ 2,00", antes:"€ 3,00", tiempo:"29 min.", img:"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-18%", titulo:"Tostada + Café", distancia:"200 m", precio:"€ 2,20", antes:"€ 3,20", tiempo:"3 min.", img:"https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-12%", titulo:"Bollería variada", distancia:"260 m", precio:"€ 2,90", antes:"€ 3,30", tiempo:"5 min.", img:"https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=600&q=80" }
+  ],
+  "Cafetería": [
+    { badge:"Oferta Express!", titulo:"Café + Croissant", distancia:"150 m", precio:"€ 2,00", antes:"€ 3,00", tiempo:"29 min.", img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-31%", titulo:"Tostada + Café", distancia:"200 m", precio:"€ 2,20", antes:"€ 3,20", tiempo:"3 min.", img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-20%", titulo:"Titufo + zumo natural", distancia:"280 m", precio:"€ 3,20", antes:"€ 4,00", tiempo:"4 min.", img:"https://images.unsplash.com/photo-1555507036-ab794f4afe5b?auto=format&fit=crop&w=600&q=80" },
+    { badge:"2x1", titulo:"Bollería panadería", distancia:"220 m", precio:"€ 2,50", antes:"€ 3,10", tiempo:"5 min.", img:"https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=600&q=80" }
+  ],
+  "Ver todo": [
+    { badge:"Oferta Express!", titulo:"Café + Croissant", distancia:"150 m", precio:"€ 2,00", antes:"€ 3,00", tiempo:"29 min.", img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-31%", titulo:"Tostada + Café", distancia:"200 m", precio:"€ 2,20", antes:"€ 3,20", tiempo:"3 min.", img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-25%", titulo:"Churros + Chocolate", distancia:"280 m", precio:"€ 3,00", antes:"€ 4,00", tiempo:"4 min.", img:"https://images.unsplash.com/photo-1625944525533-473f1f45c9b5?auto=format&fit=crop&w=600&q=80" },
+    { badge:"2x1", titulo:"Bollería panadería", distancia:"220 m", precio:"€ 2,50", antes:"€ 3,10", tiempo:"5 min.", img:"https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=600&q=80" }
+  ]
+};
+
+function ocultarTodo(){
+  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+}
+
+function volverInicio(){
+  ocultarTodo();
+  document.getElementById('pantallaInicio').classList.add('activa');
+}
+
+function abrirPantallaUbicacion(){
+  ocultarTodo();
+  document.getElementById('pantallaUbicacion').classList.add('activa');
+}
+
+function mostrarUbicacionGPS(){
+  document.getElementById('boxSeleccionUbicacion').style.display = 'none';
+  const box = document.getElementById('boxUbicacionActual');
+  box.style.display = 'block';
+  box.innerHTML = 'Ubicación actual GPS seleccionada.<br><br>En la versión completa aquí se detectaría automáticamente la posición del usuario.';
+  document.getElementById('textoUbicacionTop').textContent = 'GPS actual';
+}
+
+function mostrarSeleccionUbicacion(){
+  document.getElementById('boxUbicacionActual').style.display = 'none';
+  document.getElementById('boxSeleccionUbicacion').style.display = 'block';
+}
+
+function seleccionarPueblo(nombre){
+  document.getElementById('textoUbicacionTop').textContent = nombre;
+  alert('Ubicación seleccionada: ' + nombre);
+  volverInicio();
+}
+
+function pintarPueblos(){
+  const listaCostaSol = document.getElementById('listaCostaSol');
+  const listaAxarquia = document.getElementById('listaAxarquia');
+
+  listaCostaSol.innerHTML = '';
+  listaAxarquia.innerHTML = '';
+
+  pueblosCostaSol.forEach(pueblo => {
+    const btn = document.createElement('button');
+    btn.className = 'puebloBtn';
+    btn.textContent = pueblo;
+    btn.onclick = () => seleccionarPueblo(pueblo);
+    listaCostaSol.appendChild(btn);
+  });
+
+  pueblosAxarquia.forEach(pueblo => {
+    const btn = document.createElement('button');
+    btn.className = 'puebloBtn';
+    btn.textContent = pueblo;
+    btn.onclick = () => seleccionarPueblo(pueblo);
+    listaAxarquia.appendChild(btn);
+  });
+}
+
+function abrirDesayuno(){
+  ocultarTodo();
+  document.getElementById('pantallaDesayuno').classList.add('activa');
+}
+
+function abrirResultadosDesayuno(tipo){
+  ocultarTodo();
+  document.getElementById('pantallaResultadosDesayuno').classList.add('activa');
+  document.getElementById('tituloResultadosDesayuno').textContent = tipo + ' en 500 m';
+
+  const lista = document.getElementById('listaResultadosDesayuno');
+  lista.innerHTML = '';
+
+  const items = resultadosDesayuno[tipo] || [];
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'resultadoCard';
+
+    const badgeHtml = item.badge ? `<div class="resultadoBadge">${item.badge}</div>` : '';
+    const antesHtml = item.antes ? `<span class="resultadoAntes">${item.antes}</span>` : '';
+    const tiempoHtml = item.tiempo ? `<div class="resultadoTiempo">🕒 ${item.tiempo}</div>` : '';
+
+    card.innerHTML = `
+      ${badgeHtml}
+      <div class="resultadoFila">
+        <div class="resultadoImg">
+          <img src="${item.img}" alt="">
+        </div>
+        <div class="resultadoInfo">
+          <div class="resultadoTopInfo">
+            <div class="resultadoTitulo">${item.titulo}</div>
+            <div class="resultadoDist">📍 ${item.distancia}</div>
+          </div>
+          <div>
+            <div class="resultadoPrecio">${item.precio}${antesHtml}</div>
+            ${tiempoHtml}
+          </div>
+          <button class="btnIr">IR 🚶</button>
+        </div>
+      </div>
+    `;
+    lista.appendChild(card);
+  });
+}
+
+function abrirCategoria(nombre){
+  ocultarTodo();
+  document.getElementById('pantallaCategoria').classList.add('activa');
+  document.getElementById('tituloCategoria').textContent = nombre;
+}
+
+function abrirComerciante(){
+  abrirPantallaComerciante();
+}
+
+function seleccionarDistancia(texto){
+  alert('Distancia seleccionada: ' + texto);
+}
+
+window.addEventListener("load", function(){
+  setTimeout(() => {
+    const splash = document.getElementById('pantallaSplash');
+    const inicio = document.getElementById('pantallaInicio');
+
+    if (splash) {
+      splash.style.display = 'none';
+    }
+
+    if (inicio) {
+      inicio.classList.add('activa');
+    }
+  }, 3000);
+});
+
+const btnUbicacion = document.getElementById('btnUbicacion');
+if (btnUbicacion) {
+  btnUbicacion.addEventListener('click', abrirPantallaUbicacion);
+}
+
+pintarPueblos();
+
+function abrirComer(){
+  ocultarTodo();
+  document.getElementById('pantallaComer').classList.add('activa');
+}
+
+let comercioActual = null;
+
+function previsualizarArchivoComerciante(event){
+  const file = event.target.files[0];
+  const preview = document.getElementById('merchant-file-preview');
+
+  if(!file || !preview) return;
+
+  const url = URL.createObjectURL(file);
+
+  if(file.type.startsWith('image/')){
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">
+        <div style="font-weight:700; margin-bottom:8px;">Imagen seleccionada</div>
+        <img src="${url}" alt="Vista previa" style="width:100%; border-radius:12px;">
+      </div>
+    `;
+  } else if(file.type.startsWith('video/')){
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">
+        <div style="font-weight:700; margin-bottom:8px;">Vídeo seleccionado</div>
+        <video controls style="width:100%; border-radius:12px;">
+          <source src="${url}" type="${file.type}">
+        </video>
+      </div>
+    `;
+  } else {
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">
+        Archivo seleccionado: ${file.name}
+      </div>
+    `;
+  }
+}
+
+function abrirPantallaComerciante(){
+  ocultarTodo();
+  document.getElementById('pantallaComerciante').classList.add('activa');
+  actualizarVistaComerciante();
+}
+
+function abrirSubirOferta(){
+  ocultarTodo();
+  document.getElementById('pantallaSubirOferta').classList.add('activa');
+}
+
+async function geocodificarDireccion(address){
+  const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(address);
+
+  const response = await fetch(url, {
+    headers: { 'Accept': 'application/json' }
+  });
+
+  if(!response.ok){
+    throw new Error('No se pudo consultar la dirección');
+  }
+
+  const results = await response.json();
+
+  if(!results || !results.length){
+    throw new Error('No se encontró esa dirección');
+  }
+
+  return {
+    lat: parseFloat(results[0].lat),
+    lng: parseFloat(results[0].lon),
+    displayName: results[0].display_name
+  };
+}
+
+function guardarComercioLocal(merchant){
+  localStorage.setItem('offerfind_comercio_actual', JSON.stringify(merchant));
+}
+
+function leerComercioLocal(){
+  const saved = localStorage.getItem('offerfind_comercio_actual');
+  return saved ? JSON.parse(saved) : null;
+}
+
+function mostrarFormularioComerciante(){
+  document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'block';
+  document.getElementById('merchant-form').style.display = 'flex';
+  document.getElementById('merchant-dashboard').style.display = 'none';
+  document.getElementById('merchant-status').textContent = '';
+}
+
+function mostrarDashboardComerciante(merchant){
+  document.getElementById('merchantScreenTitle').textContent = 'Panel del comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'none';
+  document.getElementById('merchant-form').style.display = 'none';
+  document.getElementById('merchant-dashboard').style.display = 'block';
+}
+
+function actualizarVistaComerciante(){
+  const merchant = leerComercioLocal();
+
+  if(!merchant){
+    mostrarFormularioComerciante();
+    return;
+  }
+
+  comercioActual = merchant;
+  mostrarDashboardComerciante(merchant);
+}
+
+async function registrarComercioManual(){
+  const status = document.getElementById('merchant-status');
+
+  const name = document.getElementById('merchant-name').value.trim();
+  const address = document.getElementById('merchant-address').value.trim();
+  const email = document.getElementById('merchant-email').value.trim();
+
+  if(!name || !address || !email){
+    status.textContent = 'Completa los datos';
+    return;
+  }
+
+  status.textContent = 'Registrando...';
+
+  try{
+    const geo = await geocodificarDireccion(address);
+
+    const merchant = {
+      name: name,
+      address: address,
+      normalizedAddress: geo.displayName,
+      email: email,
+      lat: geo.lat,
+      lng: geo.lng
+    };
+
+    guardarComercioLocal(merchant);
+    comercioActual = merchant;
+    mostrarDashboardComerciante(merchant);
+
+    status.textContent = 'Guardado correctamente';
+  }catch(e){
+    status.textContent = e.message || 'Error al registrar';
+  }
+}
+</script>
+</body>
+</html>
