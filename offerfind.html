@@ -1701,6 +1701,207 @@ async function registrarComercioManual(){
   }
 }
 </script>
+<script>
+(function () {
+  var merchantMapSeguro = null;
+  var merchantMarkerSeguro = null;
 
+  function ocultarPantallasSeguro() {
+    document.querySelectorAll('.pantalla').forEach(function (el) {
+      el.classList.remove('activa');
+    });
+  }
+
+  function leerComercioSeguro() {
+    try {
+      var saved = localStorage.getItem('offerfind_comercio_actual');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function guardarComercioSeguro(merchant) {
+    localStorage.setItem('offerfind_comercio_actual', JSON.stringify(merchant));
+  }
+
+  function iniciarMapaSeguro() {
+    var mapBox = document.getElementById('merchant-map');
+    if (!mapBox) return;
+
+    if (!merchantMapSeguro) {
+      merchantMapSeguro = L.map('merchant-map').setView([36.7420, -4.0927], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(merchantMapSeguro);
+    }
+
+    setTimeout(function () {
+      if (merchantMapSeguro) {
+        merchantMapSeguro.invalidateSize();
+      }
+    }, 300);
+  }
+
+  function pintarComercioSeguro(merchant) {
+    if (!merchantMapSeguro || !merchant) return;
+
+    if (merchantMarkerSeguro) {
+      merchantMapSeguro.removeLayer(merchantMarkerSeguro);
+    }
+
+    merchantMarkerSeguro = L.marker([merchant.lat, merchant.lng]).addTo(merchantMapSeguro);
+
+    merchantMarkerSeguro.bindPopup(
+      '<strong>' + merchant.name + '</strong><br>' +
+      merchant.normalizedAddress + '<br>' +
+      merchant.email
+    ).openPopup();
+
+    merchantMapSeguro.setView([merchant.lat, merchant.lng], 16);
+
+    setTimeout(function () {
+      if (merchantMapSeguro) {
+        merchantMapSeguro.invalidateSize();
+      }
+    }, 300);
+  }
+
+  function actualizarVistaComercianteSeguro() {
+    var merchant = leerComercioSeguro();
+
+    var form = document.getElementById('merchant-form');
+    var status = document.getElementById('merchant-status');
+    var resultCard = document.getElementById('merchant-result-card');
+    var resultBox = document.getElementById('merchant-result');
+    var dashboard = document.getElementById('merchant-dashboard');
+    var dashboardInfo = document.getElementById('merchant-dashboard-info');
+    var subtitle = document.querySelector('#pantallaComerciante .merchant-subtitle');
+    var title = document.querySelector('#pantallaComerciante h2');
+
+    if (!merchant) {
+      if (title) title.textContent = 'Acceso comerciante';
+      if (subtitle) subtitle.style.display = 'block';
+      if (form) form.style.display = 'flex';
+      if (resultCard) resultCard.style.display = 'none';
+      if (dashboard) dashboard.style.display = 'none';
+      if (status) status.textContent = '';
+      iniciarMapaSeguro();
+      return;
+    }
+
+    if (title) title.textContent = 'Panel del comerciante';
+    if (subtitle) subtitle.style.display = 'none';
+    if (form) form.style.display = 'none';
+
+    if (resultCard) resultCard.style.display = 'block';
+    if (resultBox) {
+      resultBox.innerHTML =
+        '<strong>' + merchant.name + '</strong><br>' +
+        merchant.normalizedAddress + '<br>' +
+        merchant.email;
+    }
+
+    if (dashboard) dashboard.style.display = 'block';
+    if (dashboardInfo) {
+      dashboardInfo.innerHTML =
+        '<strong>' + merchant.name + '</strong><br>' +
+        merchant.normalizedAddress + '<br>' +
+        merchant.email;
+    }
+
+    iniciarMapaSeguro();
+    pintarComercioSeguro(merchant);
+  }
+
+  async function geocodificarSeguro(address) {
+    var url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(address);
+
+    var response = await fetch(url, {
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (!response.ok) {
+      throw new Error('No se pudo consultar la dirección');
+    }
+
+    var results = await response.json();
+
+    if (!results || !results.length) {
+      throw new Error('No se encontró esa dirección');
+    }
+
+    return {
+      lat: parseFloat(results[0].lat),
+      lng: parseFloat(results[0].lon),
+      displayName: results[0].display_name
+    };
+  }
+
+  window.abrirPanelComercianteSeguro = function () {
+    ocultarPantallasSeguro();
+
+    var pantalla = document.getElementById('pantallaComerciante');
+    if (pantalla) {
+      pantalla.classList.add('activa');
+    }
+
+    setTimeout(function () {
+      actualizarVistaComercianteSeguro();
+    }, 250);
+  };
+
+  window.registrarComercioSeguro = async function () {
+    var status = document.getElementById('merchant-status');
+    var nameEl = document.getElementById('merchant-name');
+    var addressEl = document.getElementById('merchant-address');
+    var emailEl = document.getElementById('merchant-email');
+
+    if (!nameEl || !addressEl || !emailEl) return;
+
+    var name = nameEl.value.trim();
+    var address = addressEl.value.trim();
+    var email = emailEl.value.trim();
+
+    if (!name || !address || !email) {
+      if (status) status.textContent = 'Completa nombre, dirección y email.';
+      return;
+    }
+
+    if (status) status.textContent = 'Registrando comercio...';
+
+    try {
+      var geo = await geocodificarSeguro(address);
+
+      var merchant = {
+        id: 'merchant_' + Date.now(),
+        name: name,
+        address: address,
+        normalizedAddress: geo.displayName,
+        email: email,
+        lat: geo.lat,
+        lng: geo.lng,
+        createdAt: new Date().toISOString()
+      };
+
+      guardarComercioSeguro(merchant);
+      actualizarVistaComercianteSeguro();
+
+      if (status) status.textContent = 'Comercio registrado correctamente.';
+    } catch (e) {
+      if (status) status.textContent = e.message || 'Error al registrar el comercio.';
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var btnRegistrar = document.querySelector('.merchant-submit');
+    if (btnRegistrar) {
+      btnRegistrar.setAttribute('type', 'button');
+      btnRegistrar.setAttribute('onclick', 'registrarComercioSeguro()');
+    }
+  });
+})();
+</script>
 </body>
 </html>
