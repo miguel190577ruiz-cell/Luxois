@@ -1552,52 +1552,29 @@ function abrirComer(){
 }
 </script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
 let merchantMap = null;
 let merchantMarker = null;
 let comercioActual = null;
 
-
 function abrirPantallaComerciante(){
-  document.querySelectorAll('.pantalla').forEach(el => {
-    el.classList.remove('activa');
-  });
-
-  const pantalla = document.getElementById('pantallaComerciante');
-  if(pantalla){
-    pantalla.classList.add('activa');
-  }
-
- setTimeout(function(){
-  iniciarMapaComerciante();
+  ocultarTodo();
+  document.getElementById('pantallaComerciante').classList.add('activa');
 
   setTimeout(function(){
-    if (merchantMap) {
-      merchantMap.invalidateSize();
-    }
-  }, 300);
+    iniciarMapaComerciante();
+    actualizarVistaComerciante();
 
-  function cargarComercioGuardado(){
-  var merchant = leerComercioLocal();
-  if (!merchant) return;
-
-  comercioActual = merchant;
-  mostrarDashboardComerciante(merchant);
-
-  setTimeout(function(){
-    if (merchantMap) {
-      merchantMap.invalidateSize();
-      merchantMap.setView([merchant.lat, merchant.lng], 16);
-    }
-  }, 400);
-  }
+    setTimeout(function(){
+      if (merchantMap) {
+        merchantMap.invalidateSize();
+      }
+    }, 300);
+  }, 250);
+}
 
 function abrirSubirOferta(){
-  document.querySelectorAll('.pantalla').forEach(el => {
-    el.classList.remove('activa');
-  });
-
+  ocultarTodo();
   document.getElementById('pantallaSubirOferta').classList.add('activa');
 }
 
@@ -1611,9 +1588,13 @@ function iniciarMapaComerciante(){
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(merchantMap);
-  } else {
-    merchantMap.invalidateSize();
   }
+
+  setTimeout(function(){
+    if (merchantMap) {
+      merchantMap.invalidateSize();
+    }
+  }, 300);
 }
 
 async function geocodificarDireccion(address){
@@ -1649,7 +1630,43 @@ function leerComercioLocal(){
   return saved ? JSON.parse(saved) : null;
 }
 
+function pintarComercioEnMapa(merchant){
+  if(!merchantMap || !merchant) return;
+
+  if(merchantMarker){
+    merchantMap.removeLayer(merchantMarker);
+  }
+
+  merchantMarker = L.marker([merchant.lat, merchant.lng]).addTo(merchantMap);
+
+  merchantMarker.bindPopup(
+    '<strong>' + merchant.name + '</strong><br>' +
+    merchant.normalizedAddress + '<br>' +
+    merchant.email
+  ).openPopup();
+
+  merchantMap.setView([merchant.lat, merchant.lng], 16);
+
+  setTimeout(function(){
+    if (merchantMap) {
+      merchantMap.invalidateSize();
+    }
+  }, 300);
+}
+
+function mostrarFormularioComerciante(){
+  document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'block';
+  document.getElementById('merchant-form').style.display = 'flex';
+  document.getElementById('merchant-result-card').style.display = 'none';
+  document.getElementById('merchant-dashboard').style.display = 'none';
+}
+
 function mostrarDashboardComerciante(merchant){
+  document.getElementById('merchantScreenTitle').textContent = 'Panel del comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'none';
+  document.getElementById('merchant-form').style.display = 'none';
+
   document.getElementById('merchant-result-card').style.display = 'block';
   document.getElementById('merchant-dashboard').style.display = 'block';
 
@@ -1657,11 +1674,22 @@ function mostrarDashboardComerciante(merchant){
     '<strong>' + merchant.name + '</strong><br>' +
     merchant.normalizedAddress + '<br>' +
     merchant.email;
+
+  document.getElementById('merchant-dashboard-info').innerHTML =
+    '<strong>' + merchant.name + '</strong><br>' +
+    merchant.normalizedAddress + '<br>' +
+    merchant.email;
+
+  pintarComercioEnMapa(merchant);
 }
 
-function cargarComercioGuardado(){
+function actualizarVistaComerciante(){
   const merchant = leerComercioLocal();
-  if(!merchant) return;
+
+  if(!merchant){
+    mostrarFormularioComerciante();
+    return;
+  }
 
   comercioActual = merchant;
   mostrarDashboardComerciante(merchant);
@@ -1685,14 +1713,15 @@ async function registrarComercioManual(){
     const geo = await geocodificarDireccion(address);
 
     const merchant = {
-      name,
-      address,
+      name: name,
+      address: address,
       normalizedAddress: geo.displayName,
-      email,
+      email: email,
       lat: geo.lat,
       lng: geo.lng
     };
 
+    comercioActual = merchant;
     guardarComercioLocal(merchant);
     mostrarDashboardComerciante(merchant);
 
@@ -1701,7 +1730,6 @@ async function registrarComercioManual(){
     status.textContent = 'Error al registrar';
   }
 }
-
 </script>
 </body>
 </html>
