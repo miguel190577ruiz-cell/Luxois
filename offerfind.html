@@ -1355,29 +1355,51 @@ document.addEventListener('DOMContentLoaded', function () {
       </form>
 
       <div id="merchant-status" class="merchant-status"></div>
+<div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
+  <div class="merchant-actions">
 
-      <div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
-        <div class="merchant-actions">
-          <button type="button" class="merchant-action-btn" onclick="abrirSubirOferta()">
-            Subir ofertas
-          </button>
+    <button
+      type="button"
+      id="btn-crear-oferta"
+      class="merchant-action-btn"
+      onclick="abrirSubirOferta()"
+      style="display:block;">
+      Crear oferta
+    </button>
 
-          <button type="button" class="merchant-action-btn" onclick="document.getElementById('merchant-file-input').click()">
-            Subir archivos
-          </button>
+    <button
+      type="button"
+      id="btn-ver-oferta"
+      class="merchant-action-btn"
+      style="display:none;">
+      Ver oferta actual
+    </button>
 
-          <input
-            type="file"
-            id="merchant-file-input"
-            accept="image/*,video/*"
-            style="display:none;"
-            onchange="previsualizarArchivoComerciante(event)"
-          >
+    <button
+      type="button"
+      id="btn-borrar-oferta"
+      class="merchant-action-btn"
+      style="display:none; background:#7a1f1f;">
+      Borrar oferta actual
+    </button>
 
-          <div id="merchant-file-preview" style="margin-top:12px;"></div>
-        </div>
-      </div>
-    </div>
+    <button
+      type="button"
+      class="merchant-action-btn"
+      onclick="document.getElementById('merchant-file-input').click()">
+      Subir archivos
+    </button>
+
+    <input
+      type="file"
+      id="merchant-file-input"
+      accept="image/*,video/*"
+      style="display:none;"
+      onchange="previsualizarArchivoComerciante(event)"
+    >
+
+    <div id="merchant-file-preview" style="margin-top:12px;"></div>
+
   </div>
 </div>
 
