@@ -1705,7 +1705,7 @@ function previsualizarMediaOferta(event){
       `;
     } else if(file.type.startsWith('video/')){
       preview.innerHTML = `
-        <video controls playsinline webkit-playsinline style="width:100%; max-height:120px; object-fit:contain; border-radius:12px;">
+        <video controls playsinline webkit-playsinline style="width:100%; max-height:120px; object-fit:contain; border-radius:8px;">
           <source src="${base64}" type="${file.type}">
         </video>
       `;
