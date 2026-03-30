@@ -1729,7 +1729,7 @@ function guardarOferta(){
     status.textContent = 'Completa título, precio y descripción.';
     return;
   }
-  
+
   const oferta = {
     id: 'oferta_' + Date.now(),
     titulo: titulo,
@@ -1740,7 +1740,7 @@ function guardarOferta(){
   localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
   status.textContent = 'Oferta guardada correctamente.';
 
-  lista.innerHTML += `
+  lista.innerHTML = `
     <div style="background:#fff; border-radius:12px; padding:12px; margin-top:10px;">
       <div style="font-weight:700;">${oferta.titulo}</div>
       <div style="margin-top:4px; color:#111;">${oferta.precio}</div>
