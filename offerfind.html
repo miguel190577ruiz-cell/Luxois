@@ -1736,10 +1736,7 @@ function guardarOferta(){
     desc: desc
   };
 
-  const guardadas = JSON.parse(localStorage.getItem('offerfind_ofertas') || '[]');
-  guardadas.push(oferta);
-  localStorage.setItem('offerfind_ofertas', JSON.stringify(guardadas));
-
+  localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
   status.textContent = 'Oferta guardada correctamente.';
 
   lista.innerHTML += `
