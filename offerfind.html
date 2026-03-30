@@ -1390,16 +1390,15 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 <div id="pantallaSubirOferta" class="pantalla">
   <div class="home">
-    <div class="topbar">
-      <span class="volverResultados" onclick="abrirPantallaComerciante()">← Volver</span>
-    </div>
+    <div class="topbar" style="display:flex; align-items:center; justify-content:space-between; padding:8px 16px 0 16px;">
+  <span class="volverResultados" onclick="abrirPantallaComerciante()">← Volver</span>
+  <span style="color:#fff; font-size:16px; font-weight:700;">Subir oferta</span>
+</div>
 
-    <div style="padding:8px 16px 16px 16px; margin-top:-20px;">
-      <h2>Subir oferta</h2>
-
-      <p style="color:#666; font-size:14px;">
-        Crea una oferta para tu negocio.
-      </p>
+<div style="padding:4px 16px 16px 16px; margin-top:0px;">
+  <p style="color:#666; font-size:14px; margin:0 0 8px 0;">
+    Crea una oferta para tu negocio.
+  </p>
 
       <div style="margin-top:10px;">
         <select id="oferta-seccion"
