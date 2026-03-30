@@ -1359,30 +1359,32 @@ document.addEventListener('DOMContentLoaded', function () {
 <div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
   <div class="merchant-actions">
 
-    <button
-      type="button"
-      id="btn-crear-oferta"
-      class="merchant-action-btn"
-      onclick="abrirSubirOferta()"
-      style="display:block;">
-      Crear oferta
-    </button>
+  <button
+  type="button"
+  id="btn-crear-oferta"
+  class="merchant-action-btn"
+  onclick="abrirSubirOferta()"
+  style="display:block;">
+  Crear oferta
+</button>
 
-    <button
-      type="button"
-      id="btn-ver-oferta"
-      class="merchant-action-btn"
-      style="display:none;">
-      Ver oferta actual
-    </button>
+<button
+  type="button"
+  id="btn-ver-oferta"
+  class="merchant-action-btn"
+  onclick="verPublicacionActual()"
+  style="display:none;">
+  Ver oferta actual
+</button>
 
-    <button
-      type="button"
-      id="btn-borrar-oferta"
-      class="merchant-action-btn"
-      style="display:none; background:#7a1f1f;">
-      Borrar oferta actual
-    </button>
+<button
+  type="button"
+  id="btn-borrar-oferta"
+  class="merchant-action-btn"
+  onclick="borrarPublicacionActual()"
+  style="display:none; background:#7a1f1f;">
+  Borrar oferta actual
+</button>  
 
   </div>
 </div>
