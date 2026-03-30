@@ -1732,14 +1732,18 @@ function guardarOferta(){
     return;
   }
 
-  const oferta = {
-    id: 'oferta_' + Date.now(),
-    seccion: seccion,
-    tipo: tipo,
-    titulo: titulo,
-    precio: precio,
-    desc: desc
-  };
+  const preview = document.getElementById('oferta-media-preview');
+let mediaData = preview.getAttribute('data-media') || '';
+
+const oferta = {
+  id: 'oferta_' + Date.now(),
+  seccion: seccion,
+  tipo: tipo,
+  titulo: titulo,
+  precio: precio,
+  desc: desc,
+  media: mediaData
+};
 
   localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
   status.textContent = 'Publicación guardada correctamente.';
