@@ -1733,11 +1733,13 @@ const tipo = document.getElementById('oferta-tipo').value;
   }
 
   const oferta = {
-    id: 'oferta_' + Date.now(),
-    titulo: titulo,
-    precio: precio,
-    desc: desc
-  };
+  id: 'oferta_' + Date.now(),
+  seccion: seccion,
+  tipo: tipo,
+  titulo: titulo,
+  precio: precio,
+  desc: desc
+};
 
   localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
   status.textContent = 'Oferta guardada correctamente.';
