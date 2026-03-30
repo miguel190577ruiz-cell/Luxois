@@ -1734,12 +1734,13 @@ const tipo = document.getElementById('oferta-tipo').value;
   }
 
   const oferta = {
-  id: 'oferta_' + Date.now(),
-  seccion: seccion,
-  tipo: tipo,
-  titulo: titulo,
-  precio: precio,
-  desc: desc
+    id: 'oferta_' + Date.now(),
+    seccion: seccion,
+    tipo: tipo,
+    titulo: titulo,
+    precio: precio,
+    desc: desc,
+    media: mediaHTML
 };
 
   localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
