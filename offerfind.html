@@ -1823,7 +1823,34 @@ function leerPublicacionActual(){
   document.getElementById('oferta-titulo').value = pub.titulo || '';
   document.getElementById('oferta-precio').value = pub.precio || '';
   document.getElementById('oferta-desc').value = pub.desc || '';
-  document.getElementById('oferta-media-preview').innerHTML = pub.media || '';
+  const preview = document.getElementById('oferta-media-preview');
+
+if(pub.media && pub.media.url){
+  if(pub.media.type && pub.media.type.startsWith('image/')){
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:0px; margin-top:0px;">
+        <img src="${pub.media.url}" alt="Vista previa" style="width:100%; border-radius:12px;">
+      </div>
+    `;
+  } else if(pub.media.type && pub.media.type.startsWith('video/')){
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:0px; margin-top:0px;">
+        <video controls playsinline webkit-playsinline
+          style="width:100%; max-height:24vh; object-fit:contain; border-radius:12px; background:#000;">
+          <source src="${pub.media.url}" type="${pub.media.type}">
+        </video>
+      </div>
+    `;
+  } else {
+    preview.innerHTML = '';
+  }
+
+  preview.setAttribute('data-media-url', pub.media.url || '');
+  preview.setAttribute('data-media-type', pub.media.type || '');
+} else {
+  preview.innerHTML = '';
+  preview.setAttribute('data-media-url', '');
+  preview.setAttribute('data-media-type', '');
   }
 function mostrarFormularioComerciante(){
   document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
