@@ -1738,6 +1738,14 @@ function verPublicacionActual(){
     return;
   }
 
+  ocultarTodo();
+  document.getElementById('pantallaSubirOferta').classList.add('activa');
+
+  document.getElementById('oferta-titulo').value = pub.titulo || '';
+  document.getElementById('oferta-precio').value = pub.precio || '';
+  document.getElementById('oferta-desc').value = pub.desc || '';
+}
+
   // Abrir pantalla
   document.getElementById('pantallaSubirOferta').style.display = 'block';
 
