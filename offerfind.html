@@ -1801,6 +1801,22 @@ function mostrarDashboardComerciante(merchant){
   document.getElementById('merchantScreenSubtitle').style.display = 'none';
   document.getElementById('merchant-form').style.display = 'none';
   document.getElementById('merchant-dashboard').style.display = 'block';
+
+  const publicacionActual = leerPublicacionActual();
+
+  const btnCrear = document.getElementById('btn-crear-oferta');
+  const btnVer = document.getElementById('btn-ver-oferta');
+  const btnBorrar = document.getElementById('btn-borrar-oferta');
+
+  if(publicacionActual){
+    btnCrear.style.display = 'none';
+    btnVer.style.display = 'block';
+    btnBorrar.style.display = 'block';
+  } else {
+    btnCrear.style.display = 'block';
+    btnVer.style.display = 'none';
+    btnBorrar.style.display = 'none';
+  }
 }
 
 function actualizarVistaComerciante(){
