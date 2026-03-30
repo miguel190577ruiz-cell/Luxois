@@ -1723,6 +1723,8 @@ function guardarOferta(){
   const titulo = document.getElementById('oferta-titulo').value.trim();
   const precio = document.getElementById('oferta-precio').value.trim();
   const desc = document.getElementById('oferta-desc').value.trim();
+  const preview = document.getElementById('oferta-media-preview');
+const media = preview.getAttribute('data-media') || '';
   const status = document.getElementById('oferta-status');
 
   if(!seccion || !tipo || !titulo || !precio || !desc){
