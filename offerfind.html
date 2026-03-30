@@ -1721,38 +1721,30 @@ function previsualizarMediaOferta(event){
 }
 
 function guardarOferta(){
+  const seccion = document.getElementById('oferta-seccion').value;
+  const tipo = document.getElementById('oferta-tipo').value;
   const titulo = document.getElementById('oferta-titulo').value.trim();
   const precio = document.getElementById('oferta-precio').value.trim();
   const desc = document.getElementById('oferta-desc').value.trim();
   const status = document.getElementById('oferta-status');
-  const lista = document.getElementById('lista-ofertas');
 
-  if(!titulo || !precio || !desc){
-    status.textContent = 'Completa título, precio y descripción.';
+  if(!seccion || !tipo || !titulo || !precio || !desc){
+    status.textContent = 'Completa sección, tipo, título, precio y descripción.';
     return;
   }
 
   const oferta = {
     id: 'oferta_' + Date.now(),
+    seccion: seccion,
+    tipo: tipo,
     titulo: titulo,
     precio: precio,
     desc: desc
   };
 
   localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
-  status.textContent = 'Oferta guardada correctamente.';
-
-  lista.innerHTML += `
-    <div style="background:#fff; border-radius:12px; padding:12px; margin-top:10px;">
-      <div style="font-weight:700;">${oferta.titulo}</div>
-      <div style="margin-top:4px; color:#111;">${oferta.precio}</div>
-      <div style="margin-top:6px; color:#666; font-size:14px;">${oferta.desc}</div>
-    </div>
-  `;
-
-  document.getElementById('oferta-titulo').value = '';
-  document.getElementById('oferta-precio').value = '';
-  document.getElementById('oferta-desc').value = '';
+  status.textContent = 'Publicación guardada correctamente.';
+  actualizarVistaComerciante();
 }
 
 async function geocodificarDireccion(address){
