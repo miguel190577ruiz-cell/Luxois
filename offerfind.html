@@ -1789,6 +1789,21 @@ function leerPublicacionActual(){
   const saved = localStorage.getItem('offerfind_publicacion');
   return saved ? JSON.parse(saved) : null;
 }
+  function verPublicacionActual(){
+  const pub = leerPublicacionActual();
+
+  if(!pub){
+    alert('No hay publicación actual');
+    return;
+  }
+
+  ocultarTodo();
+  document.getElementById('pantallaSubirOferta').classList.add('activa');
+
+  document.getElementById('oferta-titulo').value = pub.titulo || '';
+  document.getElementById('oferta-precio').value = pub.precio || '';
+  document.getElementById('oferta-desc').value = pub.desc || '';
+  }
 function mostrarFormularioComerciante(){
   document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
   document.getElementById('merchantScreenSubtitle').style.display = 'block';
