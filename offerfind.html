@@ -1744,8 +1744,9 @@ const oferta = {
 };
 
   localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
-  status.textContent = 'Publicación guardada correctamente.';
-  actualizarVistaComerciante();
+status.textContent = 'Publicación guardada correctamente.';
+alert('Publicación guardada correctamente');
+actualizarVistaComerciante();
 }
 
 async function geocodificarDireccion(address){
