@@ -1817,29 +1817,39 @@ function verPublicacionActual(){
   document.getElementById('oferta-precio').value = pub.precio || '';
   document.getElementById('oferta-desc').value = pub.desc || '';
 
-  pintarMediaGuardada(pub.media || null);
-
-  document.getElementById('oferta-status').textContent = '';
-  document.getElementById('btn-guardar-oferta').textContent = 'Publicar';
-}
-
-function borrarPublicacionActual(){
-  localStorage.removeItem('offerfind_publicacion');
-
   const preview = document.getElementById('oferta-media-preview');
-  if(preview){
+
+  if(pub.media && pub.media.url){
+    preview.setAttribute('data-media-url', pub.media.url || '');
+    preview.setAttribute('data-media-type', pub.media.type || '');
+
+    if(pub.media.type && pub.media.type.startsWith('image/')){
+      preview.innerHTML = `
+        <div style="background:#fff; border-radius:16px; padding:0px; margin-top:0px;">
+          <img src="${pub.media.url}" alt="Vista previa" style="width:100%; border-radius:12px;">
+        </div>
+      `;
+    } else if(pub.media.type && pub.media.type.startsWith('video/')){
+      preview.innerHTML = `
+        <div style="background:#fff; border-radius:16px; padding:0px; margin-top:0px;">
+          <video controls playsinline webkit-playsinline
+            style="width:100%; max-height:24vh; object-fit:contain; border-radius:12px; background:#000;">
+            <source src="${pub.media.url}" type="${pub.media.type}">
+          </video>
+        </div>
+      `;
+    } else {
+      preview.innerHTML = '';
+    }
+  } else {
     preview.innerHTML = '';
     preview.setAttribute('data-media-url', '');
     preview.setAttribute('data-media-type', '');
   }
+}
 
-  document.getElementById('oferta-seccion').value = '';
-  document.getElementById('oferta-tipo').value = '';
-  document.getElementById('oferta-titulo').value = '';
-  document.getElementById('oferta-precio').value = '';
-  document.getElementById('oferta-desc').value = '';
-  document.getElementById('oferta-status').textContent = '';
-
+function borrarPublicacionActual(){
+  localStorage.removeItem('offerfind_publicacion');
   actualizarVistaComerciante();
 }
 
