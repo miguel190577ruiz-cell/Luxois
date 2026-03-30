@@ -1809,6 +1809,7 @@ function leerPublicacionActual(){
   document.getElementById('oferta-titulo').value = pub.titulo || '';
   document.getElementById('oferta-precio').value = pub.precio || '';
   document.getElementById('oferta-desc').value = pub.desc || '';
+  document.getElementById('oferta-media-preview').innerHTML = pub.media || '';
   }
 function mostrarFormularioComerciante(){
   document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
