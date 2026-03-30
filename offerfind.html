@@ -1727,7 +1727,7 @@ const tipo = document.getElementById('oferta-tipo').value;
   const status = document.getElementById('oferta-status');
   const lista = document.getElementById('lista-ofertas');
 
-  if(!titulo || !precio || !desc){
+  if(!seccion || !tipo || !titulo || !precio || !desc){
     status.textContent = 'Completa título, precio y descripción.';
     return;
   }
