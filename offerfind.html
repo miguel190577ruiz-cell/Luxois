@@ -1784,7 +1784,10 @@ function leerComercioLocal(){
   const saved = localStorage.getItem('offerfind_comercio_actual');
   return saved ? JSON.parse(saved) : null;
 }
-
+function leerPublicacionActual(){
+  const saved = localStorage.getItem('offerfind_publicacion');
+  return saved ? JSON.parse(saved) : null;
+}
 function mostrarFormularioComerciante(){
   document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
   document.getElementById('merchantScreenSubtitle').style.display = 'block';
