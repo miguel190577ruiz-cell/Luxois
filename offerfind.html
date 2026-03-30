@@ -1725,77 +1725,53 @@ function guardarOferta(){
   const precio = document.getElementById('oferta-precio').value.trim();
   const desc = document.getElementById('oferta-desc').value.trim();
   const preview = document.getElementById('oferta-media-preview');
-const media = preview.getAttribute('data-media') || '';
   const status = document.getElementById('oferta-status');
+
+  const media = preview ? (preview.getAttribute('data-media') || '') : '';
 
   if(!seccion || !tipo || !titulo || !precio || !desc){
     status.textContent = 'Completa sección, tipo, título, precio y descripción.';
     return;
   }
 
-
-const oferta = {
-  id: 'oferta_' + Date.now(),
-  seccion: seccion,
-  tipo: tipo,
-  titulo: titulo,
-  precio: precio,
-  desc: desc,
-  media: media
-};
-
-  localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
-status.textContent = 'Publicación guardada correctamente.';
-  status.innerHTML = 'Publicación guardada correctamente.';
-//actualizarVistaComerciante();
-}
-
-async function geocodificarDireccion(address){
-  const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(address);
-
-  const response = await fetch(url, {
-    headers: { 'Accept': 'application/json' }
-  });
-
-  if(!response.ok){
-    throw new Error('No se pudo consultar la dirección');
-  }
-
-  const results = await response.json();
-
-  if(!results || !results.length){
-    throw new Error('No se encontró esa dirección');
-  }
-
-  return {
-    lat: parseFloat(results[0].lat),
-    lng: parseFloat(results[0].lon),
-    displayName: results[0].display_name
+  const oferta = {
+    id: 'oferta_' + Date.now(),
+    seccion: seccion,
+    tipo: tipo,
+    titulo: titulo,
+    precio: precio,
+    desc: desc,
+    media: media
   };
+
+  try {
+    localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
+
+    const guardada = localStorage.getItem('offerfind_publicacion');
+
+    if(guardada){
+      status.textContent = 'Publicación guardada correctamente.';
+    } else {
+      status.textContent = 'No se ha podido guardar la publicación.';
+    }
+  } catch (error) {
+    status.textContent = 'Error al guardar la publicación.';
+    console.log(error);
+  }
 }
 
-function guardarComercioLocal(merchant){
-  localStorage.setItem('offerfind_comercio_actual', JSON.stringify(merchant));
-}
-
-function leerComercioLocal(){
-  const saved = localStorage.getItem('offerfind_comercio_actual');
-  return saved ? JSON.parse(saved) : null;
-}
 function leerPublicacionActual(){
-  const saved = localStorage.getItem('offerfind_publicacion');
-  return saved ? JSON.parse(saved) : null;
-}
-  function leerPublicacionActual(){
   const saved = localStorage.getItem('offerfind_publicacion');
   return saved ? JSON.parse(saved) : null;
 }
 
 function verPublicacionActual(){
   const pub = leerPublicacionActual();
+  const status = document.getElementById('oferta-status');
+  const preview = document.getElementById('oferta-media-preview');
 
   if(!pub){
-    alert('No hay publicación actual');
+    alert('No hay publicación actual guardada');
     return;
   }
 
@@ -1808,7 +1784,46 @@ function verPublicacionActual(){
   document.getElementById('oferta-precio').value = pub.precio || '';
   document.getElementById('oferta-desc').value = pub.desc || '';
 
-  document.getElementById('oferta-status').textContent = '';
+  if(preview){
+    if(pub.media){
+      preview.setAttribute('data-media', pub.media);
+
+      if(pub.media.startsWith('data:image')){
+        preview.innerHTML = `<img src="${pub.media}" style="width:100%; max-height:200px; object-fit:contain; border-radius:12px;">`;
+      } else if(pub.media.startsWith('data:video')){
+        preview.innerHTML = `
+          <video controls playsinline webkit-playsinline style="width:100%; max-height:120px; object-fit:contain; border-radius:12px;">
+            <source src="${pub.media}">
+          </video>
+        `;
+      } else {
+        preview.innerHTML = '';
+      }
+    } else {
+      preview.innerHTML = '';
+      preview.setAttribute('data-media', '');
+    }
+  }
+
+  status.textContent = '';
+}
+
+function borrarPublicacionActual(){
+  localStorage.removeItem('offerfind_publicacion');
+
+  const preview = document.getElementById('oferta-media-preview');
+  const status = document.getElementById('oferta-status');
+
+  if(preview){
+    preview.innerHTML = '';
+    preview.setAttribute('data-media', '');
+  }
+
+  if(status){
+    status.textContent = '';
+  }
+
+  actualizarVistaComerciante();
 }
 function mostrarFormularioComerciante(){
   document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
