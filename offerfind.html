@@ -1719,6 +1719,8 @@ function previsualizarMediaOferta(event){
 }
 
 function guardarOferta(){
+  const seccion = document.getElementById('oferta-seccion').value;
+const tipo = document.getElementById('oferta-tipo').value;
   const titulo = document.getElementById('oferta-titulo').value.trim();
   const precio = document.getElementById('oferta-precio').value.trim();
   const desc = document.getElementById('oferta-desc').value.trim();
