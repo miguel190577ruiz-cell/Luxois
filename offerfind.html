@@ -2037,5 +2037,19 @@ function hablarIA() {
   };
 }
   </script>
+  <script>
+function abrirPantallaComerciante() {
+  alert("CLICK OK");
+
+  document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
+
+  var p = document.getElementById('pantallaComerciante');
+  if (p) {
+    p.style.display = 'block';
+  } else {
+    alert("NO EXISTE pantallaComerciante");
+  }
+}
+  </script>
 </body>
 </html>
