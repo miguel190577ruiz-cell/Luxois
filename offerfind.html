@@ -959,43 +959,45 @@ document.addEventListener('DOMContentLoaded', function () {
         </button>
       </div>
 
-      <div class="distanciaBloque" style="margin-bottom:0;">
-        <div class="distanciaTitulo" style="margin-bottom:0;>¿A qué distancia?</div>
+     <div class="distanciaBloque" style="margin-bottom:0;">
+  <div class="distanciaTitulo" style="margin-bottom:6px;">¿A qué distancia?</div>
 
-        <div class="distancias" style="display:flex;gap:10px;align-items:center;justify-content:flex-start;width:100%;"> 
-          <button class="distBtn"
-  onclick="seleccionarDistancia('100 m')"
-  style="
-    flex:0 0 auto;        
-    height:30px;
-    padding:0 12px;
-    font-size:14px;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  ">
-  100 m
-          </button>
- <button class="cambiarDist"
-  style="
-    flex:1;
-    width:auto;
-    height:30px;
-    padding:0 4px;
-    font-size:14px;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  ">
-  ⚙️ Distancia..
- </button>
-        </div>
+  <div class="distancias" style="display:flex; align-items:center; gap:10px; width:100%;">
+    <button
+      class="distBtn"
+      onclick="seleccionarDistancia('100 m')"
+      style="
+        flex:0 0 auto;
+        height:30px;
+        padding:0 12px;
+        font-size:14px;
+        border-radius:10px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      ">
+      100 m
+    </button>
 
-       
-      </div>
-    </div>
+    <button
+      class="cambiarDist"
+      style="
+        flex:1;
+        min-width:0;
+        height:30px;
+        padding:0 8px;
+        font-size:13px;
+        border-radius:10px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        white-space:nowrap;
+        margin:0;
+      ">
+      ⚙️ Distancia
+    </button>
+  </div>
+     </div> 
 <div id="iaBox" style="margin:-8px 24px 14px 24px; height:110px; position:relative;">
 
   <!-- BOTÓN -->
