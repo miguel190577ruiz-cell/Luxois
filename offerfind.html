@@ -2003,5 +2003,35 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
+  <script>
+function abrirPanelIA() {
+  const btn = document.getElementById('btnIA');
+  const panel = document.getElementById('panelIA');
+
+  if (!btn || !panel) return;
+
+  btn.style.display = 'none';
+  panel.style.display = 'block';
+}
+
+function hablarIA() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert('Tu navegador no permite usar el micro.');
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'es-ES';
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const texto = event.results[0][0].transcript;
+    const input = document.getElementById('inputIA');
+    if (input) input.value = texto;
+  };
+}
+  </script>
 </body>
 </html>
