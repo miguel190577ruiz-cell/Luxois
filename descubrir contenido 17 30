@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>OfertFind</title>
+  
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+<style> 
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:
+    linear-gradient(rgba(80,140,220,.08), rgba(255,255,255,.03)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
+    center center/cover no-repeat;
+  color:#fff;
+}
+
+.pantalla{
+  display:none;
+  width:100%;
+  height:100%;
+}
+
+.pantalla.activa{
+  display:block;
+}
+
+/* SPLASH */
+#pantallaSplash{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:#000;
+}
+
+.splashWrap{
+  width:100%;
+  max-width:430px;
+  height:100%;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,.34)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
+    center/cover no-repeat;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:24px;
+}
+
+.splashTitulo{
+  font-size:48px;
+  font-weight:900;
+  color:#ffd84b;
+  text-shadow:0 4px 14px rgba(0,0,0,.45);
+  margin:0;
+}
+
+.splashSub{
+  margin-top:12px;
+  font-size:21px;
+  font-weight:800;
+  color:#fff;
+  text-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+
+.splashZona{
+  margin-top:18px;
+  font-size:17px;
+  color:#fff;
+  opacity:.95;
+  text-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+
+.splashLoading{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:38px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  gap:10px;
+}
+
+.splashText{
+  font-size:15px;
+  font-weight:700;
+  color:#ffffff;
+  text-shadow:0 2px 6px rgba(0,0,0,.55);
+}
+
+.splashDots{
+  display:flex;
+  gap:8px;
+}
+
+.splashDots span{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ffffff;
+  opacity:.35;
+  animation:dotPulse 1.2s infinite ease-in-out;
+}
+
+.splashDots span:nth-child(2){animation-delay:.2s}
+.splashDots span:nth-child(3){animation-delay:.4s}
+
+@keyframes dotPulse{
+  0%,80%,100%{transform:scale(.8);opacity:.35}
+  40%{transform:scale(1.15);opacity:1}
+}
+
+/* HOME */
+.home{
+  width:100%;
+  max-width:430px;
+  height:100%;
+  margin:0 auto;
+  padding:6px 14px 10px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  background:linear-gradient(to bottom, rgba(90,150,235,.10), rgba(255,255,255,.03));
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:14px;
+  font-weight:700;
+  text-shadow:0 2px 6px rgba(0,0,0,.45);
+  margin-bottom:18px;
+}
+
+.toplink{
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+/* BOTONES */
+.grid4{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  width:100%;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  width:49%;
+  margin:2px auto 0;
+}
+
+.cat{
+  border: none;
+  border-radius: 6px;
+  width:100%;
+  max-width:100%
+  height: 100px;
+
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  overflow:hidden;
+  
+  padding: 8px;
+  cursor: pointer;
+
+  /* SOMBRA PRO */
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.25),
+    inset 0 2px 6px rgba(0,0,0,0.25);
+
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.cat:active{
+  transform:scale(0.95);
+  box-shadow:0 2px 6px rgba(0,0,0,0.3);
+}
+
+.cat .icon{
+  font-size:28px;
+  margin-bottom:8px;
+  line-height:1;
+}
+
+.cat .txt{
+  font-family:'Pacifico',cursive;
+  font-size:17px;
+  font-weight:400;
+  line-height:1.05;
+  text-align:center;
+}
+
+.naranja { background: linear-gradient(145deg, #f9c76b, #e08a1a); }
+.rojo { background: linear-gradient(145deg, #ff7a5c, #d63c2f); }
+.azul { background: linear-gradient(145deg, #6fa3ff, #2f5fd0); }
+.verde { background: linear-gradient(145deg, #6edb8f, #2e9f5a); }
+.morado { background: linear-gradient(145deg, #c77dff, #7b2cbf); }
+.turquesa { background: linear-gradient(145deg, #72d6e3, #2aa7b8); }
+
+/* DISTANCIA */
+.distanciaBloque{
+  margin-top:2px;
+  text-align:center;
+}
+
+.distanciaTitulo{
+  font-size:18px;
+  font-style:italic;
+  font-weight:400;
+  font-family:'Pacifico',cursive;
+  margin-bottom:8px;
+  text-shadow:0 2px 6px rgba(0,0,0,.35);
+}
+
+.distancias{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.distBtn{
+  background:linear-gradient(#4e74c7,#2c4c97);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  min-width:96px;
+  padding:12px 12px;
+  font-size:16px;
+  font-weight:800;
+  box-shadow:0 4px 10px rgba(0,0,0,.22);
+  cursor:pointer;
+}
+
+.cambiarDist{
+  display:block;
+  width:280px;
+  margin:0 auto;
+  border:none;
+  border-radius:22px;
+  padding:10px 16px;
+  font-size:16px;
+  font-style:italic;
+  font-family:'Pacifico',cursive;
+  background:linear-gradient(#ffffff,#dfe8f1);
+  color:#2f4058;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);
+  cursor:default;
+}
+
+/* CARRUSEL */
+.carruselWrap{
+  overflow:hidden;
+  width:100%;
+  margin-top:4px;
+  padding-bottom:4px;
+}
+
+.carruselTrack{
+  display:flex;
+  gap:12px;
+  width:max-content;
+  animation:moverCarrusel 36s linear infinite;
+}
+
+.carruselWrap:hover .carruselTrack{
+  animation-play-state:paused;
+}
+
+@keyframes moverCarrusel{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+
+.promoBanner{
+  position:relative;
+  width:300px;
+  height:160px;
+  flex:0 0 auto;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:0 5px 12px rgba(0,0,0,.25);
+  border:2px solid rgba(255,255,255,.55);
+}
+
+.promoBanner img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.promoOverlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right, rgba(0,0,0,.32), rgba(0,0,0,.08));
+  padding:16px 16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.promoTitulo{
+  font-size:18px;
+  line-height:1.08;
+  font-weight:800;
+  color:#fff;
+  text-shadow:0 2px 6px rgba(0,0,0,.7);
+}
+
+.promoSub{
+  margin-top:6px;
+  font-size:14px;
+  font-weight:700;
+  color:#fff9d0;
+  text-shadow:0 2px 6px rgba(0,0,0,.7);
+}
+
+.footerLink{
+  text-align:center;
+  font-size:15px;
+  color:#28364a;
+  font-weight:700;
+  margin-top:8px;
+  text-shadow:0 1px 1px rgba(255,255,255,.25);
+}
+
+.footerLink span{
+  color:#13479c;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+/* PANELES */
+.panelPantalla{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:linear-gradient(rgba(90,150,235,.15), rgba(255,255,255,.08));
+}
+
+.panel{
+  width:100%;
+  max-width:430px;
+  max-height:90vh;
+  overflow:auto;
+  background:rgba(255,255,255,.93);
+  color:#223;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.22);
+}
+
+.volver{
+  display:inline-block;
+  margin-bottom:14px;
+  color:#1d4ca0;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tituloPantalla{
+  margin:0 0 16px;
+  font-size:26px;
+  color:#173c80;
+}
+
+.ofertaLista{
+  display:grid;
+  gap:12px;
+}
+
+.itemOferta{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+  border:1px solid #d8e0ef;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  cursor:pointer;
+}
+
+.itemOferta strong{
+  display:block;
+  margin-bottom:4px;
+  color:#0e2f6f;
+}
+
+/* UBICACION */
+.ubicacionBtns{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+
+.ubicacionBtn{
+  width:100%;
+  padding:14px 16px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(#4e74c7,#2c4c97);
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.18);
+}
+
+.ubicacionActualBox{
+  margin-top:16px;
+  background:#eef4ff;
+  color:#173c80;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #c9d8f5;
+  font-weight:600;
+}
+
+.listaPueblos{
+  display:grid;
+  gap:10px;
+  margin-top:14px;
+}
+
+.puebloBtn{
+  width:100%;
+  text-align:left;
+  padding:12px 14px;
+  border:none;
+  border-radius:12px;
+  background:#ffffff;
+  color:#173c80;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 3px 8px rgba(0,0,0,.08);
+  border:1px solid #d8e0ef;
+}
+
+.subBloque{
+  margin-top:18px;
+}
+
+.subBloque h3{
+  margin:0 0 10px;
+  color:#173c80;
+  font-size:18px;
+}
+
+/* RESULTADOS */
+.resultadosPantalla{
+  width:100%;
+  max-width:430px;
+  height:100%;
+  margin:0 auto;
+  background:
+    linear-gradient(rgba(255,255,255,.14), rgba(255,255,255,.08)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')
+    center center/cover no-repeat;
+  overflow:auto;
+}
+
+.resultadosTop{
+  padding:12px 12px 0;
+}
+
+.barraBusqueda{
+  background:rgba(255,255,255,.95);
+  border-radius:22px;
+  padding:12px 16px;
+  color:#163b7a;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:16px;
+  font-weight:700;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+.barraBusqueda span{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.mapaDemo{
+  position:relative;
+  height:210px;
+  margin-top:10px;
+  background:
+    linear-gradient(rgba(255,255,255,.12), rgba(255,255,255,.12)),
+    url('https://static-maps.yandex.ru/1.x/?lang=es_ES&ll=-4.4991,36.6213&z=14&size=650,300&l=map&pt=-4.4991,36.6213,pm2rdm')
+    center/cover no-repeat;
+  border-radius:0 0 24px 24px;
+  overflow:hidden;
+}
+
+.pinCentro{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:74px;
+  height:74px;
+  border-radius:50%;
+  background:rgba(70,120,220,.25);
+  border:8px solid rgba(70,120,220,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+}
+
+.tagMapa{
+  position:absolute;
+  background:#d94848;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:800;
+  box-shadow:0 4px 8px rgba(0,0,0,.18);
+}
+
+.tag1{left:14px; top:36px;}
+.tag2{left:88px; top:118px;}
+.tag3{right:18px; top:98px;}
+.tag4{right:18px; top:28px;}
+
+.listaResultados{
+  padding:10px 10px 16px;
+}
+
+.resultadoCard{
+  background:rgba(255,255,255,.94);
+  color:#1d2435;
+  border-radius:16px;
+  margin-bottom:10px;
+  padding:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+.resultadoBadge{
+  display:inline-block;
+  background:#e34a4a;
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  border-radius:12px;
+  padding:6px 10px;
+  margin-bottom:8px;
+}
+
+.resultadoFila{
+  display:flex;
+  gap:10px;
+  align-items:stretch;
+}
+
+.resultadoImg{
+  width:105px;
+  min-width:105px;
+  height:88px;
+  border-radius:12px;
+  overflow:hidden;
+  background:#ddd;
+}
+
+.resultadoImg img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.resultadoInfo{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.resultadoTopInfo{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.resultadoTitulo{
+  font-size:16px;
+  font-weight:800;
+  color:#182f67;
+  line-height:1.15;
+}
+
+.resultadoDist{
+  font-size:13px;
+  color:#5a647d;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.resultadoPrecio{
+  font-size:18px;
+  font-weight:800;
+  color:#111;
+}
+
+.resultadoAntes{
+  font-size:14px;
+  color:#666;
+  text-decoration:line-through;
+  margin-left:6px;
+}
+
+.resultadoTiempo{
+  font-size:13px;
+  color:#555;
+  font-weight:700;
+  margin-top:2px;
+}
+
+.btnIr{
+  align-self:flex-end;
+  background:linear-gradient(#ffd74a,#e6b81d);
+  color:#2f2600;
+  border:none;
+  border-radius:12px;
+  padding:10px 18px;
+  font-size:16px;
+  font-weight:800;
+  box-shadow:0 3px 8px rgba(0,0,0,.16);
+  cursor:default;
+}
+
+.volverResultados{
+  display:inline-block;
+  color:#fff;
+  font-weight:700;
+  padding:12px 12px 0;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);
+  cursor:pointer;
+}
+  .merchant-box{
+  padding:16px;
+}
+
+.merchant-subtitle{
+  color:#666;
+  font-size:14px;
+  line-height:1.4;
+  margin:4px 0 16px;
+}
+
+.merchant-form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.merchant-form label{
+  font-size:14px;
+  font-weight:700;
+  color:#222;
+}
+
+.merchant-form input{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid #d7d7d7;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:16px;
+  background:#fff;
+  color:#111;
+}
+
+.merchant-submit{
+  border:none;
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:800;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+  margin-top:6px;
+}
+
+.merchant-status{
+  min-height:22px;
+  margin-top:12px;
+  font-size:14px;
+  font-weight:700;
+  color:#222;
+}
+
+.merchant-card{
+  margin-top:12px;
+  background:#f6f6f6;
+  border-radius:16px;
+  padding:14px;
+}
+
+#merchant-result{
+  font-size:14px;
+  line-height:1.5;
+  color:#222;
+}
+
+#merchant-map{
+  margin-top:14px;
+  height:320px;
+  border-radius:18px;
+  overflow:hidden;
+  background:#e9e9e9;
+}
+
+.merchant-dashboard{
+  margin-top:16px;
+}
+
+.merchant-dashboard h3{
+  margin:0 0 10px;
+  font-size:20px;
+  color:#111;
+}
+
+.merchant-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:12px;
+}
+
+.merchant-action-btn{
+  border:none;
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:800;
+  background:#222;
+  color:#fff;
+  cursor:pointer;
+}
+  .merchant-box{
+  padding:16px;
+}
+
+.merchant-subtitle{
+  color:#666;
+  font-size:14px;
+  line-height:1.4;
+  margin:4px 0 16px;
+}
+
+.merchant-form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.merchant-form label{
+  font-size:14px;
+  font-weight:700;
+  color:#222;
+}
+
+.merchant-form input{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid #d7d7d7;
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:16px;
+  background:#fff;
+  color:#111;
+}
+
+.merchant-submit{
+  border:none;
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:800;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+  margin-top:6px;
+}
+
+.merchant-status{
+  min-height:22px;
+  margin-top:12px;
+  font-size:14px;
+  font-weight:700;
+  color:#222;
+}
+
+.merchant-card{
+  margin-top:12px;
+  background:#f6f6f6;
+  border-radius:16px;
+  padding:14px;
+}
+
+#merchant-result{
+  font-size:14px;
+  line-height:1.5;
+  color:#222;
+}
+
+#merchant-map{
+  margin-top:14px;
+  height:320px;
+  border-radius:18px;
+  overflow:hidden;
+  background:#e9e9e9;
+}
+
+.merchant-dashboard{
+  margin-top:16px;
+}
+
+.merchant-dashboard h3{
+  margin:0 0 10px;
+  font-size:20px;
+  color:#111;
+}
+
+.merchant-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:12px;
+}
+
+.merchant-action-btn{
+  border:none;
+  border-radius:16px;
+  padding:14px 16px;
+  font-size:16px;
+  font-weight:800;
+  background:#222;
+  color:#fff;
+  cursor:pointer;
+}
+</style>
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+</head>
+<body>
+
+<div id="pantallaSplash" class="pantalla activa">
+  <div class="splashWrap">
+    <h1 class="splashTitulo">OfertFind</h1>
+    <div class="splashSub">Ofertas cerca de ti</div>
+    <div class="splashZona">Costa del Sol · Axarquía</div>
+
+    <div class="splashLoading">
+      <div class="splashText">Cargando ofertas...</div>
+      <div class="splashDots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    var splash = document.getElementById('pantallaSplash');
+    var inicio = document.getElementById('pantallaInicio');
+
+    if (splash) {
+      splash.style.display = 'none';
+      splash.classList.remove('activa');
+    }
+
+    if (inicio) {
+      inicio.classList.add('activa');
+    }
+  }, 3000);
+});
+</script>
+<div id="pantallaInicio" class="pantalla">
+  <div class="home">
+    <div>
+      <div class="topbar">
+        <div id="btnUbicacion" class="toplink">📍 <span id="textoUbicacionTop">Tu ubicación</span></div>
+        <div class="toplink">Seleccionar idioma ›</div>
+      </div>
+
+      <div class="grid4">
+        <button class="cat naranja" onclick="abrirDesayuno()">
+          <div class="icon">☕</div>
+          <div class="txt">Desayunar</div>
+        </button>
+
+        <button class="cat rojo" onclick="abrirComer()">
+          <div class="icon">🍴</div>
+          <div class="txt">Comer</div>
+        </button>
+
+        <button class="cat azul" onclick="abrirCategoria('Comprar')">
+          <div class="icon">🛍️</div>
+          <div class="txt">Comprar</div>
+        </button>
+
+        <button class="cat verde" onclick="abrirCategoria('Ofertas Express')">
+          <div class="icon">⚡</div>
+          <div class="txt">Ofertas<br>Express</div>
+        </button>
+      </div>
+
+      <div class="grid2">
+        <button class="cat morado" onclick="abrirCategoria('Happy Hour')">
+          <div class="icon">🍸</div>
+          <div class="txt">Happy Hour</div>
+        </button>
+
+        <button class="cat turquesa" onclick="abrirCategoria('Ocio')">
+          <div class="icon">🌴</div>
+          <div class="txt">Ocio</div>
+        </button>
+      </div>
+
+      <div class="distanciaBloque"style="margin-bottom:0;">
+        <div class="distanciaTitulo"style="margin-bottom:0;>¿A qué distancia?</div>
+
+        <div class="distancias"style="display:flex;gap:10px;">
+          <button class="distBtn"
+  onclick="seleccionarDistancia('100 m')"
+  style="
+    height:30px;
+    padding:0 12px;
+    font-size:14px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  ">
+  100 m
+          </button>
+ <button class="cambiarDist"
+style="
+  flex:1;
+  height:42px;
+  padding:0 12px;
+  font-size:16px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+
+  background: linear-gradient(135deg, rgba(255,0,150,0.7), rgba(120,0,255,0.7));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255,255,255,0.2);
+  color:white;
+
+  box-shadow: 0 8px 20px rgba(120,0,255,0.25);
+">
+🎬 Descubrir contenido
+ </button>
+        </div>
+
+       
+      </div>
+    </div>
+<div id="iaBox" style="margin:-8px 24px 14px 24px; height:110px; position:relative;">
+
+  <!-- BOTÓN -->
+  <button
+    id="btnIA"
+    type="button"
+    onclick="abrirPanelIA()"
+    style="
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:18px;
+      background:linear-gradient(135deg, #4f6cff, #7c3aed, #06b6d4);
+      box-shadow:0 6px 20px rgba(0,0,0,0.25);
+      color:gold;
+      font-family:'Great Vibes', cursive;
+      font-size:26px;
+      text-shadow:0 0 8px rgba(255,215,0,0.75), 0 2px 4px rgba(0,0,0,0.35);
+    ">
+    ✨ ¿Qué te apetece? ✨
+  </button>
+
+  <!-- PANEL IA -->
+  <div
+    id="panelIA"
+    style="
+      display:none;
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, rgba(79,108,255,0.15), rgba(124,58,237,0.15), rgba(6,182,212,0.15));
+backdrop-filter: blur(6px);
+      border-radius:18px;
+      padding:10px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.18);
+      box-sizing:border-box;
+    ">
+
+    <input
+      id="inputIA"
+      type="text"
+      placeholder="Ej: pizza, desayuno, ofertas..."
+      style="
+        width:100%;
+        padding:8px;
+        border:none;
+        border-radius:10px;
+        background:rgba(255,255,255,0.5);
+        font-size:14px;
+        margin-bottom:6px;
+      "
+    >
+
+    <div style="display:flex; gap:6px;">
+      <button
+        onclick="hablarIA()"
+        style="
+          width:48px;
+          border:none;
+          border-radius:10px;
+          background:#7c3aed;
+          color:#fff;
+          font-size:18px;
+        ">
+        🎤
+      </button>
+
+      <button
+        style="
+          flex:1;
+          border:none;
+          border-radius:10px;
+          background:linear-gradient(135deg,#4facfe,#00f2fe);
+          color:#fff;
+          font-weight:600;
+        ">
+        Buscar
+      </button>
+    </div>
+
+  </div>
+</div>
+    <div>
+      <div class="carruselWrap">
+        <div class="carruselTrack">
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Zumo de naranja natural + pitufo catalana</div>
+              <div class="promoSub">2,50 €</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Mojitos 2,50 €</div>
+              <div class="promoSub">Happy Hour hoy de 19h a 20h · Chiringuito Tropical</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Pizza familiar</div>
+              <div class="promoSub">10 €</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Lote de azulejos imitación madera</div>
+              <div class="promoSub">5 €/m²</div>
+            </div>
+          </div>
+
+          <div class="promoBanner" style="
+  background:linear-gradient(135deg,#1e3a8a 0%, #7c3aed 50%, #06b6d4 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+">
+  <div style="
+    width:100%;
+    height:100%;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    color:#fff;
+    text-shadow:0 2px 6px rgba(0,0,0,.35);
+  ">
+    <div style="font-size:46px; line-height:1; margin-bottom:10px;">🎳</div>
+    <div style="font-size:18px; font-weight:800;">Hoy bolera</div>
+    <div style="font-size:14px; font-weight:700; margin-top:6px;">7 €</div>
+  </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Esta semana · Paseo en ferry</div>
+              <div class="promoSub">Lunes a jueves · 7 € adultos · 3 € niños</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Zumo de naranja natural + pitufo catalana</div>
+              <div class="promoSub">2,50 €</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Mojitos 2,50 €</div>
+              <div class="promoSub">Happy Hour hoy de 19h a 20h · Chiringuito Tropical</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Pizza familiar</div>
+              <div class="promoSub">10 €</div>
+            </div>
+          </div>
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Lote de azulejos imitación madera</div>
+              <div class="promoSub">5 €/m²</div>
+            </div>
+          </div>
+
+          <div class="promoBanner" style="
+  background:linear-gradient(135deg,#1e3a8a 0%, #7c3aed 50%, #06b6d4 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+">
+  <div style="
+    width:100%;
+    height:100%;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    color:#fff;
+    text-shadow:0 2px 6px rgba(0,0,0,.35);
+  ">
+    <div style="font-size:46px; line-height:1; margin-bottom:10px;">🎳</div>
+    <div style="font-size:18px; font-weight:800;">Hoy bolera</div>
+    <div style="font-size:14px; font-weight:700; margin-top:6px;">7 €</div>
+  </div>
+         </div>
+          
+
+          <div class="promoBanner">
+            <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=900&q=80" alt="">
+            <div class="promoOverlay">
+              <div class="promoTitulo">Esta semana · Paseo en ferry</div>
+              <div class="promoSub">Lunes a jueves · 7 € adultos · 3 € niños</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
+<div class="footerLink">
+        ¿Tienes un negocio?
+        <span onclick="abrirPantallaComerciante()">Acceso comerciante</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaUbicacion" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Ubicación</h2>
+
+      <div class="ubicacionBtns">
+        <button class="ubicacionBtn" onclick="mostrarUbicacionGPS()">Ubicación actual GPS</button>
+        <button class="ubicacionBtn" onclick="mostrarSeleccionUbicacion()">Seleccionar ubicación</button>
+      </div>
+
+      <div id="boxUbicacionActual" class="ubicacionActualBox" style="display:none;"></div>
+
+      <div id="boxSeleccionUbicacion" class="subBloque" style="display:none;">
+        <h3>Costa del Sol</h3>
+        <div class="listaPueblos" id="listaCostaSol"></div>
+
+        <h3 style="margin-top:18px;">Axarquía costa</h3>
+        <div class="listaPueblos" id="listaAxarquia"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaDesayuno" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 class="tituloPantalla">Desayunar</h2>
+
+      <div class="ofertaLista">
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Churrería')"><strong>Churrería</strong></div>
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Panadería')"><strong>Panadería</strong></div>
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Cafetería')"><strong>Cafetería</strong></div>
+        <div class="itemOferta" onclick="abrirResultadosDesayuno('Ver todo')"><strong>Ver todo</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaResultadosDesayuno" class="pantalla">
+  <div class="resultadosPantalla">
+    <div class="volverResultados" onclick="abrirDesayuno()">← Volver</div>
+
+    <div class="resultadosTop">
+      <div class="barraBusqueda">
+        <span>📍 <span id="tituloResultadosDesayuno">Cafetería en 500 m</span></span>
+        <span>›</span>
+      </div>
+
+      <div class="mapaDemo">
+        <div class="tagMapa tag1">33%</div>
+        <div class="tagMapa tag2">+3%</div>
+        <div class="tagMapa tag3">Express!</div>
+        <div class="tagMapa tag4">-31%</div>
+        <div class="pinCentro">📍</div>
+      </div>
+    </div>
+
+    <div id="listaResultadosDesayuno" class="listaResultados"></div>
+  </div>
+</div>
+
+<div id="pantallaComer" class="pantalla">
+  <div class="resultadosPantalla">
+    <div class="volverResultados" onclick="volverInicio()">← Volver</div>
+
+    <div class="resultadosTop">
+      <div class="barraBusqueda">
+        <span>📍 <span>Comer en 500 m</span></span>
+        <span>›</span>
+      </div>
+
+      <div class="mapaDemo">
+        <div class="tagMapa tag1">33%</div>
+        <div class="tagMapa tag2">+3%</div>
+        <div class="tagMapa tag3">Express!</div>
+        <div class="tagMapa tag4">-31%</div>
+        <div class="pinCentro">📍</div>
+      </div>
+    </div>
+
+    <div class="listaResultados">
+      <div class="resultadoCard">
+        <div class="resultadoBadge">⚡ Oferta Express!</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Espeto + vino</div>
+              <div class="resultadoDist">📍 180 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 6,00</div>
+              <div class="resultadoTiempo">🕒 5 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-30%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Menú del día</div>
+              <div class="resultadoDist">📍 300 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 8,50 <span class="resultadoAntes">€ 12,00</span></div>
+              <div class="resultadoTiempo">🕒 7 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-25%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Pizza familiar</div>
+              <div class="resultadoDist">📍 220 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 10,00</div>
+              <div class="resultadoTiempo">🕒 4 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-20%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Helado de pistacho</div>
+              <div class="resultadoDist">📍 250 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 1,50</div>
+              <div class="resultadoTiempo">🕒 5 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="resultadoCard">
+        <div class="resultadoBadge">-35%</div>
+        <div class="resultadoFila">
+          <div class="resultadoImg">
+            <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="resultadoInfo">
+            <div class="resultadoTopInfo">
+              <div class="resultadoTitulo">Kebab</div>
+              <div class="resultadoDist">📍 250 m</div>
+            </div>
+            <div>
+              <div class="resultadoPrecio">€ 3,50 <span class="resultadoAntes">€ 4,90</span></div>
+              <div class="resultadoTiempo">🕒 5 min.</div>
+            </div>
+            <button class="btnIr">IR 🚶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaCategoria" class="pantalla">
+  <div class="panelPantalla">
+    <div class="panel">
+      <div class="volver" onclick="volverInicio()">← Volver</div>
+      <h2 id="tituloCategoria" class="tituloPantalla">Categoría</h2>
+      <div class="ofertaLista">
+        <div class="itemOferta"><strong>Pantalla demo</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pantallaComerciante" class="pantalla">
+  <div class="home">
+    <div class="topbar">
+      <span class="volverResultados" onclick="volverInicio()">← Volver</span>
+    </div>
+
+    <div class="merchant-box">
+      <h2 id="merchantScreenTitle" style="margin:6px 0 10px 0; font-size:18px;">Acceso comerciante</h2>
+
+      <p id="merchantScreenSubtitle" class="merchant-subtitle">
+        Registra tu negocio para aparecer en el mapa y poder publicar ofertas.
+      </p>
+
+      <form id="merchant-form" class="merchant-form" onsubmit="return false;">
+        <label for="merchant-name">Nombre del comercio</label>
+        <input
+          type="text"
+          id="merchant-name"
+          placeholder="Ej. Cafetería La Plaza"
+          required
+        >
+
+        <label for="merchant-address">Dirección</label>
+        <input
+          type="text"
+          id="merchant-address"
+          placeholder="Ej. Calle del Mar 12, Torre del Mar, Málaga"
+          required
+        >
+
+        <label for="merchant-email">Email</label>
+        <input
+          type="email"
+          id="merchant-email"
+          placeholder="ejemplo@comercio.com"
+          required
+        >
+
+        <button type="button" class="merchant-submit" onclick="registrarComercioManual()">
+          Registrar comercio
+        </button>
+      </form>
+
+      <div id="merchant-status" class="merchant-status"></div>
+<div id="merchant-dashboard" class="merchant-dashboard" style="display:none;">
+  <div class="merchant-actions">
+
+  <button
+  type="button"
+  id="btn-crear-oferta"
+  class="merchant-action-btn"
+  onclick="abrirSubirOferta()"
+  style="display:block;">
+  Crear oferta
+</button>
+    
+<button
+  type="button"
+  id="btn-ver-oferta"
+  class="merchant-action-btn"
+  onclick="verPublicacionActual()"
+  style="display:none;">
+  Ver oferta actual
+</button>
+
+<button
+  type="button"
+  id="btn-borrar-oferta"
+  class="merchant-action-btn"
+  onclick="borrarPublicacionActual()"
+  style="display:none; background:#7a1f1f;">
+  Borrar oferta actual
+</button>  
+
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+<div id="pantallaSubirOferta" class="pantalla">
+  <div class="home">
+    <div class="topbar" style="display:flex; align-items:center; justify-content:space-between; padding:8px 16px 0 16px;">
+  <span class="volverResultados" onclick="abrirPantallaComerciante()">← Volver</span>
+  <span style="color:#fff; font-size:16px; font-weight:700;">Subir oferta</span>
+</div>
+
+<div style="padding:4px 16px 16px 16px; margin-top:0px;">
+  <p style="color:#666; font-size:14px; margin:0 0 8px 0;">
+    Crea una oferta para tu negocio.
+  </p>
+
+      <div style="margin-top:10px;">
+        <select id="oferta-seccion"
+  style="width:100%; padding:10px; margin-bottom:8px; border-radius:12px; border:1px solid #ccc;">
+  <option value="">Selecciona sección</option>
+  <option value="desayunar">Desayunar</option>
+  <option value="comer">Comer</option>
+  <option value="comprar">Comprar</option>
+  <option value="ocio">Ocio</option>
+</select>
+
+<select id="oferta-tipo"
+  style="width:100%; padding:10px; margin-bottom:8px; border-radius:12px; border:1px solid #ccc;">
+  <option value="">Tipo de oferta</option>
+  <option value="dia">Oferta del día</option>
+  <option value="semana">Oferta de la semana</option>
+  <option value="express">Oferta Express</option>
+  <option value="happy">Happy Hour</option>
+</select>
+        <input id="oferta-titulo" type="text" placeholder="Título de la oferta"
+          style="width:100%; padding:10px; margin-bottom:8px; border-radius:10px; border:1px solid #ccc;">
+
+        <input id="oferta-precio" type="text" placeholder="Precio (ej: 2,50 €)"
+          style="width:100%; padding:10px; margin-bottom:8px; border-radius:10px; border:1px solid #ccc;">
+
+        <textarea id="oferta-desc" placeholder="Descripción"
+          style="width:100%; padding:10px; margin-bottom:8px; border-radius:10px; border:1px solid #ccc;"></textarea>
+
+        <button type="button" onclick="document.getElementById('oferta-media').click()"
+          style="width:100%; padding:12px; border:none; border-radius:12px; background:#222; color:#fff; font-weight:700; margin-bottom:10px;">
+          Elegir imagen o vídeo
+        </button>
+ 
+        <input
+          type="file"
+          id="oferta-media"
+          accept="image/*,video/*"
+          style="display:none;"
+          onchange="previsualizarMediaOferta(event)"
+        >
+
+        <div id="oferta-media-preview" style="margin-bottom:12px;"></div>
+<div id="oferta-status" style="margin:10px 0; font-size:14px; color:#ffffff; font-weight:700; text-shadow:0 1px 3px rgba(0,0,0,0.6);"></div>
+        <button id="btn-guardar-oferta"
+          onclick="guardarOferta()"
+         style="margin-top:0px; width:100%; padding:12px; border:none; border-radius:12px; background:#000; color:#fff; font-weight:700;">
+          Publicar
+        </button>
+      </div>
+
+      
+
+      <div id="lista-ofertas" style="margin-top:16px;"></div>
+      </div>
+     </div>
+   </div>
+  </div>
+</div>
+  
+<script>
+const pueblosCostaSol = [
+  "Málaga","Torremolinos","Benalmádena","Fuengirola","Mijas Costa",
+  "Marbella","San Pedro de Alcántara","Estepona","Manilva","Casares Costa","Nerja"
+];
+
+const pueblosAxarquia = [
+  "Rincón de la Victoria","Torre de Benagalbón","Benajarafe","Chilches Costa",
+  "Torre del Mar","Caleta de Vélez","Algarrobo Costa","Torrox Costa","El Morche","Nerja"
+];
+
+const resultadosDesayuno = {
+  "Churrería": [
+    { badge:"-25%", titulo:"Churros + Chocolate", distancia:"280 m", precio:"€ 3,00", antes:"€ 4,00", tiempo:"4 min.", img:"https://images.unsplash.com/photo-1625944525533-473f1f45c9b5?auto=format&fit=crop&w=600&q=80" },
+    { badge:"Oferta Express!", titulo:"Porra + Café", distancia:"190 m", precio:"€ 2,50", antes:"€ 3,20", tiempo:"6 min.", img:"https://images.unsplash.com/photo-1515442261605-65987783cb6a?auto=format&fit=crop&w=600&q=80" },
+    { badge:"+10%", titulo:"Chocolate grande + Churros", distancia:"320 m", precio:"€ 3,80", antes:"€ 4,50", tiempo:"8 min.", img:"https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&w=600&q=80" }
+  ],
+  "Panadería": [
+    { badge:"Oferta Express!", titulo:"Croissant + Café", distancia:"150 m", precio:"€ 2,00", antes:"€ 3,00", tiempo:"29 min.", img:"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-18%", titulo:"Tostada + Café", distancia:"200 m", precio:"€ 2,20", antes:"€ 3,20", tiempo:"3 min.", img:"https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-12%", titulo:"Bollería variada", distancia:"260 m", precio:"€ 2,90", antes:"€ 3,30", tiempo:"5 min.", img:"https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=600&q=80" }
+  ],
+  "Cafetería": [
+    { badge:"Oferta Express!", titulo:"Café + Croissant", distancia:"150 m", precio:"€ 2,00", antes:"€ 3,00", tiempo:"29 min.", img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-31%", titulo:"Tostada + Café", distancia:"200 m", precio:"€ 2,20", antes:"€ 3,20", tiempo:"3 min.", img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-20%", titulo:"Titufo + zumo natural", distancia:"280 m", precio:"€ 3,20", antes:"€ 4,00", tiempo:"4 min.", img:"https://images.unsplash.com/photo-1555507036-ab794f4afe5b?auto=format&fit=crop&w=600&q=80" },
+    { badge:"2x1", titulo:"Bollería panadería", distancia:"220 m", precio:"€ 2,50", antes:"€ 3,10", tiempo:"5 min.", img:"https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=600&q=80" }
+  ],
+  "Ver todo": [
+    { badge:"Oferta Express!", titulo:"Café + Croissant", distancia:"150 m", precio:"€ 2,00", antes:"€ 3,00", tiempo:"29 min.", img:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-31%", titulo:"Tostada + Café", distancia:"200 m", precio:"€ 2,20", antes:"€ 3,20", tiempo:"3 min.", img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80" },
+    { badge:"-25%", titulo:"Churros + Chocolate", distancia:"280 m", precio:"€ 3,00", antes:"€ 4,00", tiempo:"4 min.", img:"https://images.unsplash.com/photo-1625944525533-473f1f45c9b5?auto=format&fit=crop&w=600&q=80" },
+    { badge:"2x1", titulo:"Bollería panadería", distancia:"220 m", precio:"€ 2,50", antes:"€ 3,10", tiempo:"5 min.", img:"https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=600&q=80" }
+  ]
+};
+
+function ocultarTodo(){
+  document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
+}
+
+function volverInicio(){
+  ocultarTodo();
+  document.getElementById('pantallaInicio').classList.add('activa');
+}
+
+function abrirPantallaUbicacion(){
+  ocultarTodo();
+  document.getElementById('pantallaUbicacion').classList.add('activa');
+}
+
+function mostrarUbicacionGPS(){
+  document.getElementById('boxSeleccionUbicacion').style.display = 'none';
+  const box = document.getElementById('boxUbicacionActual');
+  box.style.display = 'block';
+  box.innerHTML = 'Ubicación actual GPS seleccionada.<br><br>En la versión completa aquí se detectaría automáticamente la posición del usuario.';
+  document.getElementById('textoUbicacionTop').textContent = 'GPS actual';
+}
+
+function mostrarSeleccionUbicacion(){
+  document.getElementById('boxUbicacionActual').style.display = 'none';
+  document.getElementById('boxSeleccionUbicacion').style.display = 'block';
+}
+
+function seleccionarPueblo(nombre){
+  document.getElementById('textoUbicacionTop').textContent = nombre;
+  alert('Ubicación seleccionada: ' + nombre);
+  volverInicio();
+}
+
+function pintarPueblos(){
+  const listaCostaSol = document.getElementById('listaCostaSol');
+  const listaAxarquia = document.getElementById('listaAxarquia');
+
+  listaCostaSol.innerHTML = '';
+  listaAxarquia.innerHTML = '';
+
+  pueblosCostaSol.forEach(pueblo => {
+    const btn = document.createElement('button');
+    btn.className = 'puebloBtn';
+    btn.textContent = pueblo;
+    btn.onclick = () => seleccionarPueblo(pueblo);
+    listaCostaSol.appendChild(btn);
+  });
+
+  pueblosAxarquia.forEach(pueblo => {
+    const btn = document.createElement('button');
+    btn.className = 'puebloBtn';
+    btn.textContent = pueblo;
+    btn.onclick = () => seleccionarPueblo(pueblo);
+    listaAxarquia.appendChild(btn);
+  });
+}
+
+function abrirDesayuno(){
+  ocultarTodo();
+  document.getElementById('pantallaDesayuno').classList.add('activa');
+}
+
+function abrirResultadosDesayuno(tipo){
+  ocultarTodo();
+  document.getElementById('pantallaResultadosDesayuno').classList.add('activa');
+  document.getElementById('tituloResultadosDesayuno').textContent = tipo + ' en 500 m';
+
+  const lista = document.getElementById('listaResultadosDesayuno');
+  lista.innerHTML = '';
+
+  const items = resultadosDesayuno[tipo] || [];
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'resultadoCard';
+
+    const badgeHtml = item.badge ? `<div class="resultadoBadge">${item.badge}</div>` : '';
+    const antesHtml = item.antes ? `<span class="resultadoAntes">${item.antes}</span>` : '';
+    const tiempoHtml = item.tiempo ? `<div class="resultadoTiempo">🕒 ${item.tiempo}</div>` : '';
+
+    card.innerHTML = `
+      ${badgeHtml}
+      <div class="resultadoFila">
+        <div class="resultadoImg">
+          <img src="${item.img}" alt="">
+        </div>
+        <div class="resultadoInfo">
+          <div class="resultadoTopInfo">
+            <div class="resultadoTitulo">${item.titulo}</div>
+            <div class="resultadoDist">📍 ${item.distancia}</div>
+          </div>
+          <div>
+            <div class="resultadoPrecio">${item.precio}${antesHtml}</div>
+            ${tiempoHtml}
+          </div>
+          <button class="btnIr">IR 🚶</button>
+        </div>
+      </div>
+    `;
+    lista.appendChild(card);
+  });
+}
+
+function abrirCategoria(nombre){
+  ocultarTodo();
+  document.getElementById('pantallaCategoria').classList.add('activa');
+  document.getElementById('tituloCategoria').textContent = nombre;
+}
+
+function abrirComerciante(){
+  abrirPantallaComerciante();
+}
+
+function seleccionarDistancia(texto){
+  alert('Distancia seleccionada: ' + texto);
+}
+
+window.addEventListener("load", function(){
+  setTimeout(() => {
+    const splash = document.getElementById('pantallaSplash');
+    const inicio = document.getElementById('pantallaInicio');
+
+    if (splash) {
+      splash.style.display = 'none';
+    }
+
+    if (inicio) {
+      inicio.classList.add('activa');
+    }
+  }, 3000);
+});
+
+const btnUbicacion = document.getElementById('btnUbicacion');
+if (btnUbicacion) {
+  btnUbicacion.addEventListener('click', abrirPantallaUbicacion);
+}
+
+pintarPueblos();
+
+function abrirComer(){
+  ocultarTodo();
+  document.getElementById('pantallaComer').classList.add('activa');
+}
+
+let comercioActual = null;
+
+function previsualizarArchivoComerciante(event){
+  const file = event.target.files[0];
+  const preview = document.getElementById('merchant-file-preview');
+
+  if(!file || !preview) return;
+
+  const url = URL.createObjectURL(file);
+
+  if(file.type.startsWith('image/')){
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">
+        <div style="font-weight:700; margin-bottom:8px;">Imagen seleccionada</div>
+        <img src="${url}" alt="Vista previa" style="width:100%; border-radius:12px;">
+      </div>
+    `;
+  } else if(file.type.startsWith('video/')){
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:0px; margin:0px;">
+        <div style="font-weight:700; margin-bottom:8px;">Vídeo seleccionado</div>
+        <video controls style="width:100%; border-radius:12px;">
+          <source src="${url}" type="${file.type}">
+        </video>
+      </div>
+    `;
+  } else {
+    preview.innerHTML = `
+      <div style="background:#fff; border-radius:16px; padding:8px; margin-top:8px;">
+        Archivo seleccionado: ${file.name}
+      </div>
+    `;
+  }
+}
+
+function abrirPantallaComerciante(){
+  ocultarTodo();
+  document.getElementById('pantallaComerciante').classList.add('activa');
+  actualizarVistaComerciante();
+}
+
+function abrirSubirOferta(){
+  ocultarTodo();
+  document.getElementById('pantallaSubirOferta').classList.add('activa');
+}
+
+function previsualizarMediaOferta(event){
+  const file = event.target.files[0];
+  const preview = document.getElementById('oferta-media-preview');
+
+  if(!file || !preview){
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+    const base64 = e.target.result;
+
+    preview.setAttribute('data-media', base64);
+
+    if(file.type.startsWith('image/')){
+  preview.innerHTML = `
+    <img src="${base64}" style="width:100%; max-height:200px; object-fit:contain; border-radius:12px;">
+      `;
+    } else if(file.type.startsWith('video/')){
+      preview.innerHTML = `
+        <video controls playsinline webkit-playsinline style="width:100%; max-height:120px; object-fit:contain; border-radius:8px;">
+          <source src="${base64}" type="${file.type}">
+        </video>
+      `;
+    } else {
+      preview.innerHTML = '';
+    }
+  };
+
+  reader.readAsDataURL(file);
+}
+  
+function guardarOferta(){
+  const seccion = document.getElementById('oferta-seccion').value;
+  const tipo = document.getElementById('oferta-tipo').value;
+  const titulo = document.getElementById('oferta-titulo').value.trim();
+  const precio = document.getElementById('oferta-precio').value.trim();
+  const desc = document.getElementById('oferta-desc').value.trim();
+  const preview = document.getElementById('oferta-media-preview');
+const media = preview.getAttribute('data-media') || '';
+  const status = document.getElementById('oferta-status');
+
+  if(!seccion || !tipo || !titulo || !precio || !desc){
+    status.textContent = 'Completa sección, tipo, título, precio y descripción.';
+    return;
+  }
+
+
+const oferta = {
+  id: 'oferta_' + Date.now(),
+  seccion: seccion,
+  tipo: tipo,
+  titulo: titulo,
+  precio: precio,
+  desc: desc,
+  media: media
+};
+
+  localStorage.setItem('offerfind_publicacion', JSON.stringify(oferta));
+status.textContent = 'Publicación guardada correctamente.';
+  status.innerHTML = 'Publicación guardada correctamente.';
+//actualizarVistaComerciante();
+}
+
+async function geocodificarDireccion(address){
+  const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=' + encodeURIComponent(address);
+
+  const response = await fetch(url, {
+    headers: { 'Accept': 'application/json' }
+  });
+
+  if(!response.ok){
+    throw new Error('No se pudo consultar la dirección');
+  }
+
+  const results = await response.json();
+
+  if(!results || !results.length){
+    throw new Error('No se encontró esa dirección');
+  }
+
+  return {
+    lat: parseFloat(results[0].lat),
+    lng: parseFloat(results[0].lon),
+    displayName: results[0].display_name
+  };
+}
+
+function guardarComercioLocal(merchant){
+  localStorage.setItem('offerfind_comercio_actual', JSON.stringify(merchant));
+}
+
+function leerComercioLocal(){
+  const saved = localStorage.getItem('offerfind_comercio_actual');
+  return saved ? JSON.parse(saved) : null;
+}
+function leerPublicacionActual(){
+  const saved = localStorage.getItem('offerfind_publicacion');
+  return saved ? JSON.parse(saved) : null;
+}
+  function leerPublicacionActual(){
+  const saved = localStorage.getItem('offerfind_publicacion');
+  return saved ? JSON.parse(saved) : null;
+}
+
+function verPublicacionActual(){
+  const pub = leerPublicacionActual();
+
+  if(!pub){
+    alert('No hay publicación actual');
+    return;
+  }
+
+  ocultarTodo();
+  document.getElementById('pantallaSubirOferta').classList.add('activa');
+
+  document.getElementById('oferta-seccion').value = pub.seccion || '';
+  document.getElementById('oferta-tipo').value = pub.tipo || '';
+  document.getElementById('oferta-titulo').value = pub.titulo || '';
+  document.getElementById('oferta-precio').value = pub.precio || '';
+  document.getElementById('oferta-desc').value = pub.desc || '';
+
+  document.getElementById('oferta-status').textContent = '';
+}
+function mostrarFormularioComerciante(){
+  document.getElementById('merchantScreenTitle').textContent = 'Acceso comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'block';
+  document.getElementById('merchant-form').style.display = 'flex';
+  document.getElementById('merchant-dashboard').style.display = 'none';
+  document.getElementById('merchant-status').textContent = '';
+}
+
+function mostrarDashboardComerciante(merchant){
+  document.getElementById('merchantScreenTitle').textContent = 'Panel del comerciante';
+  document.getElementById('merchantScreenSubtitle').style.display = 'none';
+  document.getElementById('merchant-form').style.display = 'none';
+  document.getElementById('merchant-dashboard').style.display = 'block';
+
+  const publicacionActual = leerPublicacionActual();
+
+  const btnCrear = document.getElementById('btn-crear-oferta');
+  const btnVer = document.getElementById('btn-ver-oferta');
+  const btnBorrar = document.getElementById('btn-borrar-oferta');
+
+  if(publicacionActual){
+    btnCrear.style.display = 'none';
+    btnVer.style.display = 'block';
+    btnBorrar.style.display = 'block';
+  } else {
+    btnCrear.style.display = 'block';
+    btnVer.style.display = 'none';
+    btnBorrar.style.display = 'none';
+  }
+}
+
+function actualizarVistaComerciante(){
+  const merchant = leerComercioLocal();
+
+  if(!merchant){
+    mostrarFormularioComerciante();
+    return;
+  }
+
+  comercioActual = merchant;
+  mostrarDashboardComerciante(merchant);
+}
+
+async function registrarComercioManual(){
+  const status = document.getElementById('merchant-status');
+
+  const name = document.getElementById('merchant-name').value.trim();
+  const address = document.getElementById('merchant-address').value.trim();
+  const email = document.getElementById('merchant-email').value.trim();
+
+  if(!name || !address || !email){
+    status.textContent = 'Completa los datos';
+    return;
+  }
+
+  status.textContent = 'Registrando...';
+
+  try{
+    const geo = await geocodificarDireccion(address);
+
+    const merchant = {
+      name: name,
+      address: address,
+      normalizedAddress: geo.displayName,
+      email: email,
+      lat: geo.lat,
+      lng: geo.lng
+    };
+
+    guardarComercioLocal(merchant);
+    comercioActual = merchant;
+    mostrarDashboardComerciante(merchant);
+
+    status.textContent = 'Guardado correctamente';
+  }catch(e){
+    status.textContent = e.message || 'Error al registrar';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  const btn = document.getElementById('btn-guardar-oferta');
+  if(btn){
+    btn.addEventListener('click', guardarOferta);
+  }
+});
+</script>
+  <script>
+function abrirPanelIA() {
+  const btn = document.getElementById('btnIA');
+  const panel = document.getElementById('panelIA');
+
+  if (!btn || !panel) return;
+
+  btn.style.display = 'none';
+  panel.style.display = 'block';
+}
+
+function hablarIA() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert('Tu navegador no permite usar el micro.');
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'es-ES';
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const texto = event.results[0][0].transcript;
+    const input = document.getElementById('inputIA');
+    if (input) input.value = texto;
+  };
+}
+  </script>
+</body>
+</html>
