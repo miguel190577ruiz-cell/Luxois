@@ -2109,6 +2109,10 @@ function hablarIA() {
     if (input) input.value = texto;
   };
 }
+    function abrirPantallaComprarFeed() {
+  document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
+  document.getElementById('pantallaComprarFeed').style.display = 'block';
+    }
   </script>
 </body>
 </html>
