@@ -2789,7 +2789,9 @@ function ocultarTodo(){
 
 function volverInicio(){
     ocultarTodo();
-
+    document.getElementById('pantallaInicio').classList.add('activa');
+}
+function cerrarFeedYVolver(){
     const feeds = [
         'pantallaComprarFeed',
         'pantallaHappyHourFeed',
@@ -2803,13 +2805,8 @@ function volverInicio(){
         if (el) el.style.display = 'none';
     });
 
-    const inicio = document.getElementById('pantallaInicio');
-    if (inicio) {
-        inicio.style.display = 'block';
-        inicio.classList.add('activa');
-    }
+    volverInicio();
 }
-
 function abrirPantallaUbicacion(){
   ocultarTodo();
   document.getElementById('pantallaUbicacion').classList.add('activa');
