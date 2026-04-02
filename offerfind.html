@@ -2788,8 +2788,26 @@ function ocultarTodo(){
 }
 
 function volverInicio(){
-  ocultarTodo();
-  document.getElementById('pantallaInicio').classList.add('activa');
+    ocultarTodo();
+
+    const feeds = [
+        'pantallaComprarFeed',
+        'pantallaHappyHourFeed',
+        'pantallaOfertaExpressFeed',
+        'pantallaOcioFeed',
+        'pantallaDescubrirFeed'
+    ];
+
+    feeds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    const inicio = document.getElementById('pantallaInicio');
+    if (inicio) {
+        inicio.style.display = 'block';
+        inicio.classList.add('activa');
+    }
 }
 
 function abrirPantallaUbicacion(){
