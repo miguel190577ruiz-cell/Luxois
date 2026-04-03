@@ -3285,8 +3285,11 @@ function hablarIA() {
         }
     });
     }
-window.addEventListener('scroll', controlarVideosVisibles);
 window.addEventListener('load', controlarVideosVisibles);
+
+document.querySelectorAll('div[style*="overflow-y:auto"]').forEach(feed => {
+    feed.addEventListener('scroll', controlarVideosVisibles);
+});
   </script>
 </body>
 </html>
