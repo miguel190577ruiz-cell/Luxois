@@ -3273,22 +3273,18 @@ function hablarIA() {
         const rect = video.getBoundingClientRect();
 
         const visible = (
-            rect.top < window.innerHeight &&
-            rect.bottom > 0
+            rect.top < window.innerHeight * 0.75 &&
+            rect.bottom > window.innerHeight * 0.25
         );
 
         if (visible) {
-            if (video.paused) {
-                video.currentTime = 0;
-                video.play().catch(() => {});
-            }
+            video.play().catch(() => {});
         } else {
             video.pause();
             video.currentTime = 0;
         }
     });
-}
-
+    }
 window.addEventListener('scroll', controlarVideosVisibles);
 window.addEventListener('load', controlarVideosVisibles);
   </script>
