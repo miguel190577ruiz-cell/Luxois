@@ -1,4 +1,4 @@
-<!DOCTYPE html>   
+<!DOCTYPE html> 
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -965,7 +965,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="distancias"style="display:flex;gap:10px;">
          
  <button class="cambiarDist"
- onclick="window.location.href='descubrir.html'"
+ onclick="abrirPantallaDescubrirFeed()"
 style="
   flex:1;
   height:42px;
@@ -1448,7 +1448,6 @@ backdrop-filter: blur(6px);
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
   <video autoplay muted loop playsinline
-    preload="metadata"
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402095128.mp4" type="video/mp4">
   </video>
@@ -1457,7 +1456,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -1510,7 +1509,7 @@ backdrop-filter: blur(6px);
       <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.15) 45%, rgba(0,0,0,.05));"></div>
 
       <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+        <button onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
         <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Comprar cerca de ti</div>
       </div>
 
@@ -1539,7 +1538,7 @@ backdrop-filter: blur(6px);
       <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
 
       <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+        <button onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
         <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Comprar cerca de ti</div>
       </div>
 
@@ -1568,7 +1567,7 @@ backdrop-filter: blur(6px);
       <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
 
       <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+        <button onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
         <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Comprar cerca de ti</div>
       </div>
 
@@ -1595,7 +1594,7 @@ backdrop-filter: blur(6px);
   <div id="pantallaHappyHourFeed" class="pantalla" style="display:none;">
   <div style="height:100vh; overflow-y:auto; background:linear-gradient(180deg, rgba(15,20,35,.96), rgba(25,25,45,.96)); padding:16px; box-sizing:border-box;">
 
-    <button onclick="cerrarFeedYVolver()" style="margin-bottom:16px; border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; font-size:16px; backdrop-filter:blur(8px);">← Volver</button>
+    <button onclick="volverInicio()" style="margin-bottom:16px; border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; font-size:16px; backdrop-filter:blur(8px);">← Volver</button>
 
     <div style="display:flex; flex-direction:column; gap:16px;">
 
@@ -1697,7 +1696,7 @@ backdrop-filter: blur(6px);
   <div style="height:100vh; overflow-y:auto; background:linear-gradient(180deg,#1a1a1a,#000); padding:16px; box-sizing:border-box;">
 
     <!-- VOLVER -->
-    <button onclick="cerrarFeedYVolver()" style="margin-bottom:16px; border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; font-size:16px; backdrop-filter:blur(8px);">
+    <button onclick="volverInicio()" style="margin-bottom:16px; border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; font-size:16px; backdrop-filter:blur(8px);">
       ← Volver
     </button>
 
@@ -1823,7 +1822,6 @@ backdrop-filter: blur(6px);
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
   <video autoplay muted loop playsinline
-    preload="metadata"
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402101830.mp4" type="video/mp4">
   </video>
@@ -1833,7 +1831,7 @@ backdrop-filter: blur(6px);
   <!-- TOP -->
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -1887,7 +1885,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -1942,6 +1940,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA 1 VIDEO -->
     <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
       <video
+        autoplay
         muted
         loop
         playsinline
@@ -1954,7 +1953,7 @@ backdrop-filter: blur(6px);
       <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
 
       <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-        <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+        <button onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
         <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Descubrir contenido</div>
       </div>
 
@@ -1974,10 +1973,10 @@ backdrop-filter: blur(6px);
     <!-- TARJETA 2 IMAGEN -->
     <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
       <video
+  autoplay
   muted
   loop
   playsinline
-  preload="metadata"
   style="width:100%; height:100%; object-fit:cover;" 
 >
   <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401154909.mp4" type="video/mp4">
@@ -2005,10 +2004,10 @@ backdrop-filter: blur(6px);
     <!-- TARJETA 3 VIDEO -->
     <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
       <video
+  autoplay
   muted
   loop
   playsinline
-  preload="metadata"      
   style="width:100%; height:100%; object-fit:cover;"
 >
   <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401151632.mp4" type="video/mp4">
@@ -2036,10 +2035,10 @@ backdrop-filter: blur(6px);
     <!-- TARJETA 4 IMAGEN -->
     <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
       <video
+  autoplay
   muted
   loop
   playsinline
-  preload="metadata"     
   style="width:100%; height:100%; object-fit:cover;"
 >
   <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401161244.mp4" type="video/mp4">
@@ -2066,10 +2065,10 @@ backdrop-filter: blur(6px);
 <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   <video
+    autoplay
     muted
     loop
     playsinline
-    preload="metadata" 
     style="width:100%; height:100%; object-fit:cover;"
   >
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061403.mp4" type="video/mp4">
@@ -2078,7 +2077,7 @@ backdrop-filter: blur(6px);
   <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+    <button onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
     <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Descubrir contenido</div>
   </div>
 
@@ -2097,8 +2096,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-   preload="metadata" 
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062946.mp4" type="video/mp4">
   </video>
@@ -2106,7 +2104,7 @@ backdrop-filter: blur(6px);
   <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2154,8 +2152,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061754.mp4" type="video/mp4">
   </video>
@@ -2164,7 +2161,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2213,8 +2210,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062628.mp4" type="video/mp4">
   </video>
@@ -2223,7 +2219,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2272,8 +2268,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063852.mp4" type="video/mp4">
   </video>
@@ -2282,7 +2277,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2331,8 +2326,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063634.mp4" type="video/mp4">
   </video>
@@ -2341,7 +2335,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2390,8 +2384,7 @@ backdrop-filter: blur(6px);
    <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402064103.mp4" type="video/mp4">
   </video>
@@ -2400,7 +2393,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2449,8 +2442,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063212.mp4" type="video/mp4">
   </video>
@@ -2459,7 +2451,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2508,8 +2500,7 @@ backdrop-filter: blur(6px);
     <!-- TARJETA VIDEO NUEVO -->
 <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
   
-  <video muted loop playsinline
-  preload="metadata"  
+  <video autoplay muted loop playsinline
   style="width:100%; height:100%; object-fit:cover;">
     <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062435.mp4" type="video/mp4">
   </video>
@@ -2518,7 +2509,7 @@ backdrop-filter: blur(6px);
 
   <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
     
-    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+    <div onclick="volverInicio()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
       ← Volver
     </div>
 
@@ -2797,34 +2788,10 @@ function ocultarTodo(){
 }
 
 function volverInicio(){
-    ocultarTodo();
-    document.getElementById('pantallaInicio').classList.add('activa');
+  ocultarTodo();
+  document.getElementById('pantallaInicio').classList.add('activa');
 }
-function cerrarFeedYVolver(){
-    const feeds = [
-        'pantallaComprarFeed',
-        'pantallaHappyHourFeed',
-        'pantallaOfertaExpressFeed',
-        'pantallaOcioFeed',
-        'pantallaDescubrirFeed'
-    ];
 
-    feeds.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.style.display = 'none';
-            el.classList.remove('activa');
-        }
-    });
-
-    ocultarTodo();
-
-    const inicio = document.getElementById('pantallaInicio');
-    if (inicio) {
-        inicio.style.display = '';
-        inicio.classList.add('activa');
-    }
-}
 function abrirPantallaUbicacion(){
   ocultarTodo();
   document.getElementById('pantallaUbicacion').classList.add('activa');
@@ -3265,31 +3232,6 @@ function hablarIA() {
   document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
   document.getElementById('pantallaDescubrirFeed').style.display = 'block';
     }
-    
-    function controlarVideosVisibles() {
-    const videos = document.querySelectorAll('video');
-
-    videos.forEach(video => {
-        const rect = video.getBoundingClientRect();
-
-        const visible = (
-            rect.top < window.innerHeight * 0.75 &&
-            rect.bottom > window.innerHeight * 0.25
-        );
-
-        if (visible) {
-            video.play().catch(() => {});
-        } else {
-            video.pause();
-            video.currentTime = 0;
-        }
-    });
-    }
-window.addEventListener('load', controlarVideosVisibles);
-
-document.querySelectorAll('div[style*="overflow-y:auto"]').forEach(feed => {
-    feed.addEventListener('scroll', controlarVideosVisibles);
-});
   </script>
 </body>
 </html>
