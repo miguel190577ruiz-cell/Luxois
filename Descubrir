@@ -20,7 +20,437 @@
 <!-- CONTENEDOR DEL FEED -->
 <div style="height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; background:#000;">
 
-  <!-- AQUÍ IRÁN LAS TARJETAS -->
+  <div id="pantallaDescubrirFeed" class="pantalla" style="display:none;">
+  <div style="height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; background:#000;">
+
+    <!-- TARJETA 1 VIDEO -->
+    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+      <video
+        muted
+        loop
+        playsinline
+        style="width:100%; height:100%; object-fit:cover;"
+        poster="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1200&q=80"
+      >
+        <source src="https://github.com/miguel190577ruiz-cell/Luxois/blob/main/VID20260401142544.mp4">
+      </video>
+
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
+
+      <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+        <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Descubrir contenido</div>
+      </div>
+
+      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+        <div style="font-size:30px; font-weight:900;">Playa de la Malagueta!!!</div>
+        <div style="font-size:22px; font-weight:800; margin-top:4px;">Mojito preparado al momento</div>
+        <div style="font-size:17px; margin-top:8px;">📍 A 195 m · Chiringuito Tropical</div>
+        <div style="font-size:15px; opacity:.95; margin-top:10px;">Desliza hacia arriba y descubre lo que está pasando cerca de ti.</div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">Vídeo</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.78); font-weight:800;">Maps</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA 2 IMAGEN -->
+    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+      <video
+  muted
+  loop
+  playsinline
+  preload="metadata"
+  style="width:100%; height:100%; object-fit:cover;" 
+>
+  <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401154909.mp4" type="video/mp4">
+      </video>
+
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
+
+      <div style="position:absolute; top:18px; right:18px;">
+        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">📸 Imagen</div>
+      </div>
+
+      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+        <div style="font-size:30px; font-weight:900;">Atardecer + cóctel</div>
+        <div style="font-size:22px; font-weight:800; margin-top:4px;">Chiringuito La Palmera</div>
+        <div style="font-size:17px; margin-top:8px;">📍 A 120 m · Cócteles desde 3,50€</div>
+        <div style="font-size:15px; opacity:.95; margin-top:10px;">DJ en directo.</div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,190,60,.82); color:#222; font-weight:800;">Plan</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">Ir</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA 3 VIDEO -->
+    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+      <video
+  muted
+  loop
+  playsinline
+  preload="metadata"      
+  style="width:100%; height:100%; object-fit:cover;"
+>
+  <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401151632.mp4" type="video/mp4">
+      </video>
+
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
+
+      <div style="position:absolute; top:18px; right:18px;">
+        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">🎥 Reciente</div>
+      </div>
+
+      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+        <div style="font-size:30px; font-weight:900;">Concierto esta noche</div>
+        <div style="font-size:22px; font-weight:800; margin-top:4px;">Turizzo · Malagueta</div>
+        <div style="font-size:17px; margin-top:8px;">📍 A 600 m · Entrada libre</div>
+        <div style="font-size:15px; opacity:.95; margin-top:10px;">Organiza Ayuntamiento de Malaga.</div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,0,150,.72); font-weight:700;">Evento</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Notificar</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.78); font-weight:800;">Maps</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA 4 IMAGEN -->
+    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+      <video
+  muted
+  loop
+  playsinline
+  preload="metadata"     
+  style="width:100%; height:100%; object-fit:cover;"
+>
+  <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401161244.mp4" type="video/mp4">
+      </video>
+
+      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
+
+      <div style="position:absolute; top:18px; right:18px;">
+        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">📸 Imagen</div>
+      </div>
+
+      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+        <div style="font-size:30px; font-weight:900;">Nuevo en tienda  49 euros</div>
+        <div style="font-size:22px; font-weight:800; margin-top:4px;">Zapatillas urbanas Running</div>
+        <div style="font-size:17px; margin-top:8px;">📍 A 395 m · Step Málaga</div>
+        <div style="font-size:15px; opacity:.95; margin-top:10px;">Semana Top Sport.</div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(79,108,255,.75); font-weight:700;">Comprar</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
+          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">Ir</span>
+        </div>
+      </div>
+    </section>
+<!-- TARJETA VIDEO NUEVO -->
+<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+  <video
+    muted
+    loop
+    playsinline
+    preload="metadata" 
+    style="width:100%; height:100%; object-fit:cover;"
+  >
+    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061403.mp4" type="video/mp4">
+  </video>
+
+  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
+
+  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+    <button onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
+    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Descubrir contenido</div>
+  </div>
+
+  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+    <div style="font-size:30px; font-weight:900;">Torneo de Dardos</div>
+    <div style="font-size:22px; font-weight:800; margin-top:4px;">Pub Diana-Sabado 22:00h</div>
+    <div style="font-size:17px; margin-top:8px;">📍 480m</div>
+    <div style="font-size:15px; opacity:.95; margin-top:10px;">Apuntate ya y compite por suculentos premios en metalico.</div>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">Vídeo</span>
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.78); font-weight:800;">Ir</span>
+    </div>
+  </div>
+</section>
+    <!-- TARJETA VIDEO NUEVO -->
+<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+  
+  <video muted loop playsinline
+   preload="metadata" 
+  style="width:100%; height:100%; object-fit:cover;">
+    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062946.mp4" type="video/mp4">
+  </video>
+
+  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
+
+  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+      ← Volver
+    </div>
+
+    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
+      Descubrir contenido
+    </div>
+  </div>
+
+  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+    
+    <div style="font-size:30px; font-weight:900;">
+      🎉 BANANA BOAT
+    </div>
+
+    <div style="font-size:22px; font-weight:800; margin-top:4px;">
+      Grupos de 6 x 49 euros
+    </div>
+
+    <div style="font-size:17px; margin-top:8px;">
+      📍 Cerca de ti
+    </div>
+
+    <div style="font-size:15px; opacity:.95; margin-top:10px;">
+      Descubre este plan y no te lo pierdas.
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,80,80,.8); font-weight:700;">
+        Evento
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
+        Guardar
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
+        Ir
+      </span>
+
+    </div>
+  </div>
+
+</section>
+    <!-- TARJETA VIDEO NUEVO -->
+<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+  
+  <video muted loop playsinline
+  preload="metadata"  
+  style="width:100%; height:100%; object-fit:cover;">
+    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061754.mp4" type="video/mp4">
+  </video>
+
+  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
+
+  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+    
+    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+      ← Volver
+    </div>
+
+    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
+      Descubrir contenido
+    </div>
+
+  </div>
+
+  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+    
+    <div style="font-size:30px; font-weight:900;">
+      🔥 Jugueteria Ana
+    </div>
+
+    <div style="font-size:22px; font-weight:800; margin-top:4px;">
+      Disfraces todas las tallas
+    </div>
+
+    <div style="font-size:17px; margin-top:8px;">
+      📍 540m
+    </div>
+
+    <div style="font-size:15px; opacity:.95; margin-top:10px;">
+      50% de descuento en disfraces Semana del 7 al 14.
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,80,80,.8); font-weight:700;">
+        Evento
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
+        Guardar
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
+        Ir
+      </span>
+
+    </div>
+  </div>
+
+</section>
+    <!-- TARJETA VIDEO NUEVO -->
+<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+  
+  <video muted loop playsinline
+  preload="metadata"  
+  style="width:100%; height:100%; object-fit:cover;">
+    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062628.mp4" type="video/mp4">
+  </video>
+
+  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
+
+  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+    
+    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+      ← Volver
+    </div>
+
+    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
+      Descubrir contenido
+    </div>
+
+  </div>
+
+  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+    
+    <div style="font-size:30px; font-weight:900;">
+      Decoracion personalizada
+    </div>
+
+    <div style="font-size:22px; font-weight:800; margin-top:4px;">
+      La mas chula en tu zona
+    </div>
+
+    <div style="font-size:17px; margin-top:8px;">
+      📍 A 360m · Hoy
+    </div>
+
+    <div style="font-size:15px; opacity:.95; margin-top:10px;">
+      Traete una amiga y se las ponemos gratis.
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.8); font-weight:700;">
+        Ocio
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
+        Guardar
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
+        Ir
+      </span>
+
+    </div>
+  </div>
+
+</section>
+    <!-- TARJETA VIDEO NUEVO -->
+<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+  
+  <video muted loop playsinline
+  preload="metadata"  
+  style="width:100%; height:100%; object-fit:cover;">
+    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063852.mp4" type="video/mp4">
+  </video>
+
+  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
+
+  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+    
+    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+      ← Volver
+    </div>
+
+    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
+      Descubrir contenido
+    </div>
+
+  </div>
+
+  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+    
+    <div style="font-size:30px; font-weight:900;">
+      Piscina Torremolinos
+    </div>
+
+    <div style="font-size:22px; font-weight:800; margin-top:4px;">
+      Ambiente Familiar 
+    </div>
+
+    <div style="font-size:17px; margin-top:8px;">
+      📍 Junto Pavellon de Deportes .
+    </div>
+
+    <div style="font-size:15px; opacity:.95; margin-top:10px;">
+      Disfruta del momento,abierto todos los dias (Plan Familiar)
+    </div>
+
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+      
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.8); font-weight:700;">
+        Ocio
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
+        Guardar
+      </span>
+
+      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
+        Ir
+      </span>
+
+    </div>
+  </div>
+
+</section>
+    <!-- TARJETA VIDEO NUEVO -->
+<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
+  
+  <video muted loop playsinline
+  preload="metadata"  
+  style="width:100%; height:100%; object-fit:cover;">
+    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063634.mp4" type="video/mp4">
+  </video>
+
+  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
+
+  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
+    
+    <div onclick="cerrarFeedYVolver()" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
+      ← Volver
+    </div>
+
+    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
+      Descubrir contenido
+    </div>
+
+  </div>
+
+  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
+    
+    <div style="font-size:30px; font-weight:900;">
+      ✨ Recreativos CHIMPA
+    </div>
+
+    <div style="font-size:22px; font-weight:800; margin-top:4px;">
+      Descuentos por grupos
+    </div>
+
+    <div style="font-size:17px; margin-top:8px;">
+      📍 A 600m · todos los dias a partir de las 19:00h
+    </div>
+
+    <div style="font-size:15px; opacity:.95; margin-top:10px;">
+      Aguanta 20s. en el toro mecani
 
 </div>
 
