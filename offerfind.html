@@ -3283,6 +3283,27 @@ function hablarIA() {
 
 window.addEventListener('scroll', activarVideoVisible, true);
 window.addEventListener('load', activarVideoVisible);
+    function controlarVideosVisibles() {
+    const videos = document.querySelectorAll('video');
+
+    videos.forEach(video => {
+        const rect = video.getBoundingClientRect();
+
+        const visible = (
+            rect.top >= 0 &&
+            rect.bottom <= window.innerHeight
+        );
+
+        if (visible) {
+            video.play().catch(() => {});
+        } else {
+            video.pause();
+        }
+    });
+}
+
+window.addEventListener('scroll', controlarVideosVisibles);
+window.addEventListener('load', controlarVideosVisibles);
   </script>
 </body>
 </html>
