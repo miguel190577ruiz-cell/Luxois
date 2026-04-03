@@ -1,1 +1,28 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Descubrir</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- CONTENEDOR DEL FEED -->
+<div style="height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; background:#000;">
+
+  <!-- AQUÍ IRÁN LAS TARJETAS -->
+
+</div>
+
+</body>
+</html>
