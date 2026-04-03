@@ -3266,23 +3266,7 @@ function hablarIA() {
   document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
   document.getElementById('pantallaDescubrirFeed').style.display = 'block';
     }
-    function activarVideoVisible() {
-    const videos = document.querySelectorAll('video');
-
-    videos.forEach(video => {
-        const rect = video.getBoundingClientRect();
-        const visible = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.25;
-
-        if (visible) {
-            video.play().catch(() => {});
-        } else {
-            video.pause();
-        }
-    });
-}
-
-window.addEventListener('scroll', activarVideoVisible, true);
-window.addEventListener('load', activarVideoVisible);
+    
     function controlarVideosVisibles() {
     const videos = document.querySelectorAll('video');
 
