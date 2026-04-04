@@ -4,682 +4,399 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Descubrir</title>
-
   <style>
-    body {
+    * { box-sizing: border-box; }
+    html, body {
       margin: 0;
+      padding: 0;
       background: #000;
       font-family: sans-serif;
+      overflow: hidden;
+    }
+    .feed {
+      height: 100vh;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      background: #000;
+    }
+    .card {
+      height: 85vh;
+      position: relative;
+      scroll-snap-align: start;
+      overflow: hidden;
+      background: #111;
+    }
+    .card img,
+    .card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,.15) 45%, rgba(0,0,0,.04));
+    }
+    .topbar {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 2;
+    }
+    .volver,
+    .tag-top {
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.18);
+      color: #fff;
+      font-size: 16px;
+      border: none;
+    }
+    .tag-top {
+      padding: 8px 12px;
+      font-weight: 700;
+      background: rgba(255,255,255,.16);
+    }
+    .info {
+      position: absolute;
+      bottom: 28px;
+      left: 20px;
+      right: 20px;
+      color: #fff;
+      z-index: 2;
+    }
+    .t1 {
+      font-size: 30px;
+      font-weight: 900;
+    }
+    .t2 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+    .t3 {
+      font-size: 17px;
+      margin-top: 8px;
+    }
+    .t4 {
+      font-size: 15px;
+      opacity: .95;
+      margin-top: 10px;
+    }
+    .chips {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .chip1 { background: rgba(255,190,60,.82); color: #222; }
+    .chip2 { background: rgba(255,255,255,.14); color: #fff; }
+    .chip3 { background: rgba(76,175,80,.88); color: #fff; }
+    .final-card {
+      height: 85vh;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+    .final-box {
+      max-width: 90%;
+    }
+    .final-title {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    .final-subtitle {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .final-text {
+      font-size: 16px;
+      line-height: 1.5;
+      opacity: .95;
+      margin-bottom: 20px;
+    }
+    .final-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 14px 22px;
+      border-radius: 16px;
+      background: #00c6ff;
+      color: #000;
+      font-weight: 800;
+      font-size: 16px;
     }
   </style>
 </head>
-
 <body>
 
-<!-- CONTENEDOR DEL FEED -->
-<div style="height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; background:#000;">
+<div class="feed">
 
-     <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        style="width:100%; height:100%; object-fit:cover;"
-        poster="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=1200&q=80"
-      >
-        <source src="https://github.com/miguel190577ruiz-cell/Luxois/blob/main/VID20260401142544.mp4">
-      </video>
-
-      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
-
-      <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-        onclick="window.location.href='OfferFind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
-        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Descubrir contenido</div>
+  <!-- TARJETA 1 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401142544.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Descubrir contenido</div>
+    </div>
+    <div class="info">
+      <div class="t1">🌴 Playa de la Malagueta</div>
+      <div class="t2">Mojito preparado al momento</div>
+      <div class="t3">📍 A 195 m · Chiringuito Tropical</div>
+      <div class="t4">Desliza hacia arriba y descubre lo que está pasando cerca de ti.</div>
+      <div class="chips">
+        <span class="chip chip1">Vídeo</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ver</span>
       </div>
+    </div>
+  </section>
 
-      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-        <div style="font-size:30px; font-weight:900;">Playa de la Malagueta!!!</div>
-        <div style="font-size:22px; font-weight:800; margin-top:4px;">Mojito preparado al momento</div>
-        <div style="font-size:17px; margin-top:8px;">📍 A 195 m · Chiringuito Tropical</div>
-        <div style="font-size:15px; opacity:.95; margin-top:10px;">Desliza hacia arriba y descubre lo que está pasando cerca de ti.</div>
-        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">Vídeo</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.78); font-weight:800;">Maps</span>
-        </div>
+  <!-- TARJETA 2 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061403.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Reciente</div>
+    </div>
+    <div class="info">
+      <div class="t1">🎯 Torneo de dardos</div>
+      <div class="t2">Sábado · 22:00h</div>
+      <div class="t3">📍 Bar Diana · Apúntate ya</div>
+      <div class="t4">Ambiente local y plan perfecto para esta noche.</div>
+      <div class="chips">
+        <span class="chip chip1">Plan</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ir</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- TARJETA 2 IMAGEN -->
-    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-      <video
-  autoplay
-  muted
-  loop
-  playsinline
-  style="width:100%; height:100%; object-fit:cover;" 
->
-  <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401154909.mp4" type="video/mp4">
-      </video>
-
-      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
-
-      <div style="position:absolute; top:18px; right:18px;">
-        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">📸 Imagen</div>
+  <!-- TARJETA 3 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061754.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">En directo</div>
+    </div>
+    <div class="info">
+      <div class="t1">🍹 Atardecer + cóctel</div>
+      <div class="t2">Chiringuito La Palmera</div>
+      <div class="t3">📍 A 120 m · Cócteles desde 3,50€</div>
+      <div class="t4">Contenido reciente publicado ahora mismo.</div>
+      <div class="chips">
+        <span class="chip chip1">Ocio</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ir</span>
       </div>
+    </div>
+  </section>
 
-      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-        <div style="font-size:30px; font-weight:900;">Atardecer + cóctel</div>
-        <div style="font-size:22px; font-weight:800; margin-top:4px;">Chiringuito La Palmera</div>
-        <div style="font-size:17px; margin-top:8px;">📍 A 120 m · Cócteles desde 3,50€</div>
-        <div style="font-size:15px; opacity:.95; margin-top:10px;">DJ en directo.</div>
-        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,190,60,.82); color:#222; font-weight:800;">Plan</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">Ir</span>
-        </div>
+  <!-- TARJETA 4 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062435.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Top</div>
+    </div>
+    <div class="info">
+      <div class="t1">🔥 Ahora mismo</div>
+      <div class="t2">Plan activo cerca de ti</div>
+      <div class="t3">📍 Zona local · Hoy</div>
+      <div class="t4">Descubre lo que está pasando en tiempo real y no te lo pierdas.</div>
+      <div class="chips">
+        <span class="chip chip1">Live</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ver</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- TARJETA 3 VIDEO -->
-    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-      <video
-  autoplay
-  muted
-  loop
-  playsinline
-  style="width:100%; height:100%; object-fit:cover;"
->
-  <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401151632.mp4" type="video/mp4">
-      </video>
-
-      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
-
-      <div style="position:absolute; top:18px; right:18px;">
-        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">🎥 Reciente</div>
+  <!-- TARJETA 5 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062628.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Recomendado</div>
+    </div>
+    <div class="info">
+      <div class="t1">🍹 Plan para esta noche</div>
+      <div class="t2">Ambiente top en tu zona</div>
+      <div class="t3">📍 A pocos metros · Hoy</div>
+      <div class="t4">Descubre el ambiente y vive la experiencia en directo.</div>
+      <div class="chips">
+        <span class="chip chip1">Ocio</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ir</span>
       </div>
+    </div>
+  </section>
 
-      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-        <div style="font-size:30px; font-weight:900;">Concierto esta noche</div>
-        <div style="font-size:22px; font-weight:800; margin-top:4px;">Turizzo · Malagueta</div>
-        <div style="font-size:17px; margin-top:8px;">📍 A 600 m · Entrada libre</div>
-        <div style="font-size:15px; opacity:.95; margin-top:10px;">Organiza Ayuntamiento de Malaga.</div>
-        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,0,150,.72); font-weight:700;">Evento</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Notificar</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.78); font-weight:800;">Maps</span>
-        </div>
+  <!-- TARJETA 6 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062946.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Reciente</div>
+    </div>
+    <div class="info">
+      <div class="t1">🌇 Plan al atardecer</div>
+      <div class="t2">Ambiente y buenas vistas</div>
+      <div class="t3">📍 Cerca de ti · Hoy</div>
+      <div class="t4">Disfruta del momento y descubre nuevos planes en tu zona.</div>
+      <div class="chips">
+        <span class="chip chip1">Ocio</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ir</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- TARJETA 4 IMAGEN -->
-    <section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-      <video
-  autoplay
-  muted
-  loop
-  playsinline
-  style="width:100%; height:100%; object-fit:cover;"
->
-  <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260401161244.mp4" type="video/mp4">
-      </video>
-
-      <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.18) 45%, rgba(0,0,0,.05));"></div>
-
-      <div style="position:absolute; top:18px; right:18px;">
-        <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">📸 Imagen</div>
+  <!-- TARJETA 7 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063212.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Reciente</div>
+    </div>
+    <div class="info">
+      <div class="t1">🌟 Nuevo momento</div>
+      <div class="t2">Contenido recién publicado</div>
+      <div class="t3">📍 Cerca de ti · Ahora</div>
+      <div class="t4">Sigue deslizando y descubre lo último que está pasando en tu zona.</div>
+      <div class="chips">
+        <span class="chip chip1">Vídeo</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ir</span>
       </div>
+    </div>
+  </section>
 
-      <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-        <div style="font-size:30px; font-weight:900;">Nuevo en tienda  49 euros</div>
-        <div style="font-size:22px; font-weight:800; margin-top:4px;">Zapatillas urbanas Running</div>
-        <div style="font-size:17px; margin-top:8px;">📍 A 395 m · Step Málaga</div>
-        <div style="font-size:15px; opacity:.95; margin-top:10px;">Semana Top Sport.</div>
-        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(79,108,255,.75); font-weight:700;">Comprar</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
-          <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">Ir</span>
-        </div>
+  <!-- TARJETA 8 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063634.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Tendencia</div>
+    </div>
+    <div class="info">
+      <div class="t1">✨ Nuevo contenido</div>
+      <div class="t2">Descubre este momento</div>
+      <div class="t3">📍 Cerca de ti · Ahora</div>
+      <div class="t4">Vídeo reciente publicado en tu zona. Desliza y sigue descubriendo.</div>
+      <div class="chips">
+        <span class="chip chip1">Vídeo</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ver</span>
       </div>
-    </section>
-<!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  <video
-    autoplay
-    muted
-    loop
-    playsinline
-    style="width:100%; height:100%; object-fit:cover;"
-  >
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061403.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    <button onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">← Volver</button>
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">Descubrir contenido</div>
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    <div style="font-size:30px; font-weight:900;">Torneo de Dardos</div>
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">Pub Diana-Sabado 22:00h</div>
-    <div style="font-size:17px; margin-top:8px;">📍 480m</div>
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">Apuntate ya y compite por suculentos premios en metalico.</div>
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">Vídeo</span>
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">Guardar</span>
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.78); font-weight:800;">Ir</span>
     </div>
-  </div>
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062946.mp4" type="video/mp4">
-  </video>
+  </section>
 
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    <div onclick="window.location.href='OfferFind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
+  <!-- TARJETA 9 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063852.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Recomendado</div>
     </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      🎉 BANANA BOAT
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Grupos de 6 x 49 euros
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 Cerca de ti
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      Descubre este plan y no te lo pierdas.
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,80,80,.8); font-weight:700;">
-        Evento
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402061754.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      🔥 Jugueteria Ana
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Disfraces todas las tallas
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 540m
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      50% de descuento en disfraces Semana del 7 al 14.
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,80,80,.8); font-weight:700;">
-        Evento
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062628.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      Decoracion personalizada
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      La mas chula en tu zona
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 A 360m · Hoy
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      Traete una amiga y se las ponemos gratis.
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.8); font-weight:700;">
-        Ocio
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063852.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      Piscina Torremolinos
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Ambiente Familiar 
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 Junto Pavellon de Deportes .
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      Disfruta del momento,abierto todos los dias (Plan Familiar)
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,140,0,.8); font-weight:700;">
-        Ocio
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063634.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      ✨ Recreativos CHIMPA
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Descuentos por grupos
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 A 600m · todos los dias a partir de las 19:00h
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      Aguanta 20s. en el toro mecanico y llevate un premio!!!.
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">
-        Vídeo
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-   <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402064103.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      Ayuntamiento De Malaga
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Jardin Botanico De La Concepcion
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 Crt.A45 Direccion Antequera
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-     Domingos tarde Entrada Gratis
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">
-        Vídeo
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402063212.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      Descubrir contenido
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-      🌟 Mascotin
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Complementos y Cuidados
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍 A 1km
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      Lavado y Peinado por 12 euros  Hoy.
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(0,210,255,.72); font-weight:700;">
-        Vídeo
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ir
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA VIDEO NUEVO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden;">
-  
-  <video autoplay muted loop playsinline
-  style="width:100%; height:100%; object-fit:cover;">
-    <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402062435.mp4" type="video/mp4">
-  </video>
-
-  <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,.12) 45%, rgba(0,0,0,.03));"></div>
-
-  <div style="position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center;">
-    
-    <div onclick="window.location.href='offerfind.html'" style="border:none; border-radius:14px; padding:10px 14px; background:rgba(255,255,255,.18); color:#fff; backdrop-filter:blur(8px); font-size:16px;">
-      ← Volver
-    </div>
-
-    <div style="padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.16); color:#fff; backdrop-filter:blur(8px); font-weight:700;">
-      En directo
-    </div>
-
-  </div>
-
-  <div style="position:absolute; bottom:28px; left:20px; right:20px; color:#fff;">
-    
-    <div style="font-size:30px; font-weight:900;">
-  Partido Benefico
-    </div>
-
-    <div style="font-size:22px; font-weight:800; margin-top:4px;">
-      Asociacion De Comerciantes De Malaga
-    </div>
-
-    <div style="font-size:17px; margin-top:8px;">
-      📍Este Sabado 21:00h en La Rosaleda 3euros
-    </div>
-
-    <div style="font-size:15px; opacity:.95; margin-top:10px;">
-      Pasalo bien y ayuda al Comercio Local!!!!!.
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,80,80,.85); font-weight:700;">
-        Live
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.14); font-weight:700;">
-        Guardar
-      </span>
-
-      <span style="display:inline-block; padding:8px 12px; border-radius:12px; background:rgba(76,175,80,.88); font-weight:800;">
-        Ver
-      </span>
-
-    </div>
-  </div>
-
-</section>
-    <!-- TARJETA FINAL CONTACTO -->
-<section style="height:95vh; position:relative; scroll-snap-align:start; overflow:hidden; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); display:flex; align-items:center; justify-content:center;">
-
-  <div style="position:absolute; inset:0; background:radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 60%);"></div>
-
-  <div style="position:relative; max-width:90%; text-align:center; color:#fff;">
-    
-    <div style="font-size:32px; font-weight:900; margin-bottom:16px;">
-      🚀 Lleva esto a tu ciudad
-    </div>
-
-    <div style="font-size:20px; font-weight:700; margin-bottom:12px;">
-      ¿Te gustaría tener OfertFind en tu zona?
-    </div>
-
-    <div style="font-size:16px; opacity:.95; line-height:1.5; margin-bottom:20px;">
-      Descubre contenido en tiempo real, promociones locales, eventos, planes y negocios cerca de ti.  
-      Una nueva forma de conectar comercios y personas en tu ciudad.
-    </div>
-
-    <div style="font-size:15px; opacity:.9; margin-bottom:26px;">
-      Si crees que esto encajaría en tu pueblo, ciudad o provincia…  
-      <strong>hablemos.</strong>
-    </div>
-
-    <div style="display:flex; flex-direction:column; gap:12px; align-items:center;">
-      
-      <div style="padding:14px 22px; border-radius:16px; background:#00c6ff; color:#000; font-weight:800; font-size:16px;">
-        📩 Contactar con OfertFind
+    <div class="info">
+      <div class="t1">⭐ Destacado</div>
+      <div class="t2">No te lo pierdas</div>
+      <div class="t3">📍 Cerca de ti · Popular</div>
+      <div class="t4">Uno de los contenidos más interesantes del momento en tu zona.</div>
+      <div class="chips">
+        <span class="chip chip1">Top</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ver</span>
       </div>
-
-      <div style="padding:12px 20px; border-radius:14px; background:rgba(255,255,255,.15); backdrop-filter:blur(8px); font-weight:700;">
-        📍 Expande tu zona · Activa tu ciudad
-      </div>
-
     </div>
+  </section>
 
-  </div>
+  <!-- TARJETA 10 -->
+  <section class="card">
+    <video muted loop playsinline preload="metadata">
+      <source src="https://raw.githubusercontent.com/miguel190577ruiz-cell/Luxois/main/VID20260402064103.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    <div class="topbar">
+      <div class="volver" onclick="window.location.href='/offerfind.html'">← Volver</div>
+      <div class="tag-top">Nuevo</div>
+    </div>
+    <div class="info">
+      <div class="t1">🎥 Vídeo en tendencia</div>
+      <div class="t2">Lo que se está viendo ahora</div>
+      <div class="t3">📍 Cerca de ti · Reciente</div>
+      <div class="t4">Contenido recién publicado. Descubre lo que está pasando en tu zona.</div>
+      <div class="chips">
+        <span class="chip chip1">Vídeo</span>
+        <span class="chip chip2">Guardar</span>
+        <span class="chip chip3">Ir</span>
+      </div>
+    </div>
+  </section>
 
-</section> 
- 
-
-
+  <!-- TARJETA FINAL -->
+  <section class="final-card">
+    <div class="final-box">
+      <div class="final-title">🚀 Lleva Offerify a tu ciudad</div>
+      <div class="final-subtitle">¿Te gustaría tener esta utilidad en tu zona?</div>
+      <div class="final-text">
+        Descubre contenido en tiempo real, promociones locales, eventos, planes y negocios cerca de ti.
+        Una nueva forma de conectar comercios y personas en tu pueblo, ciudad o provincia.
+      </div>
+      <div class="final-text">
+        Si te interesa esta aplicación para tu zona, hablemos.
+      </div>
+      <div class="final-btn" onclick="window.location.href='/offerfind.html'">Volver a la app</div>
+    </div>
+  </section>
 
 </div>
+
 </body>
 </html>
