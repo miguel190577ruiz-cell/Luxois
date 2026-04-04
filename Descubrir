@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,11 +19,11 @@
 <!-- CONTENEDOR DEL FEED -->
 <div style="height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; background:#000;">
 
-  <div id="pantallaDescubrirFeed" class="pantalla" style="display:none;">
-  <div style="height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; background:#000;">
+  
+ 
+
 
 
 </div>
-
 </body>
 </html>
